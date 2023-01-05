@@ -1,0 +1,64 @@
+import {  memo, useMemo, useState } from 'react';
+import { AnimatedSprite as PIXI_AnimatedSprite, Container as PIXI_Container } from 'pixi.js';
+import { useBodyParams } from '../../Body/context';
+import { AnimatedSprite, IAnimatedSprite } from '../../AnimatedSprite';
+import { ContainerContextProvider, useMakeContainer } from '../ViewController/context';
+import { useTick } from '@inlet/react-pixi';
+import { EPS } from '../../../constants';
+
+type Props = {
+  children: React.ReactElement | React.ReactElement[]
+} & Omit<Omit<Omit<IAnimatedSprite, 'x'>, 'y'>, 'rotation'>;
+
+export const AnimatedSpriteController = memo(({children, ...props}: Props) => {
+  const {
+    x,
+    y,
+    rotation,
+    body
+  } = useBodyParams();
+
+  const pivot = props.width && props.height ? {x: 0.5, y: 0.55} : undefined;
+  const [scaleX, setScaleX] = useState<1 | -1>(1);
+
+  useTick(() => {
+    if (!body) {
+      return;
+    }
+
+    if (scaleX !== 1 && body.velocity.x > EPS) {
+      setScaleX(1);
+    }
+
+    if (scaleX !== -1 && body.velocity.x < -EPS) {
+      setScaleX(-1);
+    }
+  });
+
+  const {
+    ref,
+    value
+  } = useMakeContainer<PIXI_Container<PIXI_AnimatedSprite>>();
+
+  const scaleObj = useMemo(() => {
+    const currentScale = ref.current?.children?.[0]?.scale;
+
+    if (!currentScale) {
+      return;
+    }
+
+    return {
+      x: Math.abs(currentScale.x) * scaleX,
+      y: currentScale.y,
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ref.current?.children?.[0]?.scale.x, scaleX]);
+
+  return (
+    <AnimatedSprite ref={ref} x={x} y={y} rotation={rotation} scale={scaleObj} anchor={pivot} {...props}>
+      <ContainerContextProvider value={value}>
+        {children}
+      </ContainerContextProvider>
+    </AnimatedSprite>
+  )
+});

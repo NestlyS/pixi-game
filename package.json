@@ -1,0 +1,51 @@
+{
+  "name": "pixi-react-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@inlet/react-pixi": "^6.8.0",
+    "animated": "^0.2.2",
+    "express": "^4.18.2",
+    "lodash.uniqueid": "^4.0.1",
+    "matter-js": "^0.18.0",
+    "pixi-viewport": "^4.37.0",
+    "pixi.js": "6.5.8",
+    "pixi3d": "^2.0.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-scripts": "5.0.1",
+    "react-spring": "^9.5.5",
+    "typescript": "^4.9.3",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "start:server": "node src/server.js",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/lodash.uniqueid": "^4.0.7",
+    "@types/matter-js": "^0.18.2",
+    "@types/react-dom": "^18.0.10"
+  }
+}
