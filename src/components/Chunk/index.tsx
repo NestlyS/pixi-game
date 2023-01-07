@@ -1,8 +1,6 @@
 import React, { memo, useEffect, useMemo } from 'react';
-import { Body } from '../Body';
-import { DIRT_MIDDLE_PART_NAME, DIRT_TO_GRASS_NAME, Grass, GRASS_TO_DIRT_NAME, MIDDLE_PART_NAME } from '../TileGround/Grass';
 import { useLevelManager } from '../LevelManager/context';
-import { LandscapeParamsType, ModifiedGrassProps, PercentTypes } from './typings';
+import { ModifiedGrassProps } from './typings';
 import { generateLandscape } from './utils/generateLandscape';
 import { landscapeToSizes } from './utils/landscapeToSizes';
 import { sizesToParams } from './utils/sizesToParams';
@@ -13,18 +11,20 @@ import { paramsToElements } from './utils/paramsToElements';
 type Props = {
   width: number;
   renderKey?: number | string;
+  changeLevelEvery?: number;
 } & ModifiedGrassProps
 
 export const Chunk = memo(({
   width,
   renderKey = 0,
+  changeLevelEvery = 5,
   ...grassProps
 }: Props) => {
   const {
     setLastBlockOffset
   } = useLevelManager();
 
-  const landscape = useMemo(() => generateLandscape(width, percents, 7), [width, renderKey]);
+  const landscape = useMemo(() => generateLandscape(width, percents, changeLevelEvery), [width, renderKey, changeLevelEvery]);
 
   useEffect(() => {
     if (!landscape) return;

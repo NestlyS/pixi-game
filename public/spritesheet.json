@@ -240,7 +240,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
 	"sourceSize": {"w":16,"h":16}
 },
-"image_part_016.png":
+"grass-deco-3.png":
 {
 	"frame": {"x":16,"y":176,"w":16,"h":16},
 	"rotated": false,
@@ -496,7 +496,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
 	"sourceSize": {"w":16,"h":16}
 },
-"image_part_064.png":
+"grass-deco-4.png":
 {
 	"frame": {"x":0,"y":304,"w":16,"h":16},
 	"rotated": false,
@@ -504,7 +504,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
 	"sourceSize": {"w":16,"h":16}
 },
-"image_part_065.png":
+"grass-bush-1.png":
 {
 	"frame": {"x":16,"y":304,"w":16,"h":16},
 	"rotated": false,
@@ -512,7 +512,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
 	"sourceSize": {"w":16,"h":16}
 },
-"image_part_066.png":
+"grass-bush-2.png":
 {
 	"frame": {"x":0,"y":320,"w":16,"h":16},
 	"rotated": false,

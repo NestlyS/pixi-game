@@ -2,6 +2,8 @@ import React, { memo, useCallback, useMemo } from 'react'
 import { Ground } from '../Ground'
 import { Row } from './Row';
 
+export const spritesheetUrl = "./spritesheet.json";
+
 export type Props = {
   x: number,
   y: number,
@@ -38,10 +40,10 @@ export const TileGround = memo(({
     const innerX = (x - bodyWidth / 2) + (tileSize / 2);
 
     if (index === 0) {
-      return <Row key={index} tilesCount={tilesWidth} startX={innerX} startY={getInnerY(index)} tileSize={tileSize} spritesheet="./spritesheet.json" getTexture={(indexX: number) => getTexture(indexX, index, tilesWidth, tilesHeight)}/>;
+      return <Row key={index} tilesCount={tilesWidth} startX={innerX} startY={getInnerY(index)} tileSize={tileSize} spritesheet={spritesheetUrl} getTexture={(indexX: number) => getTexture(indexX, index, tilesWidth, tilesHeight)}/>;
     }
 
-    return <Row key={index} tilesCount={tilesWidth} startX={innerX} startY={getInnerY(index)} tileSize={tileSize} spritesheet="./spritesheet.json" getTexture={(indexX: number) => getTexture(indexX, index, tilesWidth, tilesHeight)}/>
+    return <Row key={index} tilesCount={tilesWidth} startX={innerX} startY={getInnerY(index)} tileSize={tileSize} spritesheet={spritesheetUrl} getTexture={(indexX: number) => getTexture(indexX, index, tilesWidth, tilesHeight)}/>
   }), [arr, bodyHeight, bodyWidth, getTexture, tileSize, tilesHeight, tilesWidth, x, y]);
 
   return (

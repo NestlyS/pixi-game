@@ -1,13 +1,12 @@
 import { useTick } from '@inlet/react-pixi';
+import isEqual from 'lodash/isEqual';
 import { Bodies, Body as Matter_Body, Composite, Engine, Events, IChamferableBodyDefinition } from 'matter-js';
-import React, { Ref, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useEngine } from '../../utils/useEngine';
 import { RectangleController } from '../controllers/RectangleGraphicsController';
 import { useSettings } from '../Settings/context';
 import { BodyStateContextProvider } from './context';
 import { checkIsBodyInPairs } from './utils';
-
-const IS_DEV = true;
 
 export type ControllerProps = {
   x: number,
@@ -22,6 +21,8 @@ type Props = {
   rotation?: number;
   width: number;
   height: number;
+  label?: string;
+  composite?: Composite;
   options?: IChamferableBodyDefinition;
   children?: JSX.Element | React.ReactNode | React.ReactElement | React.ReactElement[] | null;
   onCollision?: (e: Matter.IEventCollision<Matter.Engine>) => void;
@@ -34,6 +35,8 @@ export const Body: React.FC<Props> = React.memo(({
   rotation: initialRotation = 0,
   width: initialWidth,
   height: initialHeight,
+  label,
+  composite,
   options,
   children,
   onCollision,
@@ -55,17 +58,26 @@ export const Body: React.FC<Props> = React.memo(({
     if (!engine) return;
 
     const body = Bodies.rectangle(initialX, initialY, initialWidth, initialHeight, { angle: initialRotation, ...options });
-    Composite.add(engine.world, [body]);
+    Composite.add(composite ? composite : engine.world, [body]);
+
+    // Если данный композит ещё не добавлен в мир, добавляем
+    if (composite && !Composite.allComposites(engine.world).find(_composite => _composite.id === composite?.id)) {
+      Composite.add(engine.world, composite);
+    }
+
     bodyRef.current = body;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    if (label) {
+      bodyRef.current.label = label;
+    }
 
     return () => {
-      Composite.remove(engine.world, body);
+      Composite.remove(composite ? composite : engine.world, body);
       bodyRef.current = null;
       console.log('DESTROY');
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [engine, initialHeight, initialWidth]);
+  }, [engine, composite, initialWidth, initialWidth]);
 
   useEffect(() => {
     if (!bodyRef.current || !options) {
@@ -85,6 +97,13 @@ export const Body: React.FC<Props> = React.memo(({
     setY(+bodyRef.current.position.y.toFixed(3));
   }, [initialX, initialY]);
 
+
+  useEffect(() => {
+    if (!bodyRef.current || !label) return;
+
+    bodyRef.current.label = label;
+  }, [label]);
+
   useEffect(() => {
     if (!engine || !onCollision || !bodyRef.current) return;
 
@@ -100,7 +119,7 @@ export const Body: React.FC<Props> = React.memo(({
     });
   }, [engine, onCollision]);
 
-  useTick(() => {
+  useTick((delt) => {
     if (!bodyRef.current) {
       return;
     }
@@ -129,4 +148,4 @@ export const Body: React.FC<Props> = React.memo(({
       {isCollisionVisible ? <RectangleController width={initialWidth} height={initialHeight} /> : null}
     </BodyStateContextProvider>
   );
-});
+}, ({options, ...prevProps}, {options: newOptions, ...nextProps}) => isEqual(newOptions, options) && isEqual(prevProps, nextProps));

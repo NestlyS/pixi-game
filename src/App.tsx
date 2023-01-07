@@ -8,7 +8,7 @@ import { Settings } from './components/Settings';
 const App = () => {
   return (
     <div className="App">
-      <Stage width={WORLD_WIDTH} height={WORLD_HEIGHT} options={{ backgroundColor: 0x555555, antialias: false }}>
+      <Stage width={WORLD_WIDTH} height={WORLD_HEIGHT} options={{ backgroundColor: 0x99c5ff, antialias: false }}>
         <Settings>
           <World>
             <Canvas />

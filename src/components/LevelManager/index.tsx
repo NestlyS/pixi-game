@@ -77,7 +77,7 @@ export const LevelManager = ({
 
   return (
     <LevelManagerContextProvider value={value}>
-      <ChunkRenderer tileSize={tileSize} tilesHeight={tilesHeight} chunkWidth={chunkWidth} chunks={chunks} />
+      <ChunkRenderer tileSize={tileSize} tilesHeight={tilesHeight} chunkWidth={chunkWidth} chunks={chunks} changeLevelEvery={10} />
       <Graphics draw={draw(chunks[chunks.length - 1].x, chunks[chunks.length - 1].y - tilesHeight * tileSize)}/>
       {isCollisionDetectorVisibile && <Body width={60} height={10000} x={chunks[chunks.length - 1].x + (chunkWidth * tileSize) / 4} y={0} options={SENSOR_OPTIONS} onCollision={onCollision} />}
     </LevelManagerContextProvider>

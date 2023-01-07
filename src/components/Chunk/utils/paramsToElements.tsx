@@ -1,5 +1,6 @@
 import { Body } from "../../Body";
-import { GRASS_TO_DIRT_NAME, DIRT_TO_GRASS_NAME, MIDDLE_PART_NAME, DIRT_MIDDLE_PART_NAME, Grass } from "../../TileGround/Grass";
+import { GRASS_TO_DIRT_NAME, DIRT_TO_GRASS_NAME, MIDDLE_PART_NAME, DIRT_MIDDLE_PART_NAME } from "../../TileGround/components/Grass/contants";
+import { Grass } from "../../TileGround/components/Grass/Grass";
 import { TRAMPLIN_OPTIONS } from "../contants";
 import { LandscapeParamsType, ModifiedGrassProps } from "../typings";
 

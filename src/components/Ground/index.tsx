@@ -1,12 +1,8 @@
-import React, { ReactNode, useCallback } from 'react';
-import { Engine, IEventCollision } from 'matter-js';
+import React, { memo, ReactNode } from 'react';
 import { Body } from '../Body';
-import { throwEvent } from '../../utils/throwEvent';
-import { RectangleController } from '../controllers/RectangleGraphicsController';
+import { GROUND_COMPOSITE, GROUND_LABEL } from './composite';
 
 const GROUND_OPTIONS = { isStatic: true };
-export const GROUND_COLLISION_EVENT_NAME = 'ground-collision';
-
 
 type Props = {
   x: number;
@@ -17,14 +13,8 @@ type Props = {
   rotation?: number;
 }
 
-export const Ground = ({ x, y, width, height, children, rotation}: Props) => {
-  const onCollision = useCallback((e: IEventCollision<Engine>) => {
-    throwEvent(GROUND_COLLISION_EVENT_NAME, e);
-  }, []);
-
-  return (
-    <Body x={x} y={y} width={width} rotation={rotation} height={height} options={GROUND_OPTIONS} onCollision={onCollision}>
-      {children}
-    </Body>
-  )
-}
+export const Ground = memo(({ x, y, width, height, children, rotation}: Props) => (
+  <Body x={x} y={y} width={width} rotation={rotation} height={height} options={GROUND_OPTIONS} label={GROUND_LABEL} composite={GROUND_COMPOSITE}>
+    {children}
+  </Body>
+));

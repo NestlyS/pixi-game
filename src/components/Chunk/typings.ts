@@ -1,4 +1,4 @@
-import { GrassProps } from "../TileGround/Grass";
+import { GrassProps } from "../TileGround/components/Grass/Grass";
 
 export enum PercentTypes {
   Down = 'down',

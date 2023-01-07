@@ -7,6 +7,7 @@ import { applyForce, calcForceApply } from '../../Body/utils';
 import { BODY_FRICTION } from '../../Controllable';
 
 const HORIZONTAL_SPEED = 0.025;
+const MAX_SPEED = 7;
 
 export const MoveController = () => {
   const {
@@ -14,12 +15,12 @@ export const MoveController = () => {
   } = useBodyParams();
 
   const DCb = useCallback(() => {
-    if (!body || body.velocity.x > 20) return;
+    if (!body || body.velocity.x > MAX_SPEED) return;
     applyForce(body, HORIZONTAL_SPEED, 0);
   }, [body]);
 
   const ACb = useCallback(() => {
-    if (!body || body.velocity.x < -20) return;
+    if (!body || body.velocity.x < -MAX_SPEED) return;
     applyForce(body, -HORIZONTAL_SPEED, 0);
   }, [body]);
 
