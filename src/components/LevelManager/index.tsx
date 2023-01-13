@@ -2,7 +2,6 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { Graphics} from '@inlet/react-pixi';
 import { Graphics as PIXI_Grapics } from 'pixi.js';
 import { Body } from '../Body'
-import { Chunk } from '../Chunk'
 import { LevelManagerContextProvider } from './context'
 import { ChunkParams } from './typings';
 import { ChunkRenderer } from './ChunkRendered';
@@ -18,6 +17,7 @@ type Props = {
   tileSize: number,
   tilesHeight: number,
   chunkWidth: number,
+  spritesheetUrl: string,
 }
 
 export const LevelManager = ({
@@ -26,6 +26,7 @@ export const LevelManager = ({
   tileSize,
   tilesHeight,
   chunkWidth,
+  spritesheetUrl,
 }: Props) => {
   const [ lastBlockOffset, setLastBlockOffset ] = useState(0);
   const [ isCollisionDetectorVisibile, setCollisionDetectorVisibility ] = useState(true);
@@ -77,9 +78,9 @@ export const LevelManager = ({
 
   return (
     <LevelManagerContextProvider value={value}>
-      <ChunkRenderer tileSize={tileSize} tilesHeight={tilesHeight} chunkWidth={chunkWidth} chunks={chunks} changeLevelEvery={10} />
+      <ChunkRenderer tileSize={tileSize} tilesHeight={tilesHeight} chunkWidth={chunkWidth} chunks={chunks} changeLevelEvery={10} spritesheetUrl={spritesheetUrl}/>
       <Graphics draw={draw(chunks[chunks.length - 1].x, chunks[chunks.length - 1].y - tilesHeight * tileSize)}/>
-      {isCollisionDetectorVisibile && <Body width={60} height={10000} x={chunks[chunks.length - 1].x + (chunkWidth * tileSize) / 4} y={0} options={SENSOR_OPTIONS} onCollision={onCollision} />}
+      {isCollisionDetectorVisibile && <Body width={60} height={10000} x={chunks[chunks.length - 1].x + (chunkWidth * tileSize) / 4} y={0} options={SENSOR_OPTIONS} label="sensor" onCollision={onCollision} />}
     </LevelManagerContextProvider>
   )
 }

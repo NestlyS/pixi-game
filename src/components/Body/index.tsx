@@ -1,11 +1,13 @@
 import { useTick } from '@inlet/react-pixi';
 import isEqual from 'lodash/isEqual';
 import { Bodies, Body as Matter_Body, Composite, Engine, Events, IChamferableBodyDefinition } from 'matter-js';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { BodyGroupMap as BodyGroup } from '../../bodyGroups/typings';
 import { useEngine } from '../../utils/useEngine';
 import { RectangleController } from '../controllers/RectangleGraphicsController';
 import { useSettings } from '../Settings/context';
-import { BodyStateContextProvider } from './context';
+import { BodyContextProvider, BodyStateContextProvider } from './context';
+import { CleanEventListener, CleanEventType } from './typing';
 import { checkIsBodyInPairs } from './utils';
 
 export type ControllerProps = {
@@ -22,7 +24,7 @@ type Props = {
   width: number;
   height: number;
   label?: string;
-  composite?: Composite;
+  bodyGroup?: BodyGroup | BodyGroup[];
   options?: IChamferableBodyDefinition;
   children?: JSX.Element | React.ReactNode | React.ReactElement | React.ReactElement[] | null;
   onCollision?: (e: Matter.IEventCollision<Matter.Engine>) => void;
@@ -36,12 +38,12 @@ export const Body: React.FC<Props> = React.memo(({
   width: initialWidth,
   height: initialHeight,
   label,
-  composite,
+  bodyGroup,
   options,
   children,
   onCollision,
 }) => {
-  const bodyRef = useRef<Matter_Body | null>(null);
+  const [body, setBody] = useState<Matter_Body | null>(null);
 
   const engine = useEngine();
   const [ x, setX ] = useState(initialX);
@@ -49,89 +51,130 @@ export const Body: React.FC<Props> = React.memo(({
   const [ vx, setVX ] = useState(0);
   const [ vy, setVY ] = useState(0);
   const [ rotation, setRotation ] = useState(initialRotation);
+  const collisionListentersRef = useRef<CleanEventListener[]>([]);
 
   const {
     isCollisionVisible
   } = useSettings();
 
+  // ------------------------ INIT --------------------
+
   useEffect(() => {
     if (!engine) return;
+    const rawBody = Bodies.rectangle(initialX, initialY, initialWidth, initialHeight, { angle: initialRotation, ...options });
 
-    const body = Bodies.rectangle(initialX, initialY, initialWidth, initialHeight, { angle: initialRotation, ...options });
-    Composite.add(composite ? composite : engine.world, [body]);
+    Composite.add(engine.world, rawBody);
 
-    // Если данный композит ещё не добавлен в мир, добавляем
-    if (composite && !Composite.allComposites(engine.world).find(_composite => _composite.id === composite?.id)) {
-      Composite.add(engine.world, composite);
-    }
-
-    bodyRef.current = body;
 
     if (label) {
-      bodyRef.current.label = label;
+      rawBody.label = label;
     }
+
+    setBody(rawBody);
 
     return () => {
-      Composite.remove(composite ? composite : engine.world, body);
-      bodyRef.current = null;
+      Composite.remove(engine.world, rawBody);
+
+      console.log('BODY', rawBody)
       console.log('DESTROY');
+      setBody(null);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [engine, composite, initialWidth, initialWidth]);
+  }, [engine]);
+
+  // ------------------ UPDATERS ---------------------------------------------
 
   useEffect(() => {
-    if (!bodyRef.current || !options) {
+    if (!bodyGroup || !body) return;
+
+    const processComposite = (processableBodyGroup: BodyGroup) => processableBodyGroup.set(body);
+    const unprocessComposite = (processableBodyGroup: BodyGroup) => processableBodyGroup.delete(body);
+
+    Array.isArray(bodyGroup) ? bodyGroup.map(processComposite) : processComposite(bodyGroup);
+
+    return () => {Array.isArray(bodyGroup) ? bodyGroup.map(unprocessComposite) : unprocessComposite(bodyGroup)};
+  }, [body, bodyGroup]);
+
+  useEffect(() => {
+    if (!body || !options) {
       return;
     }
 
     if (options.friction) {
-      bodyRef.current.friction = options.friction;
+      body.friction = options.friction;
     }
-  }, [options]);
+  }, [body, options]);
 
   useEffect(() => {
-    if (!bodyRef.current) return;
+    if (!body) return;
 
-    Matter_Body.setPosition(bodyRef.current, {x: initialX, y: initialY});
-    setX(+bodyRef.current.position.x.toFixed(3));
-    setY(+bodyRef.current.position.y.toFixed(3));
-  }, [initialX, initialY]);
-
-
-  useEffect(() => {
-    if (!bodyRef.current || !label) return;
-
-    bodyRef.current.label = label;
-  }, [label]);
+    Matter_Body.setPosition(body, {x: initialX, y: initialY});
+    setX(+body.position.x.toFixed(3));
+    setY(+body.position.y.toFixed(3));
+  }, [body, initialX, initialY]);
 
   useEffect(() => {
-    if (!engine || !onCollision || !bodyRef.current) return;
+    if (!body) return;
 
-    Events.on(engine, 'collisionStart', (e) => {
+    const angle = body.angle;
+    const inertia = body.inertia;
+
+    Matter_Body.setAngle(body, 0);
+
+    const width = body.bounds.max.x - body.bounds.min.x;
+    const height = body.bounds.max.y - body.bounds.min.y;
+
+    Matter_Body.scale(body, initialWidth / width, initialHeight / height);
+
+    Matter_Body.setAngle(body, angle);
+    Matter_Body.setInertia(body, inertia);
+  }, [body, initialHeight, initialWidth]);
+
+  useEffect(() => {
+    if (!body || !label) return;
+
+    body.label = label;
+  }, [body, label]);
+
+// ------------------------------------ ON COLLISION --------------------
+
+  useEffect(() => {
+    if (!engine || !body) return;
+
+    const cb = (e: Matter.IEventCollision<Engine>) => {
       // Проверка, что одно из тел - это текущее тело
-      if (!checkIsBodyInPairs(e.pairs, bodyRef.current)) return;
+      if (!checkIsBodyInPairs(e.pairs, body)) return;
+      console.log('collisionStart', e, collisionListentersRef.current, body, checkIsBodyInPairs(e.pairs, body));
 
-      const cleanEvent = { ...e, pairs: e.pairs.filter(pair => pair.bodyA === bodyRef.current || pair.bodyB === bodyRef.current) }
+      const cleanEvent = { ...e, pairs: e.pairs.filter(pair => pair.bodyA === body || pair.bodyB === body) }
 
-      console.log('collisionStart');
 
-      onCollision(cleanEvent);
-    });
-  }, [engine, onCollision]);
+      onCollision?.(cleanEvent);
+      collisionListentersRef.current.map(cb => cb(cleanEvent));
+    }
+
+    Events.on(engine, 'collisionStart', cb);
+    return () => Events.off(engine, 'collisionStart', cb);
+  }, [body, engine, onCollision]);
+
+// ------------------------------------ TICK UPDATER ------------------
 
   useTick((delt) => {
-    if (!bodyRef.current) {
+    if (!body) {
       return;
     }
 
-    if (x !== +bodyRef.current.position.x.toFixed(3) || y !== +bodyRef.current.position.y.toFixed(3) || rotation !== +bodyRef.current.angle.toFixed(3) || vx !== +bodyRef.current.velocity.x.toFixed(3) || vy !== +bodyRef.current.velocity.y.toFixed(3)) {
-      setX(+bodyRef.current.position.x.toFixed(3));
-      setY(+bodyRef.current.position.y.toFixed(3));
-      setVX(+bodyRef.current.velocity.x.toFixed(3));
-      setVY(+bodyRef.current.velocity.y.toFixed(3));
-      setRotation(+bodyRef.current.angle.toFixed(3));
+    if (x !== +body.position.x.toFixed(3) || y !== +body.position.y.toFixed(3) || rotation !== +body.angle.toFixed(3) || vx !== +body.velocity.x.toFixed(3) || vy !== +body.velocity.y.toFixed(3)) {
+      setX(+body.position.x.toFixed(3));
+      setY(+body.position.y.toFixed(3));
+      setVX(+body.velocity.x.toFixed(3));
+      setVY(+body.velocity.y.toFixed(3));
+      setRotation(+body.angle.toFixed(3));
     }
   });
+
+  const subscribeOnCollision = useCallback((cb: CleanEventListener) => { collisionListentersRef.current.push(cb); }, []);
+  const clearCollisionSubscription = useCallback((cb: CleanEventListener) => { collisionListentersRef.current = collisionListentersRef.current.filter(listener => listener !== cb); }, []);
 
   const value = useMemo(() => ({
     x,
@@ -139,13 +182,22 @@ export const Body: React.FC<Props> = React.memo(({
     vx,
     vy,
     rotation,
-    body: bodyRef.current,
   }), [rotation, vx, vy, x, y]);
+
+  const bodyValue = useMemo(() => ({
+    body,
+    onCollision: subscribeOnCollision,
+    clearCollision: clearCollisionSubscription
+  }), [body, clearCollisionSubscription, subscribeOnCollision]);
+
+  if (!children && !isCollisionVisible) return null;
 
   return (
     <BodyStateContextProvider value={value}>
-      {children}
-      {isCollisionVisible ? <RectangleController width={initialWidth} height={initialHeight} /> : null}
+      <BodyContextProvider value={bodyValue}>
+        {children}
+        {isCollisionVisible ? <RectangleController width={initialWidth} height={initialHeight} /> : null}
+      </BodyContextProvider>
     </BodyStateContextProvider>
   );
 }, ({options, ...prevProps}, {options: newOptions, ...nextProps}) => isEqual(newOptions, options) && isEqual(prevProps, nextProps));

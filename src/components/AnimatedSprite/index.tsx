@@ -2,7 +2,7 @@ import { AnimatedSprite as ReactPIXIAnimatedSprite , Container, useApp, _ReactPi
 import { Application, ISpritesheetData, AnimatedSprite as PIXI_AnimatedSprite, Texture, IPointData, Container as PIXI_Container, SCALE_MODES } from "pixi.js";
 import React, { forwardRef, memo, MutableRefObject, useEffect, useMemo, useRef, useState } from "react";
 import { loadData } from "../../utils/asyncPIXILoader";
-import { AnimationContextProvider } from "./context";
+import { AnimationContextProvider, AnimationState } from "./context";
 
 export type IAnimatedSprite = {
   spritesheet: string;
@@ -21,11 +21,13 @@ export type IAnimatedSprite = {
 export const AnimatedSprite = memo(
   forwardRef<PIXI_Container<PIXI_AnimatedSprite>, IAnimatedSprite>(
     (
-      {spritesheet, width, height, rotation, x, y, scale, children, anchor, animationSpeed = 1, setDefault},
+      {spritesheet, width, height, rotation, x, y, scale, children, anchor, animationSpeed: initialAnimationSpeed = 1, setDefault},
       ref
     ) => {
     const [currentAnimation, setCurrentAnimation] = useState<Texture[]>([]);
     const [animationMap, setAnimationMap] = useState<Record<string, Texture[]>>({});
+    const [animationSpeed, setAnimationSpeed] = useState<number>(initialAnimationSpeed);
+    const [isLooped, setIsLooped] = useState<boolean>(true);
     const app = useApp();
 
     // load
@@ -76,15 +78,19 @@ export const AnimatedSprite = memo(
     }, [app, setDefault, spritesheet]);
 
     const value = useMemo(() => ({
-      setAnimation: (animation: string) => {
-        setCurrentAnimation(animationMap[animation]);
+      setAnimation: ({name, loop, speed}) => {
+        console.log(name, animationMap)
+        setCurrentAnimation(animationMap[name]);
+
+        if (loop !== undefined) setIsLooped(loop);
+        if (speed !== undefined) setAnimationSpeed(speed);
 
         (ref as MutableRefObject<PIXI_Container<PIXI_AnimatedSprite> | null>)?.current?.children[0].play();
       },
       animations: Object.keys(animationMap),
-    }), [animationMap, ref]);
+    }) as AnimationState, [animationMap, ref]);
 
-    if (!currentAnimation.length) {
+    if (!currentAnimation?.length) {
       return null;
     }
 
@@ -98,6 +104,7 @@ export const AnimatedSprite = memo(
             textures={currentAnimation}
             anchor={anchor}
             width={width}
+            loop={isLooped}
             height={height}
             {...(scale ? {scale} : {})}
           />

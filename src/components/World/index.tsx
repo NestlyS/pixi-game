@@ -27,8 +27,6 @@ export const World: React.FC<Props> = ({ children }) => {
       }
     });
 
-    return;
-
     // run the renderer
     Render.run(render);
   }, [engine]);

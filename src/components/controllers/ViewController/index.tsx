@@ -12,13 +12,12 @@ export const ViewController = () => {
   const {
     isFocusedOnMainBody
   } = useSettings();
-  const {
-    container
-  } = useContainer();
+  const container = useContainer();
 
   const isFocused = useRef<boolean>(false);
   const app = useApp();
 
+  console.log(container, 'CONTAINER');
 
   useEffect(() => {
     if (!globalViewport || !container) { return; }

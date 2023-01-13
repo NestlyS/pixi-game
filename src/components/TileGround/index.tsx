@@ -2,14 +2,13 @@ import React, { memo, useCallback, useMemo } from 'react'
 import { Ground } from '../Ground'
 import { Row } from './Row';
 
-export const spritesheetUrl = "./spritesheet.json";
-
 export type Props = {
   x: number,
   y: number,
   tileSize: number,
   tilesWidth: number,
   tilesHeight: number,
+  spritesheetUrl: string,
   getTexture: (indexX: number, indexY: number, length: number, height: number) => string,
 }
 
@@ -19,6 +18,7 @@ export const TileGround = memo(({
   tileSize,
   tilesWidth,
   tilesHeight,
+  spritesheetUrl,
   getTexture,
 }: Props) => {
   const arr = (new Array(Math.floor(tilesHeight))).fill(0);

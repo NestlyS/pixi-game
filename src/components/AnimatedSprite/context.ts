@@ -1,7 +1,7 @@
 import { createContext, useContext } from "react";
 
-interface State <T = string>{
-  setAnimation: (value: T) => void
+export interface AnimationState <T = string>{
+  setAnimation: (props: { name: T, loop?: boolean, speed?: number }) => void
   animations: T[]
 }
 
@@ -10,7 +10,7 @@ const initialValue = {
   animations: [],
 }
 
-const AnimationContext = createContext<State>(initialValue);
+const AnimationContext = createContext<AnimationState>(initialValue);
 
 export const AnimationContextProvider = AnimationContext.Provider;
 
@@ -21,7 +21,7 @@ export const useAnimation = <T = string>() => {
   } = useContext(AnimationContext);
 
   return {
-    setAnimation: setAnimation as State<T>['setAnimation'] ?? initialValue.setAnimation,
-    animations: animations as State<T>['animations'] ?? initialValue.animations,
+    setAnimation: setAnimation as AnimationState<T>['setAnimation'] ?? initialValue.setAnimation,
+    animations: animations as AnimationState<T>['animations'] ?? initialValue.animations,
   }
 }

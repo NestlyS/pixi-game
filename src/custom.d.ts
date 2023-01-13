@@ -1,3 +1,5 @@
+import { _ReactPixi } from '@inlet/react-pixi';
+
 declare module '*.svg' {
   import * as React from 'react';
 

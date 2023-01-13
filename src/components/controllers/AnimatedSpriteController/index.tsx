@@ -1,6 +1,6 @@
 import {  memo, useMemo, useState } from 'react';
 import { AnimatedSprite as PIXI_AnimatedSprite, Container as PIXI_Container } from 'pixi.js';
-import { useBodyParams } from '../../Body/context';
+import { useBody, useBodyParams } from '../../Body/context';
 import { AnimatedSprite, IAnimatedSprite } from '../../AnimatedSprite';
 import { ContainerContextProvider, useMakeContainer } from '../ViewController/context';
 import { useTick } from '@inlet/react-pixi';
@@ -15,8 +15,11 @@ export const AnimatedSpriteController = memo(({children, ...props}: Props) => {
     x,
     y,
     rotation,
-    body
   } = useBodyParams();
+
+  const {
+    body
+  } = useBody();
 
   const pivot = props.width && props.height ? {x: 0.5, y: 0.55} : undefined;
   const [scaleX, setScaleX] = useState<1 | -1>(1);
@@ -26,11 +29,11 @@ export const AnimatedSpriteController = memo(({children, ...props}: Props) => {
       return;
     }
 
-    if (scaleX !== 1 && body.velocity.x > EPS) {
+    if (scaleX !== 1 && body.velocity.x > EPS * 10) {
       setScaleX(1);
     }
 
-    if (scaleX !== -1 && body.velocity.x < -EPS) {
+    if (scaleX !== -1 && body.velocity.x < -EPS * 10) {
       setScaleX(-1);
     }
   });

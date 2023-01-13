@@ -5,13 +5,18 @@ import { useEffect } from 'react';
 import { initialState, SettingsContextProvider } from './context'
 
 const TEXT_STYLE_POSITIVE = new TextStyle({
+  fontFamily: 'Press Start 2P',
   fill: ['#41bc66'],
   align: 'left',
+  stroke: '#223',
+  strokeThickness: 5,
 });
 
 const TEXT_STYLE_NEGATIVE = new TextStyle({
+  fontFamily: 'Press Start 2P',
   fill: ['#bb2222'],
-  align: 'left',
+  stroke: '#223',
+  strokeThickness: 5,
 });
 
 type Props = {
@@ -58,10 +63,10 @@ export const Settings = ({
   return (
     <SettingsContextProvider value={value}>
       {/* @ts-ignore */}
-      <Container x={app.view.width - 200}>
+      <Container x={app.view.width - 200} width={500} zIndex={100}>
         <Text text={`${fps}`} style={fps > 30 ? TEXT_STYLE_POSITIVE : TEXT_STYLE_NEGATIVE} />
         <Text y={30} text={ isFocusedOnMainBody ? 'Камера прикреплена' : 'Камера откреплена'} style={isFocusedOnMainBody ? TEXT_STYLE_POSITIVE : TEXT_STYLE_NEGATIVE} interactive click={onFocusedClick}/>
-        <Text y={60} text={ isCollisionVisible ? 'Границы коллизии видимы' : 'Границы коллизии невидимы'} style={isFocusedOnMainBody ? TEXT_STYLE_POSITIVE : TEXT_STYLE_NEGATIVE} interactive click={onCollisionVisibleClick}/>
+        <Text y={60} text={ isCollisionVisible ? 'Границы коллизии видимы' : 'Границы коллизии невидимы'} style={isCollisionVisible ? TEXT_STYLE_POSITIVE : TEXT_STYLE_NEGATIVE} interactive click={onCollisionVisibleClick}/>
       </Container>
       {children}
     </SettingsContextProvider>

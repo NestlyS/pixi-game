@@ -9,9 +9,10 @@ type Props = {
   tilesHeight: number;
   chunkWidth: number;
   changeLevelEvery: number;
+  spritesheetUrl: string;
 }
 
-export const ChunkRenderer = memo(({ chunks, tileSize, tilesHeight, chunkWidth, changeLevelEvery }: Props) => {
+export const ChunkRenderer = memo(({ chunks, tileSize, tilesHeight, chunkWidth, changeLevelEvery, spritesheetUrl }: Props) => {
   return <>{
           chunks
             .map(item =>
@@ -24,6 +25,7 @@ export const ChunkRenderer = memo(({ chunks, tileSize, tilesHeight, chunkWidth, 
                 tileSize={tileSize}
                 tilesHeight={tilesHeight}
                 width={chunkWidth}
+                spritesheetUrl={spritesheetUrl}
               />
             )}
         </>

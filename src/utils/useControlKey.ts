@@ -33,26 +33,24 @@ export const useGlobalCheck = () => {
   });
 }
 
-export const useControlKey = (key: KeyboardEvent['code'], cb: () => void, onUnpress?: () => void): void => {
+const keyboardCheck = (key: KeyboardEvent['code'], cb: () => void,) => (e: KeyboardEvent) => {
+  if (chechIsCorrectCode(e, key)) return;
+
+  cb();
+}
+
+export const useControlKey = (key: KeyboardEvent['code'] | 'mouse', cb: () => void, onUnpress?: () => void): void => {
   const uniqKey = useMemo(() => uniqueId(key), [key]);
 
   useEffect(() => {
     KEYS_STORE[uniqKey] = { isPressed: false, isInited: false, callback: cb};
 
-    const downCb = (e: KeyboardEvent) => {
-      if (chechIsCorrectCode(e, key)) {
-        return;
-      }
-
+    const downCb = () => {
       KEYS_STORE[uniqKey].isPressed = true;
       KEYS_STORE[uniqKey].isInited = true;
     };
 
-    const upCb = (e: KeyboardEvent) => {
-      if (chechIsCorrectCode(e, key)) {
-        return;
-      }
-
+    const upCb = () => {
       const unpressCb = () => {
         KEYS_STORE[uniqKey].isPressed = false;
         onUnpress?.();
@@ -69,13 +67,27 @@ export const useControlKey = (key: KeyboardEvent['code'], cb: () => void, onUnpr
       unpressCb();
     };
 
-    window.addEventListener('keydown', downCb);
-    window.addEventListener('keyup', upCb);
-
-    return () => {
+    // TODO Исправить any
+    const clearFunc = (_downCb: (e: any) => void, _upCb: (e: any) => void) => () => {
+      console.log('CLEAR', uniqKey);
       KEYS_STORE[uniqKey] = { isPressed: false, isInited: false, callback: null };
-      window.removeEventListener('keydown', downCb);
-      window.removeEventListener('keyup', upCb);
+      window.removeEventListener(key === 'mouse' ? 'keydown' : 'mousedown', _downCb);
+      window.removeEventListener(key === 'mouse' ? 'keyup' : 'mouseup', _upCb);
     }
+
+    if (key === 'mouse') {
+      window.addEventListener('mousedown', downCb);
+      window.addEventListener('mouseup', upCb);
+
+      return clearFunc(downCb, upCb);
+    }
+
+    const keyboardDownCb = keyboardCheck(key, downCb);
+    const keyboardUpCb = keyboardCheck(key, upCb);
+
+    window.addEventListener('keydown', keyboardDownCb);
+    window.addEventListener('keyup', keyboardUpCb);
+
+    return clearFunc(keyboardDownCb, keyboardUpCb);
   }, [cb, uniqKey, key, onUnpress]);
 }

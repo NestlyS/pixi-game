@@ -1,6 +1,6 @@
 import { Graphics as PIXI_Grapics } from "pixi.js";
 import { Graphics} from '@inlet/react-pixi';
-import React, { useRef, useCallback, forwardRef } from "react";
+import React, { useRef, useCallback, forwardRef, memo } from "react";
 
 // TODO Разделить
 type RProps = {
@@ -13,7 +13,7 @@ type RProps = {
   color: number
 };
 
-export const Rectangle = forwardRef<PIXI_Grapics, RProps>(({ x, y, color, lineWidth, rotation, width, height}, ref) => {
+export const Rectangle = memo(forwardRef<PIXI_Grapics, RProps>(({ x, y, color, lineWidth, rotation, width, height}, ref) => {
   const [mounted, setMounted] = React.useState(false);
   const originalRef = useRef(null);
 
@@ -40,4 +40,4 @@ export const Rectangle = forwardRef<PIXI_Grapics, RProps>(({ x, y, color, lineWi
       {mounted && <Graphics ref={ref} x={x} y={y} rotation={rotation} geometry={originalRef.current} pivot={{x: width / 2, y: height / 2}}/>}
     </>
   )
-})
+}));

@@ -11,3 +11,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  font-family: 'Press Start 2P';
+  src: url('/public/PressStart2P-Regular.woff2') format('woff2'),
+      url('/public/PressStart2P-Regular.woff') format('woff'),
+      url('/public/PressStart2P-Regular.ttf') format('true type');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

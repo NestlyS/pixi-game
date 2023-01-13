@@ -1,29 +1,38 @@
-import { createContext, useContext, useMemo } from 'react';
+import { createContext, useCallback, useContext, useMemo } from 'react';
 
 type HealthState = {
-  healthMap: Map<number, number | null>;
-  setHealth: (id: number, value: number) => void;
+  healthMap: Record<number, number | null>;
+  setHealth: (id: number, value: number | null | ((value: number | null) => number | null)) => void;
 }
 
-export const initialState = {
-  healthMap: new Map(),
-  setHealth: (id: number, value: number) => console.log(id),
+export const initialState: HealthState = {
+  healthMap: {},
+  setHealth: (id, value) => console.log(id, value),
 }
 
 // Внутри хранятся пары записей типа id -> колво хп или null, если нет ничего
 const HealthContext = createContext<HealthState>(initialState);
 
 export const HealthContextProvider = HealthContext.Provider;
-export const useHealth = (id: number) => {
+export const useHealth = (id?: number) => {
   const {
     healthMap,
     setHealth,
   } = useContext(HealthContext);
 
-  const currentHealth = healthMap.get(id);
+  const currentHealth = id ? healthMap[id] : null;
+
+  const setCurrentHealth = useCallback((value: number | null | ((value: number | null) => number | null), _id?: number) => {
+    const innerId = id || _id;
+    console.log(_id, id, value);
+
+    if (!innerId) return initialState.setHealth;
+
+    return setHealth(innerId, value);
+  }, [id, setHealth]);
 
   return useMemo(() => ({
-    setHealth: (value: number) => setHealth ? setHealth(id, value) : initialState.setHealth(id, value),
+    setHealth: setCurrentHealth,
     currentHealth,
-  }), [currentHealth, id, setHealth]);
+  }), [currentHealth, setCurrentHealth])
 }

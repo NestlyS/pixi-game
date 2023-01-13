@@ -1,5 +1,7 @@
-import React, { useContext } from "react";
-import { Body as Matter_Body } from 'matter-js';
+import { createContext, useContext } from "react";
+import { Body } from 'matter-js';
+import { CleanEventListener } from "./typing";
+import { plug } from "../../utils/plug";
 
 type BodyState = {
   x: number,
@@ -7,7 +9,6 @@ type BodyState = {
   y: number,
   vy: number,
   rotation: number,
-  body: Matter_Body | null,
 }
 
 const initialState = {
@@ -16,10 +17,9 @@ const initialState = {
   y: 0,
   vy: 0,
   rotation: 0,
-  body: null,
 }
 
-const BodyStateContext = React.createContext<BodyState>(initialState);
+const BodyStateContext = createContext<BodyState>(initialState);
 
 export const BodyStateContextProvider = BodyStateContext.Provider;
 export const BodyStateContextConsumer = BodyStateContext.Consumer;
@@ -33,6 +33,30 @@ export const useBodyParams = () => {
     y: Number(props?.y.toFixed(2)) ?? 0,
     vy: Number(props?.vy.toFixed(2)) ?? 0,
     rotation: props?.rotation ?? 0,
-    body: props?.body ?? null
+  }
+}
+
+type BodyContextState = {
+  body: Body | null,
+  onCollision: (cb: CleanEventListener) => void,
+  clearCollision: (cb: CleanEventListener) => void,
+}
+
+const bodyInitialState = {
+  body: null,
+  onCollision: plug,
+  clearCollision: plug,
+}
+
+const BodyContext = createContext<BodyContextState>(bodyInitialState);
+export const BodyContextProvider = BodyContext.Provider;
+
+export const useBody = () => {
+  const props = useContext(BodyContext);
+
+  return {
+    body: props?.body ?? null,
+    onCollision: props?.onCollision ?? bodyInitialState.onCollision,
+    clearCollision: props?.clearCollision ?? bodyInitialState.clearCollision,
   }
 }

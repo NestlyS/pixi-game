@@ -42,7 +42,7 @@ const pushToQueue = <T extends LoaderResource['data'] = LoaderResource['data']>(
   urlQueue.set(url, [resolve]);
 }
 
-export const loadData = <T extends LoaderResource['data'] = LoaderResource['data']>(url: string, app: Application) => {
+export const loadData = <T extends LoaderResource['data'] = LoaderResource['data']>(url: string, app: Application, options?: { signal: AbortController['signal'] }) => {
   if (app.loader.resources?.[url]?.data) {
     return app.loader.resources[url].data as T;
   }
@@ -51,6 +51,8 @@ export const loadData = <T extends LoaderResource['data'] = LoaderResource['data
     activateQueuer(app);
 
     return new Promise<T>((resolve, reject) => {
+      if (options?.signal?.onabort) options.signal.onabort = () => reject(`Aborted with ${options.signal.reason}`);
+
       pushToQueue(urlQueue, url, (value) => resolve(value))
 
       setTimeout(() => {
@@ -60,7 +62,11 @@ export const loadData = <T extends LoaderResource['data'] = LoaderResource['data
   }
 
 
-  return new Promise<T>(resolve => app.loader.add(url).load((_, resources) => {
-    resolve(resources[url].data);
-  }));
+  return new Promise<T>((resolve, reject) => {
+      if (options?.signal?.onabort) options.signal.onabort = () => reject(`Aborted with ${options.signal.reason}`);
+
+      return app.loader.add(url).load((_, resources) => {
+        resolve(resources[url].data);
+      });
+  });
 }
