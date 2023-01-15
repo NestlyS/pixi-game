@@ -11,7 +11,7 @@ export const HealthStorage = memo(({
 }: Props) => {
   const [healthState, updateHealthState] = useState(initialState.healthMap);
 
-  const setHealth = useCallback((id: number, value: number | null | ((value: number | null) => number | null)) => updateHealthState(state => {
+  const setHealth = useCallback((id: number | string, value: number | null | ((value: number | null) => number | null)) => updateHealthState(state => {
     if (typeof value === 'function') {
       const calc = value(state[id]);
       return {...state, [id]: calc};

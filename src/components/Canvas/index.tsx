@@ -27,13 +27,13 @@ export const Canvas = () => {
         <Text x={90} y={10} text='Ева' style={PIXEL_FONT}/>
         <HeartBar x={90} y={50} width={60} height={55} pad={10} spritesheetUrl={spritesheetUrl} textureUrl={TEXTURE_URL} />
         <GlobalViewport width={WORLD_HEIGHT / 2} height={WORLD_HEIGHT / 2}>
-          <ControllableBody />
           <Box x={575} y={-100} width={100} height={80} />
           <Box x={600} y={-50} width={100} height={80} />
           <Box x={300} y={50} width={150} height={120} />
           <Grass x={400} y={410} tilesWidth={14} tilesHeight={3} tileSize={60} spritesheetUrl={spritesheetUrl} />
           <Grass x={800} y={210} tilesWidth={4} tilesHeight={1} tileSize={60} spritesheetUrl={spritesheetUrl} />
           <LevelManager x={1000} y={500} tileSize={60} chunkWidth={25} tilesHeight={5} spritesheetUrl={spritesheetUrl} />
+          <ControllableBody />
         </GlobalViewport>
       </Container>
     </HealthStorage>

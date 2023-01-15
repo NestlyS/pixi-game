@@ -16,12 +16,13 @@ export type IAnimatedSprite = {
   setDefault?: boolean;
   scale?: IPointData;
   animationSpeed?: number;
+  zIndex?: number;
 }
 
 export const AnimatedSprite = memo(
   forwardRef<PIXI_Container<PIXI_AnimatedSprite>, IAnimatedSprite>(
     (
-      {spritesheet, width, height, rotation, x, y, scale, children, anchor, animationSpeed: initialAnimationSpeed = 1, setDefault},
+      {spritesheet, width, height, rotation, x, y, scale, children, anchor, animationSpeed: initialAnimationSpeed = 1, setDefault, zIndex},
       ref
     ) => {
     const [currentAnimation, setCurrentAnimation] = useState<Texture[]>([]);
@@ -79,7 +80,6 @@ export const AnimatedSprite = memo(
 
     const value = useMemo(() => ({
       setAnimation: ({name, loop, speed}) => {
-        console.log(name, animationMap)
         setCurrentAnimation(animationMap[name]);
 
         if (loop !== undefined) setIsLooped(loop);
@@ -106,6 +106,7 @@ export const AnimatedSprite = memo(
             width={width}
             loop={isLooped}
             height={height}
+            zIndex={zIndex}
             {...(scale ? {scale} : {})}
           />
         </Container>

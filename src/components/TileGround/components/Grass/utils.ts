@@ -6,12 +6,6 @@ import { LEFT_EDGE_NAME,
           DIRT_MIDDLE_PART_NAME,
           DIRT_RIGHT_EDGE_NAME,
           Decorations,
-          DECORATION_MAP_TWO_TILES,
-          GRASS_DECORATION_1,
-          GRASS_DECORATION_2,
-          GRASS_DECORATION_3,
-          GRASS_DECORATION_BUSH,
-          GRASS_DECORATION_TREE,
           DECORATION_MAP 
       } from "./contants";
 
@@ -45,41 +39,41 @@ export const getMainTexture = (textureModifier?: TextureType<string | null>): Te
   return DIRT_RIGHT_EDGE_NAME
 }
 
-export const generateTexture = () => {
-  let lastUncompletedSprite: null | Decorations = null;
+// export const generateTexture = () => {
+//   let lastUncompletedSprite: null | Decorations = null;
 
-  return (decoType: Decorations) => {
-    switch (decoType) {
-      case Decorations.Decoration1: return GRASS_DECORATION_1;
-      case Decorations.Decoration2: return GRASS_DECORATION_2;
-      case Decorations.Decoration3: return GRASS_DECORATION_3;
-      case Decorations.Bush: {
-        return GRASS_DECORATION_BUSH;
-      }
-      case Decorations.Plant: {
-        lastUncompletedSprite = Decorations.Plant;
-        return GRASS_DECORATION_TREE;
-      }
-      default:
-        return GRASS_DECORATION_1;
-    }
-  }
-};
+//   return (decoType: Decorations) => {
+//     switch (decoType) {
+//       case Decorations.Decoration1: return GRASS_DECORATION_1;
+//       case Decorations.Decoration2: return GRASS_DECORATION_2;
+//       case Decorations.Decoration3: return GRASS_DECORATION_3;
+//       case Decorations.Bush: {
+//         return GRASS_DECORATION_BUSH;
+//       }
+//       case Decorations.Plant: {
+//         lastUncompletedSprite = Decorations.Plant;
+//         return GRASS_DECORATION_TREE;
+//       }
+//       default:
+//         return GRASS_DECORATION_1;
+//     }
+//   }
+// };
 
-const getOneTileTexture = (getTexture: (decoType: Decorations) => string) => {
-  const max = Object.keys(DECORATION_MAP).length - 1;
-  const min = 0;
+// const getOneTileTexture = (getTexture: (decoType: Decorations) => string) => {
+//   const max = Object.keys(DECORATION_MAP).length - 1;
+//   const min = 0;
 
-  const random = getRandomValue(min, max);
-  const value = Object.entries(DECORATION_MAP)[random];
+//   const random = getRandomValue(min, max);
+//   const value = Object.entries(DECORATION_MAP)[random];
 
-  return getTexture(value[1]);
-}
+//   return getTexture(value[1]);
+// }
 
-export const generateDecorationGenerator = () => {
-  const getTexture = generateTexture();
+// export const generateDecorationGenerator = () => {
+//   const getTexture = generateTexture();
 
-  return (lenght: number, height: number) => (indexX: number) => {
-    return getOneTileTexture(getTexture);
-  }
-};
+//   return (lenght: number, height: number) => (indexX: number) => {
+//     return getOneTileTexture(getTexture);
+//   }
+// };

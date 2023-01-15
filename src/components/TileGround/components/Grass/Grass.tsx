@@ -1,7 +1,8 @@
 import { useCallback, useMemo } from "react";
 import { Props, TileGround } from "../..";
 import { Row } from "../../Row";
-import { generateDecorationGenerator, getMainTexture } from "./utils";
+import { GrassDeco } from "../GrassDeco";
+import { getMainTexture } from "./utils";
 
 export type GrassProps = {
   textureModifier?: (indexX: number, indexY: number, length: number, height: number) => string | null,
@@ -10,11 +11,13 @@ export type GrassProps = {
 
 export const Grass = ({textureModifier, ...props}: GrassProps) => {
   const getTexture = useCallback((indexX: number, indexY: number, length: number, height: number) => getMainTexture(textureModifier)(indexX, indexY, length, height), [textureModifier]);
-  const getDecorationTexture = useMemo(() => generateDecorationGenerator(), []);
-  const getGrassTexture = useCallback((indexX: number) => getDecorationTexture(props.tilesWidth, props.tilesHeight)(indexX), [getDecorationTexture, props.tilesHeight, props.tilesWidth]);
+  // const getDecorationTexture = useMemo(() => generateDecorationGenerator(), []);
+  // const getGrassTexture = useCallback((indexX: number) => getDecorationTexture(props.tilesWidth, props.tilesHeight)(indexX), [getDecorationTexture, props.tilesHeight, props.tilesWidth]);
+
+  console.log(props.x, props.y, props.tileSize, props.tilesWidth, props.tileSize * props.tilesWidth, props.tileSize * props.tilesWidth + props.x);
 
   return  <>
             <TileGround {...props} getTexture={getTexture} />
-            <Row startX={props.x - props.tilesWidth * props.tileSize / 2 + props.tileSize / 2} startY={props.y - props.tilesHeight * props.tileSize / 2 - props.tileSize / 2} tilesCount={props.tilesWidth} tileSize={props.tileSize} spritesheet={props.spritesheetUrl} getTexture={getGrassTexture} />
+            <GrassDeco x={props.x + props.tileSize - (props.tilesWidth * props.tileSize) / 2} y={props.y - (props.tilesHeight * props.tileSize) / 2} width={props.tilesWidth*props.tileSize} step={props.tileSize} spritesheetUrl={props.spritesheetUrl}/>
           </>;
 }

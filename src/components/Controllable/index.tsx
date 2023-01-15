@@ -11,7 +11,7 @@ import { ViewController } from '../controllers/ViewController';
 import { SlideController } from '../controllers/SlideController';
 import { AttackController } from '../controllers/AttackController';
 
-export const USER_HEALTH_ID = Number(uniqueId());
+export const USER_HEALTH_ID = `user_${Number(uniqueId())}`;
 export const USER_LABEL = `user_${USER_HEALTH_ID}`;
 const test = '/eva/texture.json';
 const animationMap = {
@@ -29,14 +29,14 @@ const INVICIBILITY_PERIOD = 1000;
 
 export const ControllableBody = () => {
   return (
-    <Body x={800} y={200} width={50} height={120} options={MAIN_BODY_OPTIONS} label={USER_LABEL}>
+    <Body x={800} y={0} width={50} height={120} options={MAIN_BODY_OPTIONS} label={USER_LABEL}>
       <GroundTouchController>
         <MoveController />
         <JumpController />
         <ViewController />
         <HealthController bodyId={USER_HEALTH_ID} cooldown={INVICIBILITY_PERIOD}>
           <AttackController width={100} height={40}>
-            <AnimatedSpriteController width={190} height={180} spritesheet={test} animationSpeed={0.07} setDefault>
+            <AnimatedSpriteController width={190} height={180} spritesheet={test} animationSpeed={0.07} setDefault zIndex={100} >
               <ViewController />
               <DamageTouchController />
               <SlideController>

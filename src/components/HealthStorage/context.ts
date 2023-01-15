@@ -1,8 +1,8 @@
 import { createContext, useCallback, useContext, useMemo } from 'react';
 
 type HealthState = {
-  healthMap: Record<number, number | null>;
-  setHealth: (id: number, value: number | null | ((value: number | null) => number | null)) => void;
+  healthMap: Record<number | string, number | null>;
+  setHealth: (id: number | string, value: number | null | ((value: number | null) => number | null)) => void;
 }
 
 export const initialState: HealthState = {
@@ -14,7 +14,7 @@ export const initialState: HealthState = {
 const HealthContext = createContext<HealthState>(initialState);
 
 export const HealthContextProvider = HealthContext.Provider;
-export const useHealth = (id?: number) => {
+export const useHealth = (id?: number | string) => {
   const {
     healthMap,
     setHealth,

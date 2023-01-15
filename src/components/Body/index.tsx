@@ -144,7 +144,6 @@ export const Body: React.FC<Props> = React.memo(({
     const cb = (e: Matter.IEventCollision<Engine>) => {
       // Проверка, что одно из тел - это текущее тело
       if (!checkIsBodyInPairs(e.pairs, body)) return;
-      console.log('collisionStart', e, collisionListentersRef.current, body, checkIsBodyInPairs(e.pairs, body));
 
       const cleanEvent = { ...e, pairs: e.pairs.filter(pair => pair.bodyA === body || pair.bodyB === body) }
 

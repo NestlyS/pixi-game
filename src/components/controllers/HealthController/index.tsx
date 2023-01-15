@@ -7,7 +7,7 @@ import { BodyHealthContextProvider } from "./context";
 const USER_HEALTH = 3;
 
 type Props = {
-  bodyId?: number;
+  bodyId?: number | string;
   initialHealth?: number,
   children?: React.ReactNode,
   cooldown?: number,

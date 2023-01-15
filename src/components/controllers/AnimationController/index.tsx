@@ -94,14 +94,12 @@ export const AnimationController = ({
     }
 
     if (animationNames.Fall && lastAnim.current !== AnimationList.Fall && vy > Y_IDLE_BORDER) {
-      console.log(body.velocity.y, vy, 'fall')
       setAnimation(animationNames.Fall);
       lastAnim.current = AnimationList.Fall;
       return;
     }
 
     if (animationNames.Jump && lastAnim.current !== AnimationList.Jump && vy < -Y_IDLE_BORDER) {
-      console.log(body.velocity.y, vy, 'JUMP')
       setAnimation(animationNames.Jump);
       lastAnim.current = AnimationList.Jump;
       return;

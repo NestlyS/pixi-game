@@ -28,6 +28,8 @@ export const HeartBar = ({
 
   if (!currentHealth) return null;
 
+  console.log(currentHealth, USER_HEALTH_ID, 'HEALTH');
+
   return (
     /* @ts-ignore */
     <Container zIndex={10}>
