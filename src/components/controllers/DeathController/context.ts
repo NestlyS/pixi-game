@@ -1,9 +1,6 @@
 import { createContext, useContext } from 'react';
 
-const initialState = {
-  onKill: (cb: () => Promise<void>) => {},
-  kill: () => {}
-};
+const initialState = () => {};
 
 const DeathWrapperContext = createContext(initialState);
 export const DeathWrapperContextProvider = DeathWrapperContext.Provider;

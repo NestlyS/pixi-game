@@ -3,7 +3,7 @@ import { useBodyHealth } from "../HealthController/context";
 import { useDeathWrapper } from "./context"
 
 export const DeathListener = () => {
-  const { kill } = useDeathWrapper();
+  const kill = useDeathWrapper();
   const {
     currentHealth
   } = useBodyHealth();

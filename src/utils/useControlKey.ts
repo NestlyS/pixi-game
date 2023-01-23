@@ -69,7 +69,7 @@ export const useControlKey = (key: KeyboardEvent['code'] | 'mouse', cb: () => vo
 
     // TODO Исправить any
     const clearFunc = (_downCb: (e: any) => void, _upCb: (e: any) => void) => () => {
-      console.log('CLEAR', uniqKey);
+      console.log('CLEAR', uniqKey, KEYS_STORE[uniqKey]);
       KEYS_STORE[uniqKey] = { isPressed: false, isInited: false, callback: null };
       window.removeEventListener(key === 'mouse' ? 'keydown' : 'mousedown', _downCb);
       window.removeEventListener(key === 'mouse' ? 'keyup' : 'mouseup', _upCb);

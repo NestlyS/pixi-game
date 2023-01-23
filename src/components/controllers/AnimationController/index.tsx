@@ -3,11 +3,13 @@ import React, { useCallback, useEffect, useRef } from 'react'
 import { EPS } from '../../../constants';
 import { useAnimation } from '../../AnimatedSprite/context';
 import { useBody, useBodyParams } from '../../Body/context'
+import { useAttackingAnimation } from '../AttackController/context';
+import { useDeath, useDeathWrapper } from '../DeathController/context';
 import { useGroundTouch } from '../GroundTouchController/context';
 import { useBodyHealth } from '../HealthController/context';
 import { useSliding } from '../SlideController/context';
 
-const X_IDLE_BORDER = EPS * 50;
+const X_IDLE_BORDER = EPS * 10;
 const Y_IDLE_BORDER = EPS * 100;
 
 const enum AnimationList {
@@ -17,10 +19,12 @@ const enum AnimationList {
   Jump = 'jump',
   Hurt = 'hurt',
   Slide = 'slide',
+  Attack = 'attack',
+  Die = 'die',
 }
 
 type Props = {
-  animationNames: Record<keyof typeof AnimationList, { name: string, speed?: number, loop?: boolean }>,
+  animationNames: Record<keyof typeof AnimationList, { name: string, speed?: number, loop?: boolean, trigger?: boolean } | undefined>,
 }
 
 export const AnimationController = ({
@@ -38,6 +42,12 @@ export const AnimationController = ({
   const {
     isCooldown
   } = useBodyHealth();
+
+  const {
+    isAttack,
+    onActionFinish
+  } = useAttackingAnimation();
+  const isDead = useDeath();
   const isSliding = useSliding();
 
   const isGroundTouchedRef = useRef(true);
@@ -52,17 +62,48 @@ export const AnimationController = ({
 
   const {
     animations,
+    onComplete,
     setAnimation,
   } = useAnimation();
 
   const lastAnim = useRef<AnimationList | null>(null);
 
   useEffect(() => {
+    if (!animationNames.Idle) return;
+
     setAnimation(animationNames.Idle);
   }, [animationNames.Idle, setAnimation]);
 
   useTick(() => {
     if (!body) {
+      return;
+    }
+
+    if (animationNames.Die && lastAnim.current !== AnimationList.Die && isDead) {
+      setAnimation(animationNames.Die);
+      lastAnim.current = AnimationList.Die;
+      return;
+    }
+
+    if (isDead) {
+      return;
+    }
+
+    if (animationNames.Attack && lastAnim.current !== AnimationList.Attack && isAttack) {
+      setAnimation(animationNames.Attack);
+      if (animationNames.Attack.trigger) {
+        const cb = () => {
+          console.log('ATTACK!!!');
+          onActionFinish();
+        }
+
+        onComplete(cb, true);
+      }
+      lastAnim.current = AnimationList.Attack;
+      return;
+    }
+
+    if (isAttack) {
       return;
     }
 

@@ -12,3 +12,27 @@ export const useAttacking = () => {
 
   return isAttacking ?? initialState;
 }
+
+type State = {
+  isAttack: boolean,
+  onActionFinish: () => void,
+}
+
+const initialStateAttacking = {
+  isAttack: false,
+  onActionFinish: () => {}
+}
+
+const AttackingAnimationIContext = createContext<State>(initialStateAttacking);
+export const AttackingAnimationProvider = AttackingAnimationIContext.Provider;
+export const useAttackingAnimation = () => {
+  const {
+    isAttack,
+    onActionFinish,
+  } = useContext(AttackingAnimationIContext);
+
+  return {
+    isAttack,
+    onActionFinish
+  };
+}

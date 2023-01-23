@@ -1,23 +1,13 @@
-import { useTick } from '@inlet/react-pixi';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { DAMAGABLE_BODY_GROUP } from '../../../bodyGroups/damagable';
-import { EPS } from '../../../constants';
 import { useControlKey } from '../../../utils/useControlKey';
-import { Body } from '../../Body';
 import { useBody } from '../../Body/context';
 import { useHealth } from '../../HealthStorage/context';
-import { initialState, AttackingContextProvider } from './context';
-
-const SENSOR_HIDDEN_X = -1000;
-const SENSOR_HIDDEN_Y = -1000;
-const SENSOR_LABEL = 'attack_sensor';
+import { ConnectedSensorController } from '../ConntectedSensorController';
+import { isSensorLabel } from '../ConntectedSensorController/utils';
+import { initialState, AttackingContextProvider, AttackingAnimationProvider } from './context';
 
 const DAMAGE_VALUE = 1;
-
-const SENSOR_OPTIONS: Matter.IChamferableBodyDefinition = {
-  isSensor: true,
-  isStatic: true,
-}
 
 type Props = {
   children: React.ReactNode;
@@ -38,35 +28,20 @@ export const AttackController = ({
   } = useHealth();
 
   const [isAttacing, setAttacting] = useState(initialState);
-  const [scaleX, setScaleX] = useState<1 | -1>(1);
-
-  useTick(() => {
-    if (!body) {
-      return;
-    }
-
-    if (scaleX !== 1 && body.velocity.x > EPS) {
-      setScaleX(1);
-    }
-
-    if (scaleX !== -1 && body.velocity.x < -EPS) {
-      setScaleX(-1);
-    }
-  });
+  const attackRef = useRef(false);
 
   const mouseCb = useCallback(() => {
-    if (!body) return;
+    if (!body || attackRef.current) return;
+    console.log('CB');
     setAttacting(true);
+    attackRef.current = true;
   }, [body]);
 
-  const unpressCb = useCallback(() => {
-    if (!body) return;
-    setAttacting(false);
-  }, [body]);
+  useControlKey('mouse', mouseCb);
 
   const onCollision = useCallback((e: Matter.IEventCollision<Matter.Engine>) => {
     if (!body) return;
-    const collidedBodies = e.pairs.map(pair => pair.bodyA.label === SENSOR_LABEL ? pair.bodyB : pair.bodyA);
+    const collidedBodies = e.pairs.map(pair => isSensorLabel(pair.bodyA.label) ? pair.bodyB : pair.bodyA);
 
     const collidedBody = DAMAGABLE_BODY_GROUP.get().find(damagableBody => collidedBodies.includes(damagableBody));
 
@@ -76,14 +51,23 @@ export const AttackController = ({
     }
   }, [body, setHealth]);
 
-  useControlKey('mouse', mouseCb, unpressCb);
+  const cb = useCallback(() => {
+    console.log('FINISHHHH');
+    setAttacting(false);
+    attackRef.current = false;
+  }, []);
 
-  const sensorX = body && isAttacing ? body.position.x + scaleX * width * 0.75 : SENSOR_HIDDEN_X;
-  const sensorY = body && isAttacing ? body.position.y : SENSOR_HIDDEN_Y;
+  const value = useMemo(() => ({
+    isAttack: isAttacing,
+    onActionFinish: cb,
+  }), [cb, isAttacing]);
+
 
   return  (
     <AttackingContextProvider value={isAttacing}>
-      <Body x={sensorX} y={sensorY} width={width} height={height} options={SENSOR_OPTIONS} onCollision={onCollision} label={SENSOR_LABEL}/>
-      {children}
+      <AttackingAnimationProvider value={value}>
+        <ConnectedSensorController isHidden={!isAttacing} width={width} height={height} onCollision={onCollision} />
+        {children}
+      </AttackingAnimationProvider>
     </AttackingContextProvider>
 )}

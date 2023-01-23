@@ -7,7 +7,7 @@ import { useTick } from '@inlet/react-pixi';
 import { EPS } from '../../../constants';
 
 type Props = {
-  children: React.ReactElement | React.ReactElement[]
+  children?: React.ReactElement | React.ReactElement[]
 } & Omit<Omit<Omit<IAnimatedSprite, 'x'>, 'y'>, 'rotation'>;
 
 export const AnimatedSpriteController = memo(({children, ...props}: Props) => {

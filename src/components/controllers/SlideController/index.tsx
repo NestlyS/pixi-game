@@ -24,7 +24,7 @@ const moveSpriteCenter = (() => {
   return (container: Container, bodyWidth: number, isBack: boolean) => {
     console.log(moveScale, isBack);
 
-    container.children[0].position.y += moveScale * bodyWidth / 2.5;
+    container.children[0].position.y += moveScale * bodyWidth / 2;
     moveScale *= -1;
   }
 })()

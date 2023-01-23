@@ -5,6 +5,7 @@ import { Body } from '../Body'
 import { LevelManagerContextProvider } from './context'
 import { ChunkParams } from './typings';
 import { ChunkRenderer } from './ChunkRendered';
+import { USER_BODY_GROUP } from '../../bodyGroups/user';
 
 const SENSOR_OPTIONS: Matter.IChamferableBodyDefinition = {
   isSensor: true,
@@ -47,7 +48,8 @@ export const LevelManager = ({
 
 
   const onCollision = useCallback(
-    () => {
+    (e: Matter.IEventCollision<Matter.Engine>) => {
+      if (!e.pairs.some(pair => USER_BODY_GROUP.get().some( body => pair.bodyA.label === body.label || pair.bodyB.label === body.label))) return;
       console.log('------SENSOR!!!------');
       setCollisionDetectorVisibility(false);
       const newChunks = [...chunks];
@@ -64,7 +66,6 @@ export const LevelManager = ({
       if (newChunks.length > 2) {
         newChunks.shift();
       }
-      console.log('------SENSOR!!!------', chunks);
 
       setChunks(newChunks);
       setCollisionDetectorVisibility(true);

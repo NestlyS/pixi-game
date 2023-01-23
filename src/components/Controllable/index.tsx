@@ -10,10 +10,11 @@ import { HealthController } from '../controllers/HealthController';
 import { ViewController } from '../controllers/ViewController';
 import { SlideController } from '../controllers/SlideController';
 import { AttackController } from '../controllers/AttackController';
+import { USER_BODY_GROUP } from '../../bodyGroups/user';
+import { useRef } from 'react';
+import { MainUserController } from '../MainUserStorage/controller';
 
-export const USER_HEALTH_ID = `user_${Number(uniqueId())}`;
-export const USER_LABEL = `user_${USER_HEALTH_ID}`;
-const test = '/eva/texture.json';
+const test = '/eva/eva.json';
 const animationMap = {
   Idle: {name: 'stand', speed: 0.07, loop: true},
   Run: {name: 'run', speed: 0.07, loop: true},
@@ -21,6 +22,8 @@ const animationMap = {
   Jump: {name: 'jump', speed: 0.09, loop: false},
   Hurt: {name: 'hurt', speed: 0.07, loop: true},
   Slide: {name: 'slide', speed: 0.07, loop: true},
+  Attack: {name: 'attack', speed: 0.15, loop: false, trigger: true },
+  Die: undefined,
 }
 
 export const BODY_FRICTION = 0.05;
@@ -28,14 +31,17 @@ const MAIN_BODY_OPTIONS = { inertia: Infinity, friction: BODY_FRICTION, weight: 
 const INVICIBILITY_PERIOD = 1000;
 
 export const ControllableBody = () => {
+  const userLabelRef = useRef(uniqueId('user'));
+
   return (
-    <Body x={800} y={0} width={50} height={120} options={MAIN_BODY_OPTIONS} label={USER_LABEL}>
+    <Body x={800} y={0} width={50} height={120} options={MAIN_BODY_OPTIONS} label={userLabelRef.current} bodyGroup={USER_BODY_GROUP}>
+      <MainUserController />
       <GroundTouchController>
         <MoveController />
         <JumpController />
         <ViewController />
-        <HealthController bodyId={USER_HEALTH_ID} cooldown={INVICIBILITY_PERIOD}>
-          <AttackController width={100} height={40}>
+        <HealthController initialHealth={3} bodyId={userLabelRef.current} cooldown={INVICIBILITY_PERIOD}>
+          <AttackController width={70} height={100}>
             <AnimatedSpriteController width={190} height={180} spritesheet={test} animationSpeed={0.07} setDefault zIndex={100} >
               <ViewController />
               <DamageTouchController />

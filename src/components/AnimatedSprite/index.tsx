@@ -1,6 +1,6 @@
 import { AnimatedSprite as ReactPIXIAnimatedSprite , Container, useApp, _ReactPixi } from "@inlet/react-pixi";
 import { Application, ISpritesheetData, AnimatedSprite as PIXI_AnimatedSprite, Texture, IPointData, Container as PIXI_Container, SCALE_MODES } from "pixi.js";
-import React, { forwardRef, memo, MutableRefObject, useEffect, useMemo, useRef, useState } from "react";
+import React, { forwardRef, memo, MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { loadData } from "../../utils/asyncPIXILoader";
 import { AnimationContextProvider, AnimationState } from "./context";
 
@@ -10,6 +10,7 @@ export type IAnimatedSprite = {
   x?: number;
   y?: number;
   anchor?: IPointData
+  initialAnimation?: string;
   width: number;
   height: number;
   rotation?: number;
@@ -17,17 +18,20 @@ export type IAnimatedSprite = {
   scale?: IPointData;
   animationSpeed?: number;
   zIndex?: number;
+  onComplete?: (currentAnimationName: string | null) => void;
 }
 
 export const AnimatedSprite = memo(
   forwardRef<PIXI_Container<PIXI_AnimatedSprite>, IAnimatedSprite>(
     (
-      {spritesheet, width, height, rotation, x, y, scale, children, anchor, animationSpeed: initialAnimationSpeed = 1, setDefault, zIndex},
+      {spritesheet, width, height, rotation, x, y, scale, children, anchor, initialAnimation, animationSpeed: initialAnimationSpeed = 1, setDefault, zIndex, onComplete},
       ref
     ) => {
     const [currentAnimation, setCurrentAnimation] = useState<Texture[]>([]);
+    const currentAnimationNameRef = useRef<string | null>(null);
     const [animationMap, setAnimationMap] = useState<Record<string, Texture[]>>({});
     const [animationSpeed, setAnimationSpeed] = useState<number>(initialAnimationSpeed);
+    const onCompleteListenersRef = useRef<[((currentAnimationName: string | null) => void), boolean][]>([]);
     const [isLooped, setIsLooped] = useState<boolean>(true);
     const app = useApp();
 
@@ -37,19 +41,11 @@ export const AnimatedSprite = memo(
         return;
       }
 
-      /**
-       * TODO Реализовать логику асинхронного добавления в очередь и загрузки спрайтов
-       * Возможно потребуется глобальный объект, который будет ответственнен за подгрузку спрайтов
-       * Вернуть самолетик для нормального тестирования
-       */
-
-      if (app.loader.resources[spritesheet]) {
-        return;
-      }
-
       const cb = async () => {
-        const loadedSpritesheet = await loadData<ISpritesheetData>(spritesheet, app);
+        let loadedSpritesheet = app.loader.resources[spritesheet] ? app.loader.resources[spritesheet].data as ISpritesheetData : await loadData<ISpritesheetData>(spritesheet, app);
+        console.log('spritesheet', spritesheet, app.loader.resources, loadedSpritesheet);
 
+        console.log('ANIMATION!!!- ---- -- -- -', loadedSpritesheet, initialAnimation, setDefault);
         if (!loadedSpritesheet.animations) {
           throw new Error('Не обнаружено анимаций');
         }
@@ -58,37 +54,61 @@ export const AnimatedSprite = memo(
           .entries(loadedSpritesheet.animations)
           .reduce((acc, [animationName, frameUrls]) => {
             const textures = frameUrls.map(frameUrl => Texture.from(frameUrl)).map(texture => {
-              texture.baseTexture.scaleMode = SCALE_MODES.NEAREST;
+                texture.baseTexture.scaleMode = SCALE_MODES.NEAREST;
 
-              return texture;
-            });
+                return texture;
+              });
 
-            acc[animationName] = textures;
+              acc[animationName] = textures;
 
-            return acc;
-          }, {} as Record<string, Texture[]>);
+              return acc;
+            }, {} as Record<string, Texture[]>);
 
         setAnimationMap(animationMapRaw);
 
-        if (setDefault) {
-          setCurrentAnimation(Object.values(animationMapRaw)[0])
+        if (setDefault || initialAnimation) {
+          setCurrentAnimation(initialAnimation ? animationMapRaw[initialAnimation] : Object.values(animationMapRaw)[0])
+          currentAnimationNameRef.current = initialAnimation || Object.keys(animationMapRaw)[0];
         }
       }
 
       cb();
-    }, [app, setDefault, spritesheet]);
+    }, [app, initialAnimation, setDefault, spritesheet]);
+
+    const onComplete_ = useCallback((cb: (currentAnimationName: string | null) => void, once: boolean = false) => onCompleteListenersRef.current.push([cb, once]), []);
+    const clearOnComplete_ = useCallback((cb: (currentAnimationName: string | null) => void) => onCompleteListenersRef.current.filter(([_cb]) => cb !== _cb), []);
+    const innerOnComplete = useCallback(
+      () => {
+        onComplete?.(currentAnimationNameRef.current);
+        onCompleteListenersRef.current = onCompleteListenersRef.current.filter(([cb, once]) => {
+          cb(currentAnimationNameRef.current);
+          return !once;
+        });
+      },
+      [onComplete],
+    );
+    const setAnimation = useCallback(({name, loop, speed}: {
+      name: string;
+      loop?: boolean | undefined;
+      speed?: number | undefined;
+    }) => {
+      setCurrentAnimation(animationMap[name]);
+      currentAnimationNameRef.current = name;
+
+      if (loop !== undefined) setIsLooped(loop);
+      if (speed !== undefined) setAnimationSpeed(speed);
+
+      console.log(name, ref);
+
+      (ref as MutableRefObject<PIXI_Container<PIXI_AnimatedSprite> | null>)?.current?.children[0].play();
+    }, [animationMap, ref]);
 
     const value = useMemo(() => ({
-      setAnimation: ({name, loop, speed}) => {
-        setCurrentAnimation(animationMap[name]);
-
-        if (loop !== undefined) setIsLooped(loop);
-        if (speed !== undefined) setAnimationSpeed(speed);
-
-        (ref as MutableRefObject<PIXI_Container<PIXI_AnimatedSprite> | null>)?.current?.children[0].play();
-      },
+      setAnimation,
+      onComplete: onComplete_,
+      clearOnComplete: clearOnComplete_,
       animations: Object.keys(animationMap),
-    }) as AnimationState, [animationMap, ref]);
+    }) as AnimationState, [animationMap, clearOnComplete_, onComplete_, setAnimation]);
 
     if (!currentAnimation?.length) {
       return null;
@@ -99,6 +119,8 @@ export const AnimatedSprite = memo(
         {/* @ts-ignore */}
         <Container ref={ref} x={x} y={y} rotation={rotation} width={width} height={height}>
           <ReactPIXIAnimatedSprite
+            onLoop={innerOnComplete}
+            onComplete={innerOnComplete}
             animationSpeed={animationSpeed}
             isPlaying={true}
             textures={currentAnimation}

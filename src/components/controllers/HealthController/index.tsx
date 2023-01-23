@@ -1,21 +1,18 @@
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { useBody } from "../../Body/context";
-import { USER_HEALTH_ID } from "../../Controllable";
 import { useHealth } from "../../HealthStorage/context";
 import { BodyHealthContextProvider } from "./context";
 
-const USER_HEALTH = 3;
-
 type Props = {
   bodyId?: number | string;
-  initialHealth?: number,
+  initialHealth: number,
   children?: React.ReactNode,
   cooldown?: number,
 }
 
 export const HealthController = memo(({
   bodyId,
-  initialHealth = USER_HEALTH,
+  initialHealth,
   children,
   cooldown,
 }: Props) => {
@@ -28,48 +25,41 @@ export const HealthController = memo(({
   const {
     currentHealth,
     setHealth,
+    onCooldown,
+    clearCooldown,
   } = useHealth(id);
 
   const [isCooldown, setCooldown] = useState(false);
-  const [timer, setTimer] = useState<null | (() => NodeJS.Timeout)>(null);
 
   useEffect(() => {
-    if (id) {
-      setHealth(initialHealth);
-      return;
-    }
+    if (!id) return;
 
-
-    setHealth(null);
-  }, [id, initialHealth, setHealth]);
+    setHealth(initialHealth, id, cooldown);
+  }, [cooldown, id, initialHealth, setHealth]);
 
   useEffect(() => {
-    if (timer) {
-      const timeoutId = timer();
-      return () => clearTimeout(timeoutId);
+    if (!id) return;
+
+    const cb = (cooldown: boolean) => {
+      setCooldown(cooldown);
     }
-  }, [timer]);
+
+    onCooldown(cb, id);
+
+    return () => clearCooldown(cb, id);
+  }, [clearCooldown, id, onCooldown]);
 
   const calculateHealth = useCallback(
-    (value: number, isDamage?: boolean ) => {
+    (value: number) => {
       if (!id) return;
-
-      if (cooldown && isDamage) {
-        setCooldown(true);
-        setTimer(() => () => setTimeout(() => setCooldown(false), cooldown))
-      }
-
-      if (isCooldown && isDamage) {
-        return;
-      }
 
       setHealth(value);
     },
-    [cooldown, id, isCooldown, setHealth],
+    [id, setHealth],
   );
 
-  const addHealth = useCallback((amount: number) => currentHealth && calculateHealth(currentHealth + amount, false), [calculateHealth, currentHealth]);
-  const makeDamage = useCallback((amount: number) => currentHealth && calculateHealth(currentHealth - amount, true), [calculateHealth, currentHealth]);
+  const addHealth = useCallback((amount: number) => currentHealth && calculateHealth(currentHealth + amount), [calculateHealth, currentHealth]);
+  const makeDamage = useCallback((amount: number) => currentHealth && calculateHealth(currentHealth - amount), [calculateHealth, currentHealth]);
 
   const value = useMemo(() => {
     return {

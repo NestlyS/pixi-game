@@ -10,7 +10,7 @@ import { useGlobalViewportControls } from './hooks';
 type Props = {
   width: number,
   height: number,
-  children: React.ReactElement | React.ReactElement[],
+  children: React.ReactNode,
 }
 
 const plugins = ['drag', 'wheel', 'pinch'] as ("drag" | "wheel" | "pinch")[];

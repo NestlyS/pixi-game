@@ -11,7 +11,6 @@ export const createBodyGroup = (name: string): BodyGroupMap => {
       if (!body) return;
 
       bodies.push(body);
-      console.log('COMPOSITE_ADDED', callbacks, bodies.map(body => body.id));
       callbacks.map(cb => cb('add', body));
     },
     delete: body => {

@@ -144,7 +144,7 @@
         "y": 0.5
       }
     },
-    "attack sprite4.png": {
+    "attacksprite4.png": {
       "frame": {
         "x": 91,
         "y": 96,
@@ -168,7 +168,7 @@
         "y": 0.5
       }
     },
-    "attack sprite5.png": {
+    "attacksprite5.png": {
       "frame": {
         "x": 35,
         "y": 101,
@@ -192,7 +192,7 @@
         "y": 0.5
       }
     },
-    "attack sprite3.png": {
+    "attacksprite3.png": {
       "frame": {
         "x": 134,
         "y": 1,
@@ -216,7 +216,7 @@
         "y": 0.5
       }
     },
-    "attack sprite8.png": {
+    "attacksprite8.png": {
       "frame": {
         "x": 65,
         "y": 118,
@@ -264,7 +264,7 @@
         "y": 0.5
       }
     },
-    "attack sprite9.png": {
+    "attacksprite9.png": {
       "frame": {
         "x": 90,
         "y": 118,
@@ -288,7 +288,7 @@
         "y": 0.5
       }
     },
-    "attack sprite6.png": {
+    "attacksprite6.png": {
       "frame": {
         "x": 65,
         "y": 101,
@@ -312,7 +312,7 @@
         "y": 0.5
       }
     },
-    "attack sprite7.png": {
+    "attacksprite7.png": {
       "frame": {
         "x": 115,
         "y": 118,
@@ -456,7 +456,7 @@
         "y": 0.5
       }
     },
-    "attack sprite2.png": {
+    "attacksprite2.png": {
       "frame": {
         "x": 26,
         "y": 135,
@@ -480,7 +480,7 @@
         "y": 0.5
       }
     },
-    "attack sprite1.png": {
+    "attacksprite1.png": {
       "frame": {
         "x": 35,
         "y": 123,
@@ -2627,5 +2627,11 @@
       "h": 185
     },
     "scale": 1
+  },
+  "animations": {
+    "attack": ["attacksprite1.png", "attacksprite2.png", "attacksprite3.png", "attacksprite4.png", "attacksprite5.png", "attacksprite6.png", "attacksprite7.png", "attacksprite8.png", "attacksprite9.png"],
+    "paper": ["paper (1).png", "paper (2).png", "paper (3).png", "paper (4).png", "paper (5).png", "paper (6).png"],
+    "chips": ["chips (1).png", "chips (2).png", "chips (3).png", "chips (4).png", "chips (5).png", "chips (6).png"],
+    "bottle": ["bottle (1).png", "bottle (2).png", "bottle (3).png", "bottle (4).png", "bottle (5).png", "bottle (6).png"]
   }
 }

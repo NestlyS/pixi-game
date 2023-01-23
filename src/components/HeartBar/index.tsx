@@ -1,6 +1,6 @@
 import { Container } from "@inlet/react-pixi";
-import { USER_HEALTH_ID } from "../Controllable";
 import { useHealth } from "../HealthStorage/context";
+import { useMainUserId } from "../MainUserStorage/context";
 import { Sprite } from "../Sprite"
 
 type Props = {
@@ -23,12 +23,15 @@ export const HeartBar = ({
   textureUrl,
 }: Props) => {
   const {
+    id
+  } = useMainUserId();
+  const {
     currentHealth,
-  } = useHealth(USER_HEALTH_ID);
+  } = useHealth(id ?? undefined);
 
   if (!currentHealth) return null;
 
-  console.log(currentHealth, USER_HEALTH_ID, 'HEALTH');
+  console.log(currentHealth, id, 'HEALTH');
 
   return (
     /* @ts-ignore */
