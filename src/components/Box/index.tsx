@@ -32,7 +32,7 @@ export const Box = ({
         <HealthController initialHealth={1}>
           <DeathListener />
         </HealthController>
-        <SpriteController width={width} height={height} spritesheet={spritesheetUrl} textureUrl={texture} />
+        <SpriteController width={width} height={height} spritesheet={spritesheetUrl} textureUrl={texture} zIndex={20}/>
       </Body>
     </DeathWrapper>
   )

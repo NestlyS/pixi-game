@@ -17,7 +17,8 @@ export const World: React.FC<Props> = ({ children }) => {
     const engine_ = engine;
 
     if (!engine) return;
-
+    return;
+    
     const render = Render.create({
       element: window.document.body,
       engine: engine_,
@@ -26,6 +27,7 @@ export const World: React.FC<Props> = ({ children }) => {
         showPositions: true,
       }
     });
+
 
     // run the renderer
     Render.run(render);

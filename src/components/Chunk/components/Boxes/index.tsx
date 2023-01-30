@@ -1,18 +1,19 @@
 import { useCallback } from 'react';
+import { Box } from '../../../Box';
 import { MIDDLE_PART_NAME, RIGHT_EDGE_NAME, DIRT_RIGHT_EDGE_NAME, DIRT_MIDDLE_PART_NAME } from '../../../TileGround/components/Grass/contants';
 import { Grass } from '../../../TileGround/components/Grass/Grass';
 import { TrashRow } from '../../../trashes/TrashRow';
 import { ChunkProps } from '../../typings';
 
-export const ROW_WIDTH = 8;
+export const BOXES_ROW_WIDTH = 5;
 
-export const TrashRowChunk = ({
+export const BoxesChunk = ({
   spritesheetUrl,
   x,
   y,
   tileSize,
   tilesHeight,
-  width = ROW_WIDTH,
+  width = BOXES_ROW_WIDTH,
   renderKey,
 }: ChunkProps) => {
   const textureModifier = useCallback(
@@ -28,7 +29,8 @@ export const TrashRowChunk = ({
 
   return (
     <>
-      <TrashRow x={x + tileSize} y={y - ((tilesHeight + 1) * tileSize / 2)} tileSize={tileSize} width={width - 2} type="random" renderKey={renderKey}/>
+      <Box x={x + (width * (tileSize - 1)) / 2} y={y - (tilesHeight * (tileSize + 1)) / 2} width={tileSize} height={tileSize} />
+      <Box x={x + (width * (tileSize + 1)) / 2} y={y - (tilesHeight * (tileSize + 1)) / 2} width={tileSize * 2} height={tileSize * 2} />
       <Grass textureModifier={textureModifier} spritesheetUrl={spritesheetUrl} x={x + width * tileSize / 2} y={y} tileSize={tileSize} tilesWidth={width} tilesHeight={tilesHeight} />
     </>
   )

@@ -1,4 +1,4 @@
-import { Container, Text} from '@inlet/react-pixi';
+import { Container, Text, useApp} from '@inlet/react-pixi';
 import { useGlobalCheck } from '../../utils/useControlKey';
 import { ControllableBody } from '../Controllable';
 import { GlobalViewport } from '../GlobalViewport';
@@ -10,7 +10,7 @@ import { HeartBar } from '../HeartBar';
 import { Box } from '../Box';
 import { Background } from '../Background';
 import { Monster } from '../Monster';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { TrashCounter } from '../TrashCounter';
 import { Bottle } from '../trashes/Bottle';
 import { Chips } from '../trashes/Chips';
@@ -23,9 +23,6 @@ const TEXTURE_URL = 'heart.png';
 
 export const Canvas = () => {
   useGlobalCheck();
-
-  const [isHidden, setIsHidden] = useState(false);
-  const onDelete = useCallback(() => setIsHidden(true), []);
 
   return (
     <MainUserStorage>

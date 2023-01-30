@@ -2,7 +2,7 @@ import { Body } from "../../Body";
 import { Sprite } from "../../Sprite";
 import { GRASS_TO_DIRT_NAME, DIRT_TO_GRASS_NAME, MIDDLE_PART_NAME, DIRT_MIDDLE_PART_NAME, GRASS_SMOOTH_UP_TRANSITION } from "../../TileGround/components/Grass/contants";
 import { Grass } from "../../TileGround/components/Grass/Grass";
-import { AI_SENSOR_OPTIONS, TRAMPLIN_OPTIONS } from "../contants";
+import { TRAMPLIN_OPTIONS } from "../contants";
 import { LandscapeParamsType } from "../typings";
 
 type ParamsToElements = (props: {params: LandscapeParamsType[], tileSize: number, tilesHeight: number, spritesheetUrl: string }) => (React.ReactElement | null)[][];
@@ -64,24 +64,6 @@ export const paramsToElements: ParamsToElements = ({
     return ([
       <Grass key={key} x={item.x + (item.width / 2)} y={item.y} tilesWidth={item.width / tileSize} textureModifier={textureModifier} spritesheetUrl={spritesheetUrl} tileSize={tileSize} tilesHeight={tilesHeight} />,
       body,
-      <Body
-        key={`1body-${key}`}
-        label="ai-sensor"
-        x={item.x - tileSize / 3}
-        y={item.y - (tilesHeight * tileSize) / 2}
-        width={tileSize * 2}
-        height={tileSize * 4}
-        options={AI_SENSOR_OPTIONS}
-      />,
-      <Body
-        key={`2body-${key}`}
-        label="ai-sensor"
-        x={item.x + item.width + tileSize / 3}
-        y={item.y - tileSize * 2}
-        width={tileSize * 2}
-        height={tileSize * 4}
-        options={AI_SENSOR_OPTIONS}
-      />,
       sprite,
     ]);
   })

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { Graphics} from '@inlet/react-pixi';
 import { Graphics as PIXI_Grapics } from 'pixi.js';
 import { Body } from '../Body'
@@ -12,6 +12,7 @@ import { getRandomValue } from '../../utils/getRandomValue';
 import { Crack } from '../Chunk/components/Crack';
 import { CHUNKS_TYPE } from './contants';
 import { MonstersRow } from '../Chunk/components/MonstersRow';
+import { BoxesChunk } from '../Chunk/components/Boxes';
 
 const SENSOR_OPTIONS: Matter.IChamferableBodyDefinition = {
   isSensor: true,
@@ -57,6 +58,7 @@ export const LevelManager = ({
   spritesheetUrl,
 }: Props) => {
   const [ lastBlockOffset, setLastBlockOffset ] = useState(0);
+  const touchCounter = useRef(1);
   const [ isCollisionDetectorVisibile, setCollisionDetectorVisibility ] = useState(true);
   const [ chunks, setChunks ] = useState<ChunkParams[]>([
     {
@@ -82,12 +84,13 @@ export const LevelManager = ({
       console.log('------SENSOR!!!------');
       setCollisionDetectorVisibility(false);
       const newChunks = appendChunk({
-        chunks: chunks.slice(-1),
-        chunkWidth,
+        chunks: chunks.slice(-5),
+        chunkWidth: chunkWidth * 5,
         tileSize,
         lastBlockOffset
       });
 
+      touchCounter.current += 5;
       setChunks(newChunks);
       setCollisionDetectorVisibility(true);
     },
@@ -98,6 +101,8 @@ export const LevelManager = ({
     setLastBlockOffset: (yOffset: number) => setLastBlockOffset(yOffset),
   }), []);
 
+  console.log('TOUCH', touchCounter.current);
+
   return (
     <LevelManagerContextProvider value={value}>
       {
@@ -106,6 +111,7 @@ export const LevelManager = ({
             if (item.type === Chunks.Row) return <TrashRowChunk renderKey={item.renderKey} key={item.key} spritesheetUrl={spritesheetUrl} x={item.x} y={item.y} tileSize={tileSize} width={item.width} tilesHeight={tilesHeight} />
             if (item.type === Chunks.Crack) return <Crack renderKey={item.renderKey} key={item.key} spritesheetUrl={spritesheetUrl} x={item.x} y={item.y} tileSize={tileSize} width={item.width} tilesHeight={tilesHeight} />
             if (item.type === Chunks.Monsters) return <MonstersRow renderKey={item.renderKey} key={item.key} spritesheetUrl={spritesheetUrl} x={item.x} y={item.y} tileSize={tileSize} width={item.width} tilesHeight={tilesHeight} />
+            if (item.type === Chunks.Boxes) return <BoxesChunk renderKey={item.renderKey} key={item.key} spritesheetUrl={spritesheetUrl} x={item.x} y={item.y} tileSize={tileSize} width={item.width} tilesHeight={tilesHeight} />
 
             return (<Chunk
               changeLevelEvery={7}
@@ -121,7 +127,7 @@ export const LevelManager = ({
           })
       }
       <Graphics draw={draw(chunks[chunks.length - 1].x, chunks[chunks.length - 1].y - tilesHeight * tileSize)}/>
-      {isCollisionDetectorVisibile && <Body width={60} height={10000} x={chunks[chunks.length - 1].x + (chunks[chunks.length - 1].width * tileSize) / 4} y={0} options={SENSOR_OPTIONS} label="sensor" onCollision={onCollision} />}
+      {isCollisionDetectorVisibile && <Body width={60} height={10000} x={touchCounter.current * chunkWidth * tileSize} y={0} options={SENSOR_OPTIONS} label="sensor" onCollision={onCollision} />}
     </LevelManagerContextProvider>
   )
 }

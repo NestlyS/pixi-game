@@ -14,6 +14,7 @@ export enum Chunks {
   Crack = 'crack',
   Monsters = 'monsters',
   Default = 'default',
+  Boxes = 'boxes',
 }
 
 export type CustomChunkParams = {

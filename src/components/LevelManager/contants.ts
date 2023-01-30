@@ -1,4 +1,5 @@
 import { Chunk } from "../Chunk"
+import { BoxesChunk, BOXES_ROW_WIDTH } from "../Chunk/components/Boxes"
 import { Crack, CRACK_ROW_WIDTH } from "../Chunk/components/Crack"
 import { MonstersRow, MONSTERS_ROW_WIDTH } from "../Chunk/components/MonstersRow"
 import { ROW_WIDTH, TrashRowChunk } from "../Chunk/components/TrashRowChunk"
@@ -20,5 +21,9 @@ export const CHUNKS_TYPE: Record<Chunks, CustomChunkParams> = {
   [Chunks.Monsters]: {
     component: MonstersRow,
     width: MONSTERS_ROW_WIDTH,
+  },
+  [Chunks.Boxes]: {
+    component: BoxesChunk,
+    width: BOXES_ROW_WIDTH,
   }
 }
