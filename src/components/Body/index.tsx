@@ -74,9 +74,6 @@ export const Body: React.FC<Props> = React.memo(({
 
     return () => {
       Composite.remove(engine.world, rawBody);
-
-      console.log('BODY', rawBody)
-      console.log('DESTROY');
       setBody(null);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps

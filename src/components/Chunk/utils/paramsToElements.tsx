@@ -3,9 +3,16 @@ import { Sprite } from "../../Sprite";
 import { GRASS_TO_DIRT_NAME, DIRT_TO_GRASS_NAME, MIDDLE_PART_NAME, DIRT_MIDDLE_PART_NAME, GRASS_SMOOTH_UP_TRANSITION } from "../../TileGround/components/Grass/contants";
 import { Grass } from "../../TileGround/components/Grass/Grass";
 import { AI_SENSOR_OPTIONS, TRAMPLIN_OPTIONS } from "../contants";
-import { LandscapeParamsType, ModifiedGrassProps } from "../typings";
+import { LandscapeParamsType } from "../typings";
 
-export const paramsToElements = (params: LandscapeParamsType[], props: ModifiedGrassProps): (React.ReactElement | null)[][] =>
+type ParamsToElements = (props: {params: LandscapeParamsType[], tileSize: number, tilesHeight: number, spritesheetUrl: string }) => (React.ReactElement | null)[][];
+
+export const paramsToElements: ParamsToElements = ({
+  params,
+  tileSize,
+  tilesHeight,
+  spritesheetUrl,
+}) =>
   params.map((item, index, arr) => {
     const key = index;
     const isPrevLower = index === 0 ? false : arr[index - 1].y > item.y;
@@ -13,24 +20,24 @@ export const paramsToElements = (params: LandscapeParamsType[], props: ModifiedG
     const body = isPrevLower ?
       <Body
         key={`body-${key}`}
-        x={item.x - item.width / 2 - props.tileSize / 3}
-        y={item.y - (props.tilesHeight * props.tileSize) / 1.9 + props.tileSize}
+        x={item.x - tileSize / 3}
+        y={item.y - (tilesHeight * tileSize) / 1.9 + tileSize}
         rotation={-0.6}
-        width={props.tileSize * 2}
-        height={props.tileSize}
+        width={tileSize * 2}
+        height={tileSize}
         options={TRAMPLIN_OPTIONS}
       />
       : null;
     const sprite = isPrevLower ?
       <Sprite
         key={`sprite-${key}`}
-        x={item.x - item.width / 2 - props.tileSize / 1.3}
-        y={item.y - (props.tilesHeight * props.tileSize) / 2}
-        width={props.tileSize}
-        height={props.tileSize}
+        x={item.x - tileSize / 1.3}
+        y={item.y - (tilesHeight * tileSize) / 2}
+        width={tileSize}
+        height={tileSize}
         pixelised
         textureUrl={GRASS_SMOOTH_UP_TRANSITION}
-        spritesheet={props.spritesheetUrl}
+        spritesheet={spritesheetUrl}
       /> : null;
 
     const textureModifier = (indexX: number, indexY: number, length: number) => {
@@ -55,24 +62,24 @@ export const paramsToElements = (params: LandscapeParamsType[], props: ModifiedG
 
     console.log(item.y, arr[index - 1]?.y, isPrevLower, body);
     return ([
-      <Grass {...props} key={key} x={item.x} y={item.y} tilesWidth={item.width / props.tileSize} textureModifier={textureModifier} />,
+      <Grass key={key} x={item.x + (item.width / 2)} y={item.y} tilesWidth={item.width / tileSize} textureModifier={textureModifier} spritesheetUrl={spritesheetUrl} tileSize={tileSize} tilesHeight={tilesHeight} />,
       body,
       <Body
         key={`1body-${key}`}
         label="ai-sensor"
-        x={item.x - item.width / 2 - props.tileSize / 3}
-        y={item.y - (props.tilesHeight * props.tileSize) / 2}
-        width={props.tileSize * 2}
-        height={props.tileSize * 4}
+        x={item.x - tileSize / 3}
+        y={item.y - (tilesHeight * tileSize) / 2}
+        width={tileSize * 2}
+        height={tileSize * 4}
         options={AI_SENSOR_OPTIONS}
       />,
       <Body
         key={`2body-${key}`}
         label="ai-sensor"
-        x={item.x + item.width / 2 + props.tileSize / 3}
-        y={item.y - props.tileSize * 2}
-        width={props.tileSize * 2}
-        height={props.tileSize * 4}
+        x={item.x + item.width + tileSize / 3}
+        y={item.y - tileSize * 2}
+        width={tileSize * 2}
+        height={tileSize * 4}
         options={AI_SENSOR_OPTIONS}
       />,
       sprite,

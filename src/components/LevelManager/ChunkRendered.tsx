@@ -1,6 +1,8 @@
 import isEqual from "lodash/isEqual";
 import { memo } from "react";
+import { render } from "react-dom";
 import { Chunk } from "../Chunk";
+import { TrashRowChunk } from "../Chunk/components/TrashRowChunk";
 import { ChunkParams } from "./typings"
 
 type Props = {
@@ -15,8 +17,8 @@ type Props = {
 export const ChunkRenderer = memo(({ chunks, tileSize, tilesHeight, chunkWidth, changeLevelEvery, spritesheetUrl }: Props) => {
   return <>{
           chunks
-            .map(item =>
-              <Chunk
+            .map(item => {
+              return (<Chunk
                 changeLevelEvery={changeLevelEvery}
                 renderKey={item.renderKey}
                 key={item.key}
@@ -26,7 +28,7 @@ export const ChunkRenderer = memo(({ chunks, tileSize, tilesHeight, chunkWidth, 
                 tilesHeight={tilesHeight}
                 width={chunkWidth}
                 spritesheetUrl={spritesheetUrl}
-              />
-            )}
+              />)
+            })}
         </>
 }, ( { chunks, ...prevProps }, { chunks: newChunks, ...nextProps } ) => isEqual(chunks, newChunks) && isEqual( prevProps, nextProps ));

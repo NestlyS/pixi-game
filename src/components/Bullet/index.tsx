@@ -1,5 +1,6 @@
 import uniqueId from "lodash.uniqueid";
 import { useCallback, useMemo, useRef } from "react";
+import { DAMAGABLE_BODY_GROUP } from "../../bodyGroups/damagable";
 import { USER_BODY_GROUP } from "../../bodyGroups/user";
 import { Body } from "../Body"
 import { AnimatedSpriteController } from "../controllers/AnimatedSpriteController";
@@ -76,13 +77,8 @@ export const Bullet = ({
 
   if (!textureUrl && !animationName) return null;
 
-  /**
-   * TODO 
-   * Сделать обертку, запоминающую всех юзеров (и главного, на которого будет работать UI)
-   */
-
   return (
-    <Body width={width} height={height} x={x} y={y} onCollision={onCollision} options={BULLET_PARAMS} label={bodyLabelRef.current} rotation={rotation}>
+    <Body width={width} height={height} x={x} y={y} onCollision={onCollision} options={BULLET_PARAMS} label={bodyLabelRef.current} rotation={rotation} bodyGroup={DAMAGABLE_BODY_GROUP}>
       <BulletController direction={direction} speed={speed} setCurrentDistance={setCurrentDistance} />
       <>
         { textureUrl && <SpriteController width={width*1.5} height={height} textureUrl={textureUrl} spritesheet={spritesheet} />}

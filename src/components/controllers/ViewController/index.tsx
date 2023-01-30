@@ -24,7 +24,7 @@ export const ViewController = () => {
 
     if (isFocused.current && !isFocusedOnMainBody) {
       globalViewport.pivot = {x: 0, y: 0}
-      globalViewport.snapZoom({ width: WORLD_WIDTH, height: WORLD_HEIGHT })
+      globalViewport.snapZoom({ width: 900, height: 900 })
       globalViewport.plugins.pause('follow');
 
       isFocused.current = false;

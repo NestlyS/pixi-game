@@ -18,4 +18,13 @@ export type LandscapeParamsType = {
   width: number,
 }
 
-export type ModifiedGrassProps = Omit<GrassProps, 'tilesWidth'>;
+export type ChunkProps = {
+  width: number;
+  renderKey?: number | string;
+  changeLevelEvery?: number;
+  tileSize: number;
+  tilesHeight: number,
+  spritesheetUrl: string,
+  x: number;
+  y: number;
+}

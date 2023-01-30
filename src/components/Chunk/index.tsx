@@ -1,25 +1,22 @@
 import React, { memo, useEffect, useMemo } from 'react';
 import { useLevelManager } from '../LevelManager/context';
-import { ModifiedGrassProps } from './typings';
+import { ChunkProps } from './typings';
 import { generateLandscape } from './utils/generateLandscape';
 import { landscapeToSizes } from './utils/landscapeToSizes';
 import { sizesToParams } from './utils/sizesToParams';
 import { percents } from './contants';
 import { paramsToElements } from './utils/paramsToElements';
 
-
-type Props = {
-  width: number;
-  renderKey?: number | string;
-  changeLevelEvery?: number;
-} & ModifiedGrassProps
-
 export const Chunk = memo(({
   width,
   renderKey = 0,
   changeLevelEvery = 5,
-  ...grassProps
-}: Props) => {
+  tileSize,
+  x,
+  y,
+  tilesHeight,
+  spritesheetUrl,
+}: ChunkProps) => {
   const {
     setLastBlockOffset
   } = useLevelManager();
@@ -33,18 +30,20 @@ export const Chunk = memo(({
   }, [landscape]);
 
   const elements = useMemo(() =>
-    paramsToElements(
-      sizesToParams(
+    paramsToElements({
+      params: sizesToParams(
         landscapeToSizes(
           landscape,
-          grassProps.tileSize
+          tileSize
         ),
-        grassProps.x,
-        grassProps.y,
-        grassProps.tileSize
+        x,
+        y,
+        tileSize
       ),
-      grassProps
-    ), [grassProps, landscape]);
+      tilesHeight,
+      tileSize,
+      spritesheetUrl
+    }), [landscape, spritesheetUrl, tileSize, tilesHeight, x, y]);
 
   console.log(elements);
   return (<>

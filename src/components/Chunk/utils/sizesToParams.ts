@@ -4,7 +4,7 @@ export const sizesToParams = (sizes: LandscapeBlockSize[], globalX: number, glob
 sizes.reduce((acc, item, index) => {
   if (index === 0) {
     acc.push({
-      x: globalX + (item.width / 2),
+      x: globalX,
       y: globalY + item.yOffset,
       width: item.width,
     });
@@ -13,7 +13,7 @@ sizes.reduce((acc, item, index) => {
   }
 
   acc.push({
-    x: acc[acc.length - 1].x + (acc[acc.length - 1].width / 2) + item.width / 2,
+    x: acc[acc.length - 1].x + acc[acc.length - 1].width,
     y: globalY - item.yOffset,
     width: item.width,
   });

@@ -43,7 +43,7 @@ export const Canvas = () => {
               <Box x={300} y={50} width={150} height={120} />
               <Grass x={400} y={410} tilesWidth={14} tilesHeight={3} tileSize={60} spritesheetUrl={spritesheetUrl} />
               <Grass x={800} y={210} tilesWidth={4} tilesHeight={1} tileSize={60} spritesheetUrl={spritesheetUrl} />
-              <LevelManager x={1000} y={500} tileSize={60} chunkWidth={25} tilesHeight={5} spritesheetUrl={spritesheetUrl} />
+              <LevelManager x={1000} y={500} tileSize={60} chunkWidth={30} tilesHeight={5} spritesheetUrl={spritesheetUrl} />
               <Bottle x={1100} y={200} />
               <Chips x={1150} y={200} />
               <Paper x={1200} y={200} />

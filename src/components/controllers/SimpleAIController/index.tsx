@@ -17,6 +17,7 @@ const BULLET_WIDTH = 40;
 const BULLET_HEIGHT = 40;
 const BULLET_SPEED = 5;
 const BULLET_TTL = 1000;
+const ATTACK_COOLDOWN = 2500;
 
 const DEATH_BOOST = 11;
 
@@ -47,7 +48,9 @@ export const SimpleAIController = ({
   const isDead = useDeath();
 
   const [isAttack, setIsAttack] = useState(false);
+  const isAttackRef = useRef(false);
   const [bullets, setBullets] = useState<BulletProps[]>([]);
+  const isCooldownRef = useRef<null | (() => void)>(null);
   const direction = useRef<1|-1>(1);
   const distanseRef = useRef(0);
   const deltaRef = useRef(0);
@@ -92,17 +95,20 @@ export const SimpleAIController = ({
 
   const handleCollision = useCallback(
     (e: IEventCollision<Engine>) => {
-      if (isAttack || !e.pairs.some(pair => USER_BODY_GROUP.get().some(body => pair.bodyA.label === body.label || pair.bodyB.label === body.label))) return;
-      console.log('ENEMY!!!');
+      if (isAttackRef.current || isCooldownRef.current || !e.pairs.some(pair => USER_BODY_GROUP.get().some(body => pair.bodyA.label === body.label || pair.bodyB.label === body.label))) return;
       setIsAttack(true);
+      const timeoutId = setTimeout(() => isCooldownRef.current = null,ATTACK_COOLDOWN);
+      isCooldownRef.current = () => clearTimeout(timeoutId);
+      isAttackRef.current = true;
     },
-    [isAttack],
+    [],
   );
 
   const value = useMemo(() => ({
     isAttack,
     onActionFinish: () => {
       setIsAttack(false);
+      isAttackRef.current = false;
 
       if (!body) return;
 
