@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useControlKey } from '../../../utils/useControlKey';
 import { useBody, useBodyParams } from '../../Body/context';
 import { BODY_FRICTION } from '../../Controllable';
+import { useAttacking, useAttackingAnimation } from '../AttackController/context';
 import { useGroundTouch } from '../GroundTouchController/context';
 import { useBodyHealth } from '../HealthController/context';
 import { useContainer } from '../ViewController/context';
@@ -24,7 +25,7 @@ const moveSpriteCenter = (() => {
   return (container: Container, bodyWidth: number, isBack: boolean) => {
     console.log(moveScale, isBack);
 
-    container.children[0].position.y += moveScale * bodyWidth / 2;
+    container.children[0].position.x += bodyWidth * moveScale;
     moveScale *= -1;
   }
 })()
@@ -40,6 +41,7 @@ export const SlideController = ({
     body
   } = useBody();
   const { isCooldown } = useBodyHealth();
+  const { isAttack } = useAttackingAnimation();
   const isGroundTouchedRef = useRef(false);
   const onChange = useCallback((isTouched: boolean) => {
     isGroundTouchedRef.current = isTouched;
@@ -51,38 +53,39 @@ export const SlideController = ({
   const [isSliding, setSliding] = useState(initialState);
   const slidingRef = useRef(initialState);
 
+  const isUnsladed = isCooldown || isAttack;
+
   const SCb = useCallback(() => {
-    if (!body || !container?.children || !isGroundTouchedRef.current || slidingRef.current || isCooldown) return;
+    if (!body || !container?.children || !isGroundTouchedRef.current || slidingRef.current || isUnsladed) return;
     const bodyWidth = body.bounds.max.x - body.bounds.min.x;
     const bodyHeight = body.bounds.max.y - body.bounds.min.y;
     const bodyNewY = body.bounds.max.y - bodyWidth / 2;
 
     console.log(bodyWidth, bodyHeight, container);
 
-    // Принудительно сдвигаем спрайт выше, да, это костыль
-    moveSpriteCenter(container, bodyWidth, false);
-
     slidingRef.current = true;
 
-    Body.scale(body, bodyHeight / bodyWidth, bodyWidth / bodyHeight);
+    // moveSpriteCenter(container, bodyWidth, false);
+    Body.setAngle(body, 1.5708);
     Body.setPosition(body, { x: body.position.x, y: bodyNewY })
     Body.setInertia(body, Infinity);
     body.friction = SLIDING_FRICTION;
 
     setSliding(true);
-  }, [body, container, isCooldown]);
+  }, [body, container, isUnsladed]);
+
+  /**
+   * АЛЛО У ТЕБЯ СЛАЙДИНГ БАГУЕТ
+   */
 
   const unpressCb = useCallback(() => {
     if (!body || !container?.children || !slidingRef.current) return;
     slidingRef.current = false;
     setSliding(false);
-    const bodyWidth = body.bounds.max.x - body.bounds.min.x;
     const bodyHeight = body.bounds.max.y - body.bounds.min.y;
 
-    // Принудительно возвращаем спрайт обратно на самую узкую его часть, да, это костыль
-    moveSpriteCenter(container, bodyHeight, true);
-
-    Body.scale(body, bodyHeight / bodyWidth, bodyWidth / bodyHeight);
+    // moveSpriteCenter(container, bodyHeight, true);
+    Body.setAngle(body, 0);
     Body.setInertia(body, Infinity);
     body.friction = BODY_FRICTION;
   }, [body, container]);
@@ -90,8 +93,8 @@ export const SlideController = ({
   useControlKey('KeyS', SCb, unpressCb);
 
   useEffect(() => {
-    if (isCooldown && slidingRef.current) unpressCb();
-  }, [isCooldown, unpressCb])
+    if (isUnsladed && slidingRef.current) unpressCb();
+  }, [isUnsladed, unpressCb])
 
   return <SlidingContextProvider value={isSliding}>{children}</SlidingContextProvider>;
 }

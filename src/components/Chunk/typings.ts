@@ -1,5 +1,3 @@
-import { GrassProps } from "../TileGround/components/Grass/Grass";
-
 export enum PercentTypes {
   Down = 'down',
   Stay = 'stay',
@@ -20,7 +18,6 @@ export type LandscapeParamsType = {
 
 export type ChunkProps = {
   width: number;
-  renderKey?: number | string;
   changeLevelEvery?: number;
   tileSize: number;
   tilesHeight: number,

@@ -14,7 +14,6 @@ export const BoxesChunk = ({
   tileSize,
   tilesHeight,
   width = BOXES_ROW_WIDTH,
-  renderKey,
 }: ChunkProps) => {
   const textureModifier = useCallback(
     (indexX: number, indexY: number, length: number, height: number) => {

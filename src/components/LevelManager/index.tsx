@@ -1,18 +1,14 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { Graphics} from '@inlet/react-pixi';
 import { Graphics as PIXI_Grapics } from 'pixi.js';
 import { Body } from '../Body'
-import { LevelManagerContextProvider } from './context'
 import { ChunkParams, Chunks } from './typings';
-import { ChunkRenderer } from './ChunkRendered';
 import { USER_BODY_GROUP } from '../../bodyGroups/user';
-import { Chunk } from '../Chunk';
-import { TrashRowChunk } from '../Chunk/components/TrashRowChunk';
 import { getRandomValue } from '../../utils/getRandomValue';
-import { Crack } from '../Chunk/components/Crack';
 import { CHUNKS_TYPE } from './contants';
-import { MonstersRow } from '../Chunk/components/MonstersRow';
-import { BoxesChunk } from '../Chunk/components/Boxes';
+import { Row } from '../Chunk/components/Row';
+
+const CHUNKS_BEFORE_END = 3;
 
 const SENSOR_OPTIONS: Matter.IChamferableBodyDefinition = {
   isSensor: true,
@@ -28,25 +24,27 @@ type Props = {
   spritesheetUrl: string,
 }
 
-const appendChunk = ({ chunks, tileSize, lastBlockOffset, chunkWidth }: {chunks: ChunkParams[], tileSize: number, lastBlockOffset: number, chunkWidth: number}): ChunkParams[] => {
+const appendChunk = ({ chunks, tileSize, chunkWidth }: {chunks: ChunkParams[], tileSize: number, chunkWidth: number}): ChunkParams[] => {
   const randomIndex = getRandomValue(0, Object.keys(CHUNKS_TYPE).length - 1);
   const randomType = Object.keys(CHUNKS_TYPE)[randomIndex] as Chunks;
   const randomParams = CHUNKS_TYPE[randomType];
 
-  console.log(randomIndex, randomType, randomParams);
+  console.log('RANDOM', randomIndex, randomType, randomParams);
 
   const newChunks = [...chunks,
     {
       type: randomType,
+      component: randomParams.component,
       renderKey: chunks[chunks.length - 1].renderKey + 1,
-      key: chunks[chunks.length - 1].key + 1,
+      key: chunks[chunks.length - 1].key >= 10 ? 0 : chunks[chunks.length - 1].key + 1,
       x: chunks[chunks.length - 1].x + (chunks[chunks.length - 1].width * tileSize),
+      y: chunks[chunks.length - 1].y - chunks[chunks.length - 1].yDelta * tileSize,
+      yDelta: randomParams.heightDelta ?? 0,
       width: randomParams.width ?? chunkWidth,
-      y: chunks[chunks.length - 1].y - (chunks[chunks.length - 1].type === Chunks.Default ? lastBlockOffset * tileSize : 0),
   }];
 
   if ((chunkWidth - newChunks[newChunks.length - 1].width) <= 0) return newChunks;
-  return appendChunk({ chunks: newChunks, tileSize, lastBlockOffset, chunkWidth: chunkWidth - newChunks[newChunks.length - 1].width })
+  return appendChunk({ chunks: newChunks, tileSize, chunkWidth: chunkWidth - newChunks[newChunks.length - 1].width })
 }
 
 export const LevelManager = ({
@@ -57,16 +55,16 @@ export const LevelManager = ({
   chunkWidth,
   spritesheetUrl,
 }: Props) => {
-  const [ lastBlockOffset, setLastBlockOffset ] = useState(0);
-  const touchCounter = useRef(1);
-  const [ isCollisionDetectorVisibile, setCollisionDetectorVisibility ] = useState(true);
+  const isCollisionDetectorVisibile = useRef(true);
   const [ chunks, setChunks ] = useState<ChunkParams[]>([
     {
-      type: Chunks.Default,
+      type: Chunks.Row,
+      component: Row,
+      yDelta: 0,
       key: 1,
       renderKey: 1,
       x,
-      width: chunkWidth,
+      width: 8,
       y,
     }
   ]);
@@ -80,54 +78,42 @@ export const LevelManager = ({
 
   const onCollision = useCallback(
     (e: Matter.IEventCollision<Matter.Engine>) => {
-      if (!e.pairs.some(pair => USER_BODY_GROUP.get().some( body => pair.bodyA.label === body.label || pair.bodyB.label === body.label))) return;
+      if (!isCollisionDetectorVisibile.current || !e.pairs.some(pair => USER_BODY_GROUP.get().some( body => pair.bodyA.label === body.label || pair.bodyB.label === body.label))) return;
       console.log('------SENSOR!!!------');
-      setCollisionDetectorVisibility(false);
+      isCollisionDetectorVisibile.current = false;
       const newChunks = appendChunk({
-        chunks: chunks.slice(-5),
-        chunkWidth: chunkWidth * 5,
+        chunks: chunks.slice(-3),
+        chunkWidth: chunkWidth,
         tileSize,
-        lastBlockOffset
       });
 
-      touchCounter.current += 5;
       setChunks(newChunks);
-      setCollisionDetectorVisibility(true);
+      isCollisionDetectorVisibile.current = true;
     },
-    [chunkWidth, chunks, lastBlockOffset, tileSize],
+    [chunkWidth, chunks, tileSize],
   )
 
-  const value = useMemo(() => ({
-    setLastBlockOffset: (yOffset: number) => setLastBlockOffset(yOffset),
-  }), []);
-
-  console.log('TOUCH', touchCounter.current);
+  const collisionDetectorX = chunks[chunks.findIndex((_, index, arr) => index >= arr.length - 1 - 1)].x;
+  console.log('TOUCH', collisionDetectorX, chunks);
 
   return (
-    <LevelManagerContextProvider value={value}>
+    <>
       {
         chunks
-          .map(item => {
-            if (item.type === Chunks.Row) return <TrashRowChunk renderKey={item.renderKey} key={item.key} spritesheetUrl={spritesheetUrl} x={item.x} y={item.y} tileSize={tileSize} width={item.width} tilesHeight={tilesHeight} />
-            if (item.type === Chunks.Crack) return <Crack renderKey={item.renderKey} key={item.key} spritesheetUrl={spritesheetUrl} x={item.x} y={item.y} tileSize={tileSize} width={item.width} tilesHeight={tilesHeight} />
-            if (item.type === Chunks.Monsters) return <MonstersRow renderKey={item.renderKey} key={item.key} spritesheetUrl={spritesheetUrl} x={item.x} y={item.y} tileSize={tileSize} width={item.width} tilesHeight={tilesHeight} />
-            if (item.type === Chunks.Boxes) return <BoxesChunk renderKey={item.renderKey} key={item.key} spritesheetUrl={spritesheetUrl} x={item.x} y={item.y} tileSize={tileSize} width={item.width} tilesHeight={tilesHeight} />
-
-            return (<Chunk
-              changeLevelEvery={7}
-              renderKey={item.renderKey}
-              key={item.key}
-              x={item.x}
-              y={item.y}
-              tileSize={tileSize}
-              tilesHeight={tilesHeight}
-              width={item.width}
-              spritesheetUrl={spritesheetUrl}
-            />)
-          })
+          .map(item =>
+              <item.component
+                key={item.key}
+                width={item.width}
+                tileSize={tileSize}
+                tilesHeight={tilesHeight}
+                x={item.x}
+                y={item.y}
+                spritesheetUrl={spritesheetUrl}
+              />
+            )
       }
       <Graphics draw={draw(chunks[chunks.length - 1].x, chunks[chunks.length - 1].y - tilesHeight * tileSize)}/>
-      {isCollisionDetectorVisibile && <Body width={60} height={10000} x={touchCounter.current * chunkWidth * tileSize} y={0} options={SENSOR_OPTIONS} label="sensor" onCollision={onCollision} />}
-    </LevelManagerContextProvider>
+      <Body width={60} height={10000} x={collisionDetectorX} y={0} options={SENSOR_OPTIONS} label="sensor" onCollision={onCollision} />
+    </>
   )
 }

@@ -9,7 +9,6 @@ import { paramsToElements } from './utils/paramsToElements';
 
 export const Chunk = memo(({
   width,
-  renderKey = 0,
   changeLevelEvery = 5,
   tileSize,
   x,
@@ -21,7 +20,7 @@ export const Chunk = memo(({
     setLastBlockOffset
   } = useLevelManager();
 
-  const landscape = useMemo(() => generateLandscape(width, percents, changeLevelEvery), [width, renderKey, changeLevelEvery]);
+  const landscape = useMemo(() => generateLandscape(width, percents, changeLevelEvery), [width, changeLevelEvery]);
 
   useEffect(() => {
     if (!landscape) return;

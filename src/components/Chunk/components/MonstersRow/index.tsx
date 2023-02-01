@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 import { getRandomValue } from '../../../../utils/getRandomValue';
 import { Body } from '../../../Body';
 import { Monster } from '../../../Monster';
@@ -14,14 +14,13 @@ export const AI_SENSOR_OPTIONS: Matter.IChamferableBodyDefinition = {
 
 export const MONSTERS_ROW_WIDTH = 10;
 
-export const MonstersRow = ({
+export const MonstersRow = memo(({
   spritesheetUrl,
   x,
   y,
   tileSize,
   tilesHeight,
   width = MONSTERS_ROW_WIDTH,
-  renderKey,
 }: ChunkProps) => {
   const monstersX = useMemo(() => (new Array(getRandomValue(0, 1))).fill(0).map((_, index, { length }) => x + (width / length * 2) + (width * index / 2)), [width, x]);
   const textureModifier = useCallback(
@@ -57,4 +56,4 @@ export const MonstersRow = ({
       />
     </>
   )
-}
+});
