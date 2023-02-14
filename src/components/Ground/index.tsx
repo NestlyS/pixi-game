@@ -11,10 +11,19 @@ type Props = {
   height: number;
   children?: React.ReactElement | React.ReactElement[] | ReactNode;
   rotation?: number;
-}
+};
 
-export const Ground = memo(({ x, y, width, height, children, rotation}: Props) => (
-  <Body x={x} y={y} width={width} rotation={rotation} height={height} options={GROUND_OPTIONS} label={GROUND_LABEL} bodyGroup={GROUND_BODY_GROUP}>
+export const Ground = memo(({ x, y, width, height, children, rotation }: Props) => (
+  <Body
+    x={x}
+    y={y}
+    width={width}
+    rotation={rotation}
+    height={height}
+    options={GROUND_OPTIONS}
+    label={GROUND_LABEL}
+    bodyGroup={GROUND_BODY_GROUP}
+  >
     {children}
   </Body>
 ));

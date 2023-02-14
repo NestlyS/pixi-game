@@ -16,15 +16,15 @@ import { MainUserController } from '../MainUserStorage/controller';
 
 const test = '/eva/eva.json';
 const animationMap = {
-  Idle: {name: 'stand', speed: 0.07, loop: true},
-  Run: {name: 'run', speed: 0.07, loop: true},
-  Fall: {name: 'fall', speed: 0.07, loop: true},
-  Jump: {name: 'jump', speed: 0.09, loop: false},
-  Hurt: {name: 'hurt', speed: 0.07, loop: true},
-  Slide: {name: 'slide', speed: 0.07, loop: true},
-  Attack: {name: 'attack', speed: 0.15, loop: false, trigger: true },
+  Idle: { name: 'stand', speed: 0.07, loop: true },
+  Run: { name: 'run', speed: 0.07, loop: true },
+  Fall: { name: 'fall', speed: 0.07, loop: true },
+  Jump: { name: 'jump', speed: 0.09, loop: false },
+  Hurt: { name: 'hurt', speed: 0.07, loop: true },
+  Slide: { name: 'slide', speed: 0.07, loop: true },
+  Attack: { name: 'attack', speed: 0.15, loop: false, trigger: true },
   Die: undefined,
-}
+};
 
 export const BODY_FRICTION = 0.05;
 const MAIN_BODY_OPTIONS = { inertia: Infinity, friction: BODY_FRICTION, weight: 300 };
@@ -34,24 +34,44 @@ export const ControllableBody = () => {
   const userLabelRef = useRef(uniqueId('user'));
 
   return (
-    <Body x={800} y={0} width={50} height={120} options={MAIN_BODY_OPTIONS} label={userLabelRef.current} bodyGroup={USER_BODY_GROUP}>
+    <Body
+      x={800}
+      y={0}
+      width={50}
+      height={120}
+      options={MAIN_BODY_OPTIONS}
+      label={userLabelRef.current}
+      bodyGroup={USER_BODY_GROUP}
+    >
       <MainUserController />
       <GroundTouchController>
         <MoveController />
         <JumpController />
         <ViewController />
-        <HealthController initialHealth={3} bodyId={userLabelRef.current} cooldown={INVICIBILITY_PERIOD}>
+        <HealthController
+          initialHealth={3}
+          bodyId={userLabelRef.current}
+          cooldown={INVICIBILITY_PERIOD}
+        >
           <AttackController width={70} height={100}>
-            <AnimatedSpriteController width={190} height={180} spritesheet={test} animationSpeed={0.07} setDefault zIndex={100} >
+            <AnimatedSpriteController
+              ignoreRotation
+              width={190}
+              height={180}
+              spritesheet={test}
+              animationSpeed={0.07}
+              setDefault
+              zIndex={100}
+            >
               <ViewController />
               <DamageTouchController />
               <SlideController>
-                <AnimationController animationNames={animationMap}/>
+                <AnimationController animationNames={animationMap} />
               </SlideController>
             </AnimatedSpriteController>
           </AttackController>
         </HealthController>
       </GroundTouchController>
     </Body>
-  )
-}
+  );
+};

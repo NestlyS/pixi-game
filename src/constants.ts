@@ -1,8 +1,6 @@
-import { TextStyle } from "pixi.js";
+import { TextStyle } from 'pixi.js';
 
 export const EPS = 0.03;
-export const WORLD_WIDTH = 1400;
-export const WORLD_HEIGHT = 700;
 
 export const BOTTLE_TEXTURE = 'bottle (1).png';
 export const CHIPS_TEXTURE = 'chips (1).png';

@@ -12,8 +12,8 @@ export const ContainerContextProvider = ContainerContext.Provider;
 export const useContainer = <T = DisplayObject>() => {
   const container = useContext(ContainerContext);
 
-  return container as T ?? null;
-}
+  return (container as T) ?? null;
+};
 
 export const useMakeContainer = <T extends DisplayObject = DisplayObject>() => {
   const ref = useRef<T | null>(null);
@@ -21,5 +21,5 @@ export const useMakeContainer = <T extends DisplayObject = DisplayObject>() => {
   return {
     ref,
     value: ref.current,
-  }
-}
+  };
+};

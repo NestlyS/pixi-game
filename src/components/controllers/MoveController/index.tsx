@@ -9,9 +9,7 @@ const MAX_SPEED = 7;
 
 // ВОЗМОЖНО СТОИТ ОБЪЕДИНИТЬ КОНТРОЛЛЕРЫ ПЕРЕМЕЩЕНИЯ В ОДИН ТИП
 export const MoveController = () => {
-  const {
-    body
-  } = useBody();
+  const { body } = useBody();
 
   const DCb = useCallback(() => {
     if (!body || body.velocity.x > MAX_SPEED) return;
@@ -28,4 +26,4 @@ export const MoveController = () => {
   useControlKey('KeyA', ACb);
 
   return null;
-}
+};

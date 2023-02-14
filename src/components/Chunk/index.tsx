@@ -7,45 +7,33 @@ import { sizesToParams } from './utils/sizesToParams';
 import { percents } from './contants';
 import { paramsToElements } from './utils/paramsToElements';
 
-export const Chunk = memo(({
-  width,
-  changeLevelEvery = 5,
-  tileSize,
-  x,
-  y,
-  tilesHeight,
-  spritesheetUrl,
-}: ChunkProps) => {
-  const {
-    setLastBlockOffset
-  } = useLevelManager();
+export const Chunk = memo(
+  ({ width, changeLevelEvery = 5, tileSize, x, y, tilesHeight, spritesheetUrl }: ChunkProps) => {
+    const { setLastBlockOffset } = useLevelManager();
 
-  const landscape = useMemo(() => generateLandscape(width, percents, changeLevelEvery), [width, changeLevelEvery]);
+    const landscape = useMemo(
+      () => generateLandscape(width, percents, changeLevelEvery),
+      [width, changeLevelEvery],
+    );
 
-  useEffect(() => {
-    if (!landscape) return;
+    useEffect(() => {
+      if (!landscape) return;
 
-    setLastBlockOffset(landscape[landscape.length - 1]);
-  }, [landscape]);
+      setLastBlockOffset(landscape[landscape.length - 1]);
+    }, [landscape]);
 
-  const elements = useMemo(() =>
-    paramsToElements({
-      params: sizesToParams(
-        landscapeToSizes(
-          landscape,
-          tileSize
-        ),
-        x,
-        y,
-        tileSize
-      ),
-      tilesHeight,
-      tileSize,
-      spritesheetUrl
-    }), [landscape, spritesheetUrl, tileSize, tilesHeight, x, y]);
+    const elements = useMemo(
+      () =>
+        paramsToElements({
+          params: sizesToParams(landscapeToSizes(landscape, tileSize), x, y, tileSize),
+          tilesHeight,
+          tileSize,
+          spritesheetUrl,
+        }),
+      [landscape, spritesheetUrl, tileSize, tilesHeight, x, y],
+    );
 
-  console.log(elements);
-  return (<>
-    { elements }
-  </>);
-});
+    console.log(elements);
+    return <>{elements}</>;
+  },
+);

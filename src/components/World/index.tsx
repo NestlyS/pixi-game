@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { useTick } from "@inlet/react-pixi";
-import { Engine, Render } from "matter-js";
-import { EngineContext } from "../../utils/useEngine";
+import React, { useEffect, useState } from 'react';
+import { useTick } from '@inlet/react-pixi';
+import { Engine, Render } from 'matter-js';
+import { EngineContext } from '../../utils/useEngine';
 
 type Props = {
   children: React.ReactElement | React.ReactElement[];
-}
+};
 
 export const World: React.FC<Props> = ({ children }) => {
   const [engine] = useState(() => Engine.create());
@@ -18,16 +18,15 @@ export const World: React.FC<Props> = ({ children }) => {
 
     if (!engine) return;
     return;
-    
+
     const render = Render.create({
       element: window.document.body,
       engine: engine_,
       options: {
         showCollisions: true,
         showPositions: true,
-      }
+      },
     });
-
 
     // run the renderer
     Render.run(render);

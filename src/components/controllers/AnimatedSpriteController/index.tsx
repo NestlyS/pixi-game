@@ -1,4 +1,4 @@
-import {  memo, useMemo, useState } from 'react';
+import { memo, useMemo, useState } from 'react';
 import { AnimatedSprite as PIXI_AnimatedSprite, Container as PIXI_Container } from 'pixi.js';
 import { useBody, useBodyParams } from '../../Body/context';
 import { AnimatedSprite, IAnimatedSprite } from '../../AnimatedSprite';
@@ -7,21 +7,16 @@ import { useTick } from '@inlet/react-pixi';
 import { EPS } from '../../../constants';
 
 type Props = {
-  children?: React.ReactElement | React.ReactElement[]
+  children?: React.ReactElement | React.ReactElement[];
+  ignoreRotation?: boolean;
 } & Omit<Omit<Omit<IAnimatedSprite, 'x'>, 'y'>, 'rotation'>;
 
-export const AnimatedSpriteController = memo(({children, ...props}: Props) => {
-  const {
-    x,
-    y,
-    rotation,
-  } = useBodyParams();
+export const AnimatedSpriteController = memo(({ children, ignoreRotation, ...props }: Props) => {
+  const { x, y, rotation } = useBodyParams();
 
-  const {
-    body
-  } = useBody();
+  const { body } = useBody();
 
-  const pivot = props.width && props.height ? {x: 0.5, y: 0.55} : undefined;
+  const pivot = props.width && props.height ? { x: 0.5, y: 0.55 } : undefined;
   const [scaleX, setScaleX] = useState<1 | -1>(1);
 
   useTick(() => {
@@ -38,10 +33,7 @@ export const AnimatedSpriteController = memo(({children, ...props}: Props) => {
     }
   });
 
-  const {
-    ref,
-    value
-  } = useMakeContainer<PIXI_Container<PIXI_AnimatedSprite>>();
+  const { ref, value } = useMakeContainer<PIXI_Container<PIXI_AnimatedSprite>>();
 
   const scaleObj = useMemo(() => {
     const currentScale = ref.current?.children?.[0]?.scale;
@@ -53,15 +45,21 @@ export const AnimatedSpriteController = memo(({children, ...props}: Props) => {
     return {
       x: Math.abs(currentScale.x) * scaleX,
       y: currentScale.y,
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref.current?.children?.[0]?.scale.x, scaleX]);
 
   return (
-    <AnimatedSprite ref={ref} x={x} y={y} rotation={rotation} scale={scaleObj} anchor={pivot} {...props}>
-      <ContainerContextProvider value={value}>
-        {children}
-      </ContainerContextProvider>
+    <AnimatedSprite
+      ref={ref}
+      x={x}
+      y={y}
+      rotation={ignoreRotation ? 0 : rotation}
+      scale={scaleObj}
+      anchor={pivot}
+      {...props}
+    >
+      <ContainerContextProvider value={value}>{children}</ContainerContextProvider>
     </AnimatedSprite>
-  )
+  );
 });

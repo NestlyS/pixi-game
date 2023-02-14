@@ -1,12 +1,12 @@
-import { PixiComponent } from "@inlet/react-pixi";
-import * as PIXI3D from "pixi3d";
+import { PixiComponent } from '@inlet/react-pixi';
+import * as PIXI3D from 'pixi3d';
 
 type Props = {
   x?: number;
   y?: number;
   z?: number;
   intensity?: number;
-}
+};
 
 export const Light = PixiComponent('Light', {
   // eslint-disable-next-line no-empty-pattern
@@ -27,12 +27,7 @@ export const Light = PixiComponent('Light', {
     console.log('Unmounted', instance, parent);
   },
   applyProps: (instance, oldProps, newProps) => {
-    const {
-      x = 0,
-      y = 0,
-      z = 0,
-      intensity = 1,
-    } = newProps;
+    const { x = 0, y = 0, z = 0, intensity = 1 } = newProps;
 
     instance.position.set(x, y, z);
     instance.intensity = intensity;
@@ -46,4 +41,4 @@ export const Light = PixiComponent('Light', {
     // default true
     destroyChildren: true,
   },
-})
+});

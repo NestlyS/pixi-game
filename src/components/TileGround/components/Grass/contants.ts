@@ -1,4 +1,3 @@
-
 export const LEFT_EDGE_NAME = 'ground-start.png';
 export const MIDDLE_PART_NAME = 'ground-middle.png';
 export const RIGHT_EDGE_NAME = 'ground-end.png';
@@ -14,17 +13,17 @@ export enum Decorations {
   Decoration2 = 'deco2',
   Decoration3 = 'grass',
   Bush = 'bush',
-  Plant = 'plant'
+  Plant = 'plant',
 }
 
 export const DECORATION_MAP = {
   1: Decorations.Decoration1,
   2: Decorations.Decoration2,
   3: Decorations.Decoration3,
-}
+};
 
 export const DECORATION_MAP_TWO_TILES = {
   5: Decorations.Bush,
   6: Decorations.Plant,
-  ...DECORATION_MAP
-}
+  ...DECORATION_MAP,
+};

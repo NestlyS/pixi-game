@@ -1,23 +1,20 @@
-import { useCallback, useMemo, useRef, useState } from "react"
-import { DeathListenerContextProvider, DeathWrapperContextProvider } from "./context"
+import { useCallback, useMemo, useRef, useState } from 'react';
+import { DeathListenerContextProvider, DeathWrapperContextProvider } from './context';
 
 type Props = {
-  cooldown?: number,
-  children: React.ReactNode,
-}
+  cooldown?: number;
+  children: React.ReactNode;
+};
 
-export const DeathWrapper = ({
-  cooldown = 0,
-  children
-}: Props) => {
+export const DeathWrapper = ({ cooldown = 0, children }: Props) => {
   const [isVisible, setVisibility] = useState(true);
   const [isDead, setDead] = useState(false);
   const callbacksRef = useRef<(() => void)[]>([]);
 
-  const kill = useCallback(() =>{
+  const kill = useCallback(() => {
     console.log('KILL INITIED', callbacksRef.current);
     setDead(true);
-    callbacksRef.current.forEach(cb => cb());
+    callbacksRef.current.forEach((cb) => cb());
     setTimeout(() => {
       console.log('KILL ENDED', cooldown);
       setVisibility(false);
@@ -28,9 +25,7 @@ export const DeathWrapper = ({
 
   return (
     <DeathWrapperContextProvider value={kill}>
-      <DeathListenerContextProvider value={isDead}>
-        {children}
-      </DeathListenerContextProvider>
+      <DeathListenerContextProvider value={isDead}>{children}</DeathListenerContextProvider>
     </DeathWrapperContextProvider>
-  )
-}
+  );
+};

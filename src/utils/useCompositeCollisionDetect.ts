@@ -1,15 +1,15 @@
-import { useTick } from "@inlet/react-pixi";
-import { Composite, Detector, Body, Collision } from "matter-js";
-import { useEffect, useRef, useState } from "react";
-import { BodyGroupMap } from "../bodyGroups/typings";
+import { useTick } from '@inlet/react-pixi';
+import { Composite, Detector, Body, Collision } from 'matter-js';
+import { useEffect, useRef, useState } from 'react';
+import { BodyGroupMap } from '../bodyGroups/typings';
 
 export const UPDATE_PERIOD = 15;
 
 type Props = {
-  body: Body | null,
-  bodyGroup: BodyGroupMap,
-  initialState?: boolean,
-}
+  body: Body | null;
+  bodyGroup: BodyGroupMap;
+  initialState?: boolean;
+};
 
 export const useBodyToBodyGroupCollisionDetect = ({
   body,
@@ -33,11 +33,10 @@ export const useBodyToBodyGroupCollisionDetect = ({
 
     return () => {
       bodyGroup.removeOnChangeListener(cb);
-    }
+    };
   }, [body, bodyGroup]);
 
-
-  useTick(delta => {
+  useTick((delta) => {
     deltaRef.current += delta;
 
     if (deltaRef.current < UPDATE_PERIOD || !body) return;
@@ -45,8 +44,10 @@ export const useBodyToBodyGroupCollisionDetect = ({
     deltaRef.current = 0;
 
     // Возможно для получения урона стоит переписать события под Event
-    const bodyToCompositeCollisions = Detector.collisions(detectorRef.current).filter(collision => (collision.bodyA === body || collision.bodyB === body));
-    const isColliding = bodyToCompositeCollisions.some(collision => collision.collided);
+    const bodyToCompositeCollisions = Detector.collisions(detectorRef.current).filter(
+      (collision) => collision.bodyA === body || collision.bodyB === body,
+    );
+    const isColliding = bodyToCompositeCollisions.some((collision) => collision.collided);
 
     if (isColliding !== isCollided) {
       collisionsRef.current = bodyToCompositeCollisions;
@@ -55,4 +56,4 @@ export const useBodyToBodyGroupCollisionDetect = ({
   });
 
   return [isCollided, collisionsRef.current];
-}
+};

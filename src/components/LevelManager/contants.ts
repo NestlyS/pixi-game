@@ -1,13 +1,12 @@
-import { Chunk } from "../Chunk"
-import { BoxesChunk, BOXES_ROW_WIDTH } from "../Chunk/components/Boxes"
-import { Crack, CRACK_ROW_WIDTH } from "../Chunk/components/Crack"
-import { MonstersRow, MONSTERS_ROW_WIDTH } from "../Chunk/components/MonstersRow"
-import { Row } from "../Chunk/components/Row"
-import { RowDown } from "../Chunk/components/RowDown"
-import { RowUp } from "../Chunk/components/RowUp"
-import { ROW_WIDTH, TrashRowChunk } from "../Chunk/components/TrashRowChunk"
-import { Chunks, CustomChunkParams } from "./typings"
-
+import { Chunk } from '../Chunk';
+import { BoxesChunk, BOXES_ROW_WIDTH } from '../Chunk/components/Boxes';
+import { Crack, CRACK_ROW_WIDTH } from '../Chunk/components/Crack';
+import { MonstersRow, MONSTERS_ROW_WIDTH } from '../Chunk/components/MonstersRow';
+import { Row } from '../Chunk/components/Row';
+import { RowDown } from '../Chunk/components/RowDown';
+import { RowUp } from '../Chunk/components/RowUp';
+import { ROW_WIDTH, TrashRowChunk } from '../Chunk/components/TrashRowChunk';
+import { Chunks, CustomChunkParams } from './typings';
 
 export const CHUNKS_TYPE: Record<Chunks, CustomChunkParams> = {
   [Chunks.Row]: {
@@ -39,5 +38,5 @@ export const CHUNKS_TYPE: Record<Chunks, CustomChunkParams> = {
   [Chunks.Boxes]: {
     component: BoxesChunk,
     width: BOXES_ROW_WIDTH,
-  }
-}
+  },
+};

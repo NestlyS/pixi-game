@@ -3,11 +3,11 @@ import { Viewport } from 'pixi-viewport';
 
 type Props = {
   globalViewport: Viewport | null;
-}
+};
 
 const initialState = {
   globalViewport: null,
-}
+};
 
 const GlobalViewportContext = React.createContext<Props>(initialState);
 
@@ -17,6 +17,6 @@ export const useGlobalViewport = () => {
   const props = useContext(GlobalViewportContext);
 
   return {
-    globalViewport: props.globalViewport ?? null
-  }
-}
+    globalViewport: props.globalViewport ?? null,
+  };
+};

@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext } from 'react';
 
 type SlidingState = boolean;
 
@@ -11,4 +11,4 @@ export const useSliding = () => {
   const isSliding = useContext(SlidingContext);
 
   return isSliding;
-}
+};

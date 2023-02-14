@@ -8,7 +8,7 @@ export const useDeathWrapper = () => {
   const kill = useContext(DeathWrapperContext);
 
   return kill;
-}
+};
 
 const listenerInitialState = false;
 const DeathListenerContext = createContext(listenerInitialState);
@@ -17,4 +17,4 @@ export const useDeath = () => {
   const isDead = useContext(DeathListenerContext);
 
   return isDead;
-}
+};

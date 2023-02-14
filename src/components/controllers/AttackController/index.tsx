@@ -12,20 +12,12 @@ const DAMAGE_VALUE = 1;
 type Props = {
   children: React.ReactNode;
   width: number;
-  height: number,
-}
+  height: number;
+};
 
-export const AttackController = ({
-  children,
-  width,
-  height,
-}: Props) => {
-  const {
-    body
-  } = useBody();
-  const {
-    setHealth
-  } = useHealth();
+export const AttackController = ({ children, width, height }: Props) => {
+  const { body } = useBody();
+  const { setHealth } = useHealth();
 
   const [isAttacing, setAttacting] = useState(initialState);
   const attackRef = useRef(false);
@@ -39,17 +31,24 @@ export const AttackController = ({
 
   useControlKey('mouse', mouseCb);
 
-  const onCollision = useCallback((e: Matter.IEventCollision<Matter.Engine>) => {
-    if (!body) return;
-    const collidedBodies = e.pairs.map(pair => isSensorLabel(pair.bodyA.label) ? pair.bodyB : pair.bodyA);
+  const onCollision = useCallback(
+    (e: Matter.IEventCollision<Matter.Engine>) => {
+      if (!body) return;
+      const collidedBodies = e.pairs.map((pair) =>
+        isSensorLabel(pair.bodyA.label) ? pair.bodyB : pair.bodyA,
+      );
 
-    const collidedBody = DAMAGABLE_BODY_GROUP.get().find(damagableBody => collidedBodies.includes(damagableBody));
+      const collidedBody = DAMAGABLE_BODY_GROUP.get().find((damagableBody) =>
+        collidedBodies.includes(damagableBody),
+      );
 
-    console.log('DAMAGING', DAMAGABLE_BODY_GROUP.get(), collidedBody);
-    if (collidedBody?.id) {
-      setHealth(value => value ? value - DAMAGE_VALUE : value, collidedBody.id);
-    }
-  }, [body, setHealth]);
+      console.log('DAMAGING', DAMAGABLE_BODY_GROUP.get(), collidedBody);
+      if (collidedBody?.id) {
+        setHealth((value) => (value ? value - DAMAGE_VALUE : value), collidedBody.id);
+      }
+    },
+    [body, setHealth],
+  );
 
   const cb = useCallback(() => {
     console.log('FINISHHHH');
@@ -57,17 +56,25 @@ export const AttackController = ({
     attackRef.current = false;
   }, []);
 
-  const value = useMemo(() => ({
-    isAttack: isAttacing,
-    onActionFinish: cb,
-  }), [cb, isAttacing]);
+  const value = useMemo(
+    () => ({
+      isAttack: isAttacing,
+      onActionFinish: cb,
+    }),
+    [cb, isAttacing],
+  );
 
-
-  return  (
+  return (
     <AttackingContextProvider value={isAttacing}>
       <AttackingAnimationProvider value={value}>
-        <ConnectedSensorController isHidden={!isAttacing} width={width} height={height} onCollision={onCollision} />
+        <ConnectedSensorController
+          isHidden={!isAttacing}
+          width={width}
+          height={height}
+          onCollision={onCollision}
+        />
         {children}
       </AttackingAnimationProvider>
     </AttackingContextProvider>
-)}
+  );
+};

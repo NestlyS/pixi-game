@@ -1,33 +1,21 @@
-import { memo, useCallback, useEffect, useMemo, useState } from "react";
-import { useBody } from "../../Body/context";
-import { useHealth } from "../../HealthStorage/context";
-import { BodyHealthContextProvider } from "./context";
+import { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import { useBody } from '../../Body/context';
+import { useHealth } from '../../HealthStorage/context';
+import { BodyHealthContextProvider } from './context';
 
 type Props = {
   bodyId?: number | string;
-  initialHealth: number,
-  children?: React.ReactNode,
-  cooldown?: number,
-}
+  initialHealth: number;
+  children?: React.ReactNode;
+  cooldown?: number;
+};
 
-export const HealthController = memo(({
-  bodyId,
-  initialHealth,
-  children,
-  cooldown,
-}: Props) => {
-  const {
-    body
-  } = useBody();
+export const HealthController = memo(({ bodyId, initialHealth, children, cooldown }: Props) => {
+  const { body } = useBody();
 
   const id = bodyId ?? body?.id;
 
-  const {
-    currentHealth,
-    setHealth,
-    onCooldown,
-    clearCooldown,
-  } = useHealth(id);
+  const { currentHealth, setHealth, onCooldown, clearCooldown } = useHealth(id);
 
   const [isCooldown, setCooldown] = useState(false);
 
@@ -42,7 +30,7 @@ export const HealthController = memo(({
 
     const cb = (cooldown: boolean) => {
       setCooldown(cooldown);
-    }
+    };
 
     onCooldown(cb, id);
 
@@ -58,8 +46,14 @@ export const HealthController = memo(({
     [id, setHealth],
   );
 
-  const addHealth = useCallback((amount: number) => currentHealth && calculateHealth(currentHealth + amount), [calculateHealth, currentHealth]);
-  const makeDamage = useCallback((amount: number) => currentHealth && calculateHealth(currentHealth - amount), [calculateHealth, currentHealth]);
+  const addHealth = useCallback(
+    (amount: number) => currentHealth && calculateHealth(currentHealth + amount),
+    [calculateHealth, currentHealth],
+  );
+  const makeDamage = useCallback(
+    (amount: number) => currentHealth && calculateHealth(currentHealth - amount),
+    [calculateHealth, currentHealth],
+  );
 
   const value = useMemo(() => {
     return {
@@ -67,18 +61,20 @@ export const HealthController = memo(({
       currentHealth,
       addHealth,
       makeDamage,
-    }
+    };
   }, [isCooldown, currentHealth, addHealth, makeDamage]);
 
   console.log(isCooldown, currentHealth, value);
 
   return (
-    <BodyHealthContextProvider value={{
-      isCooldown,
-      currentHealth,
-      addHealth,
-      makeDamage,
-    }}>
+    <BodyHealthContextProvider
+      value={{
+        isCooldown,
+        currentHealth,
+        addHealth,
+        makeDamage,
+      }}
+    >
       {children}
     </BodyHealthContextProvider>
   );

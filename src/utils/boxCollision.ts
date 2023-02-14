@@ -1,9 +1,9 @@
 type BodyObject = {
-  x: number,
-  y: number,
-  width: number,
-  height: number,
-}
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
 
 export const boxCollision = (body1: BodyObject, body2: BodyObject) => {
   const left1 = body1.x;

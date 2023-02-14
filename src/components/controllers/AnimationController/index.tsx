@@ -1,8 +1,8 @@
 import { useTick } from '@inlet/react-pixi';
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react';
 import { EPS } from '../../../constants';
 import { useAnimation } from '../../AnimatedSprite/context';
-import { useBody, useBodyParams } from '../../Body/context'
+import { useBody, useBodyParams } from '../../Body/context';
 import { useAttackingAnimation } from '../AttackController/context';
 import { useDeath, useDeathWrapper } from '../DeathController/context';
 import { useGroundTouch } from '../GroundTouchController/context';
@@ -24,47 +24,31 @@ const enum AnimationList {
 }
 
 type Props = {
-  animationNames: Record<keyof typeof AnimationList, { name: string, speed?: number, loop?: boolean, trigger?: boolean } | undefined>,
-}
+  animationNames: Record<
+    keyof typeof AnimationList,
+    { name: string; speed?: number; loop?: boolean; trigger?: boolean } | undefined
+  >;
+};
 
-export const AnimationController = ({
-  animationNames
-}: Props) => {
-  const {
-    vx,
-    vy
-  } = useBodyParams();
+export const AnimationController = ({ animationNames }: Props) => {
+  const { vx, vy } = useBodyParams();
 
-  const {
-    body
-  } = useBody();
+  const { body } = useBody();
 
-  const {
-    isCooldown
-  } = useBodyHealth();
+  const { isCooldown } = useBodyHealth();
 
-  const {
-    isAttack,
-    onActionFinish
-  } = useAttackingAnimation();
+  const { isAttack, onActionFinish } = useAttackingAnimation();
   const isDead = useDeath();
   const isSliding = useSliding();
 
   const isGroundTouchedRef = useRef(true);
-  const onChange = useCallback(
-    (isGroundTouched: boolean) => {
-      isGroundTouchedRef.current = isGroundTouched;
-    },
-    [],
-  );
+  const onChange = useCallback((isGroundTouched: boolean) => {
+    isGroundTouchedRef.current = isGroundTouched;
+  }, []);
 
   useGroundTouch(onChange);
 
-  const {
-    animations,
-    onComplete,
-    setAnimation,
-  } = useAnimation();
+  const { animations, onComplete, setAnimation } = useAnimation();
 
   const lastAnim = useRef<AnimationList | null>(null);
 
@@ -95,7 +79,7 @@ export const AnimationController = ({
         const cb = () => {
           console.log('ATTACK!!!');
           onActionFinish();
-        }
+        };
 
         onComplete(cb, true);
       }
@@ -127,7 +111,13 @@ export const AnimationController = ({
       return;
     }
 
-    if (animationNames.Idle && lastAnim.current !== AnimationList.Idle && isGroundTouchedRef.current && Math.abs(vx) < X_IDLE_BORDER && Math.abs(vy) < Y_IDLE_BORDER) {
+    if (
+      animationNames.Idle &&
+      lastAnim.current !== AnimationList.Idle &&
+      isGroundTouchedRef.current &&
+      Math.abs(vx) < X_IDLE_BORDER &&
+      Math.abs(vy) < Y_IDLE_BORDER
+    ) {
       setAnimation(animationNames.Idle);
       // Венсти в useAnimation
       lastAnim.current = AnimationList.Idle;
@@ -146,7 +136,13 @@ export const AnimationController = ({
       return;
     }
 
-    if (animationNames.Run && lastAnim.current !== AnimationList.Run && isGroundTouchedRef.current && Math.abs(vx) > X_IDLE_BORDER && Math.abs(vy) < Y_IDLE_BORDER) {
+    if (
+      animationNames.Run &&
+      lastAnim.current !== AnimationList.Run &&
+      isGroundTouchedRef.current &&
+      Math.abs(vx) > X_IDLE_BORDER &&
+      Math.abs(vy) < Y_IDLE_BORDER
+    ) {
       setAnimation(animationNames.Run);
       lastAnim.current = AnimationList.Run;
       return;
@@ -154,4 +150,4 @@ export const AnimationController = ({
   });
 
   return null;
-}
+};

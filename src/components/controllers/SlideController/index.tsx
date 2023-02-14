@@ -19,27 +19,27 @@ export const SLIDING_FRICTION = 0.001;
  *  его положении. Это может помочь избежать ситуаций, когда спрайт уедет прочь после нескольких итераций сдвиганий
  * Мне вообще не нравится это решение, но пока что оно самое очевидное.
  */
-const moveSpriteCenter = (() => {
-  let moveScale: 1 | -1 = -1;
+const { moveSpriteCenter, returnSpriteCenter } = (() => {
+  let prevValue: number = 0;
 
-  return (container: Container, bodyWidth: number, isBack: boolean) => {
-    console.log(moveScale, isBack);
+  return {
+    moveSpriteCenter: (container: Container, offset: number, isBack: boolean) => {
+      prevValue = container.children[0].position.y;
 
-    container.children[0].position.x += bodyWidth * moveScale;
-    moveScale *= -1;
-  }
-})()
+      container.children[0].position.y -= offset;
+    },
+    returnSpriteCenter: (container: Container) => {
+      container.children[0].position.y = prevValue;
+    },
+  };
+})();
 
 type Props = {
   children: React.ReactNode;
-}
+};
 
-export const SlideController = ({
-  children
-}: Props) => {
-  const {
-    body
-  } = useBody();
+export const SlideController = ({ children }: Props) => {
+  const { body } = useBody();
   const { isCooldown } = useBodyHealth();
   const { isAttack } = useAttackingAnimation();
   const isGroundTouchedRef = useRef(false);
@@ -56,36 +56,38 @@ export const SlideController = ({
   const isUnsladed = isCooldown || isAttack;
 
   const SCb = useCallback(() => {
-    if (!body || !container?.children || !isGroundTouchedRef.current || slidingRef.current || isUnsladed) return;
+    if (
+      !body ||
+      !container?.children ||
+      !isGroundTouchedRef.current ||
+      slidingRef.current ||
+      isUnsladed
+    )
+      return;
     const bodyWidth = body.bounds.max.x - body.bounds.min.x;
-    const bodyHeight = body.bounds.max.y - body.bounds.min.y;
     const bodyNewY = body.bounds.max.y - bodyWidth / 2;
-
-    console.log(bodyWidth, bodyHeight, container);
 
     slidingRef.current = true;
 
-    // moveSpriteCenter(container, bodyWidth, false);
+    moveSpriteCenter(container, bodyWidth * 0.6, false);
     Body.setAngle(body, 1.5708);
-    Body.setPosition(body, { x: body.position.x, y: bodyNewY })
+    Body.setPosition(body, { x: body.position.x, y: bodyNewY });
     Body.setInertia(body, Infinity);
     body.friction = SLIDING_FRICTION;
 
     setSliding(true);
   }, [body, container, isUnsladed]);
 
-  /**
-   * АЛЛО У ТЕБЯ СЛАЙДИНГ БАГУЕТ
-   */
-
   const unpressCb = useCallback(() => {
     if (!body || !container?.children || !slidingRef.current) return;
     slidingRef.current = false;
     setSliding(false);
-    const bodyHeight = body.bounds.max.y - body.bounds.min.y;
+    const bodyWidth = body.bounds.max.x - body.bounds.min.x;
+    const bodyNewY = body.bounds.max.y - bodyWidth / 2;
 
-    // moveSpriteCenter(container, bodyHeight, true);
+    returnSpriteCenter(container);
     Body.setAngle(body, 0);
+    Body.setPosition(body, { x: body.position.x, y: bodyNewY });
     Body.setInertia(body, Infinity);
     body.friction = BODY_FRICTION;
   }, [body, container]);
@@ -94,7 +96,7 @@ export const SlideController = ({
 
   useEffect(() => {
     if (isUnsladed && slidingRef.current) unpressCb();
-  }, [isUnsladed, unpressCb])
+  }, [isUnsladed, unpressCb]);
 
   return <SlidingContextProvider value={isSliding}>{children}</SlidingContextProvider>;
-}
+};

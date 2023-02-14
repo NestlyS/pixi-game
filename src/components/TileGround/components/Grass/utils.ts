@@ -1,43 +1,51 @@
-import { getRandomValue } from "../../../../utils/getRandomValue";
-import { LEFT_EDGE_NAME,
-          MIDDLE_PART_NAME,
-          RIGHT_EDGE_NAME,
-          DIRT_LEFT_EDGE_NAME,
-          DIRT_MIDDLE_PART_NAME,
-          DIRT_RIGHT_EDGE_NAME,
-          Decorations,
-          DECORATION_MAP 
-      } from "./contants";
+import { getRandomValue } from '../../../../utils/getRandomValue';
+import {
+  LEFT_EDGE_NAME,
+  MIDDLE_PART_NAME,
+  RIGHT_EDGE_NAME,
+  DIRT_LEFT_EDGE_NAME,
+  DIRT_MIDDLE_PART_NAME,
+  DIRT_RIGHT_EDGE_NAME,
+  Decorations,
+  DECORATION_MAP,
+} from './contants';
 
-type TextureType<T = string> = (indexX: number, indexY: number, length:number, height: number) => T;
+type TextureType<T = string> = (
+  indexX: number,
+  indexY: number,
+  length: number,
+  height: number,
+) => T;
 
-export const getMainTexture = (textureModifier?: TextureType<string | null>): TextureType => (indexX: number, indexY: number, length:number, height: number) => {
-  const modifiedTexture = textureModifier?.(indexX, indexY, length, height);
+export const getMainTexture =
+  (textureModifier?: TextureType<string | null>): TextureType =>
+  (indexX: number, indexY: number, length: number, height: number) => {
+    const modifiedTexture = textureModifier?.(indexX, indexY, length, height);
 
-  if (modifiedTexture) return modifiedTexture;
+    if (modifiedTexture) return modifiedTexture;
 
-  if (indexY === 0) {
+    if (indexY === 0) {
+      if (indexX === 0) {
+        return LEFT_EDGE_NAME;
+      }
+
+      if (indexX < length) {
+        return MIDDLE_PART_NAME;
+      }
+
+      return RIGHT_EDGE_NAME;
+    }
+
     if (indexX === 0) {
-      return LEFT_EDGE_NAME;
+      return DIRT_LEFT_EDGE_NAME;
     }
 
     if (indexX < length) {
-      return MIDDLE_PART_NAME;
+      return DIRT_MIDDLE_PART_NAME;
     }
 
-    return RIGHT_EDGE_NAME;
-  }
-
-  if (indexX === 0) {
-    return DIRT_LEFT_EDGE_NAME;
-  }
-
-  if (indexX < length) {
-    return DIRT_MIDDLE_PART_NAME;
-  }
-
-  return DIRT_RIGHT_EDGE_NAME
-}
+    return DIRT_RIGHT_EDGE_NAME;
+  };
 
 // export const generateTexture = () => {
 //   let lastUncompletedSprite: null | Decorations = null;

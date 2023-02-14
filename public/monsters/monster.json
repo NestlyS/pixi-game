@@ -1434,6 +1434,6 @@
     "attack": ["monster_attack1.png", "monster_attack2.png", "monster_attack3.png", "monster_attack4.png", "monster_attack5.png", "monster_attack6.png", "monster_attack7.png", "monster_attack8.png", "monster_attack9.png", "monster_attack10.png"],
     "hurt": ["monster_hurt.png", "monster_empty.png"],
     "die": ["monster_hurt.png", "monster_empty.png"],
-    "bullet": ["monster_attacksprite1.png", "monster_attacksprite2.png", "monster_attacksprite3.png", "monster_attacksprite4.png", "monster_attacksprite5.png", "monster_attacksprite6.png", "monster_attacksprite7.png", "monster_attacksprite8.png", "monster_attacksprite9.png"]
+    "bullet": ["monster_attack sprite1.png", "monster_attack sprite2.png", "monster_attack sprite3.png", "monster_attack sprite4.png", "monster_attack sprite5.png", "monster_attack sprite6.png", "monster_attack sprite7.png", "monster_attack sprite8.png", "monster_attack sprite9.png"]
   }
 }

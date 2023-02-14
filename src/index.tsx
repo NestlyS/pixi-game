@@ -3,6 +3,8 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+export const __IS_DEV__ = process.env.NODE_ENV === 'development';
+
 const element = document.getElementById('root');
 
 if (element) {

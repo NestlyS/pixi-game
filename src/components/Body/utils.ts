@@ -1,13 +1,21 @@
-import { Body as Matter_Body, IEventCollision} from 'matter-js';
-import { NegativeShould, PositiveShould, ShouldApplyForce } from "./typing";
+import { Body as Matter_Body, IEventCollision } from 'matter-js';
+import { NegativeShould, PositiveShould, ShouldApplyForce } from './typing';
 
-export const applyForce = (body: Matter_Body, toX: number, toY: number) => Matter_Body.setVelocity(body, {
-  x: toX,
-  y: toY
-});
+export const applyForce = (body: Matter_Body, toX: number, toY: number) =>
+  Matter_Body.setVelocity(body, {
+    x: toX,
+    y: toY,
+  });
 
-export const isPositiveShould = (props: NegativeShould | PositiveShould): props is PositiveShould => props.should === true;
-export const calcForceApply = ({ body, shouldApplyForce } : {body: Matter_Body, shouldApplyForce?: ShouldApplyForce}) => {
+export const isPositiveShould = (props: NegativeShould | PositiveShould): props is PositiveShould =>
+  props.should === true;
+export const calcForceApply = ({
+  body,
+  shouldApplyForce,
+}: {
+  body: Matter_Body;
+  shouldApplyForce?: ShouldApplyForce;
+}) => {
   if (!shouldApplyForce) {
     return;
   }
@@ -24,8 +32,11 @@ export const calcForceApply = ({ body, shouldApplyForce } : {body: Matter_Body, 
 
   Matter_Body.setVelocity(body, {
     x: props.toX,
-    y: props.toY
+    y: props.toY,
   });
-}
+};
 
-export const checkIsBodyInPairs = (pairs: IEventCollision<Matter.Engine>['pairs'], body?: Matter_Body | null) => !!body && pairs.some(({ bodyB, bodyA }) => body === bodyA || body === bodyB)
+export const checkIsBodyInPairs = (
+  pairs: IEventCollision<Matter.Engine>['pairs'],
+  body?: Matter_Body | null,
+) => !!body && pairs.some(({ bodyB, bodyA }) => body === bodyA || body === bodyB);

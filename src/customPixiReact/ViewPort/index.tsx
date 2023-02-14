@@ -1,7 +1,7 @@
-import React, { forwardRef } from "react";
-import * as PIXI from "pixi.js";
-import { PixiComponent, useApp } from "@inlet/react-pixi";
-import { Viewport as PixiViewport } from "pixi-viewport";
+import React, { forwardRef } from 'react';
+import * as PIXI from 'pixi.js';
+import { PixiComponent, useApp } from '@inlet/react-pixi';
+import { Viewport as PixiViewport } from 'pixi-viewport';
 
 export interface ViewportProps {
   width: number;
@@ -14,7 +14,7 @@ export interface PixiComponentViewportProps extends ViewportProps {
   app: PIXI.Application;
 }
 
-const PixiComponentViewport = PixiComponent("Viewport", {
+const PixiComponentViewport = PixiComponent('Viewport', {
   create: ({ width, height, app, plugin }: PixiComponentViewportProps) => {
     const viewport = new PixiViewport({
       screenWidth: width,
@@ -22,10 +22,10 @@ const PixiComponentViewport = PixiComponent("Viewport", {
       worldWidth: width * 4,
       worldHeight: height * 4,
       ticker: app.ticker,
-      interaction: app.renderer.plugins.interaction
+      interaction: app.renderer.plugins.interaction,
     });
 
-    plugin?.forEach(plugin => {
+    plugin?.forEach((plugin) => {
       if (plugin === 'clampZoom') {
         viewport[plugin]({});
         return;
@@ -33,15 +33,17 @@ const PixiComponentViewport = PixiComponent("Viewport", {
       console.log(plugin);
 
       viewport[plugin]();
-    })
+    });
 
     return viewport;
-  }
+  },
 });
 
-const Viewport = React.memo(forwardRef<PixiViewport, ViewportProps> ((props, ref) => {
-  const app = useApp();
-  return <PixiComponentViewport ref={ref} app={app} {...props} />;
-}));
+const Viewport = React.memo(
+  forwardRef<PixiViewport, ViewportProps>((props, ref) => {
+    const app = useApp();
+    return <PixiComponentViewport ref={ref} app={app} {...props} />;
+  }),
+);
 
 export default Viewport;

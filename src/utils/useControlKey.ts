@@ -1,23 +1,21 @@
-import { useTick } from "@inlet/react-pixi";
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useTick } from '@inlet/react-pixi';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import uniqueId from 'lodash.uniqueid';
 
-
 type StoreDataType = {
-  isPressed: boolean,
-  isInited: boolean,
+  isPressed: boolean;
+  isInited: boolean;
   callback: null | (() => void);
-}
+};
 const INPUT_CHECK = 1;
 const KEYS_STORE: Record<KeyboardEvent['key'], StoreDataType> = {};
 
 const chechIsCorrectCode = (e: KeyboardEvent, key: KeyboardEvent['code']) => e.code !== key;
 
 export const useGlobalCheck = () => {
-
   const timer = useRef(0);
 
-  useTick(delta => {
+  useTick((delta) => {
     timer.current += delta;
 
     if (timer.current > INPUT_CHECK) {
@@ -31,19 +29,23 @@ export const useGlobalCheck = () => {
       timer.current = 0;
     }
   });
-}
+};
 
-const keyboardCheck = (key: KeyboardEvent['code'], cb: () => void,) => (e: KeyboardEvent) => {
+const keyboardCheck = (key: KeyboardEvent['code'], cb: () => void) => (e: KeyboardEvent) => {
   if (chechIsCorrectCode(e, key)) return;
 
   cb();
-}
+};
 
-export const useControlKey = (key: KeyboardEvent['code'] | 'mouse', cb: () => void, onUnpress?: () => void): void => {
+export const useControlKey = (
+  key: KeyboardEvent['code'] | 'mouse',
+  cb: () => void,
+  onUnpress?: () => void,
+): void => {
   const uniqKey = useMemo(() => uniqueId(key), [key]);
 
   useEffect(() => {
-    KEYS_STORE[uniqKey] = { isPressed: false, isInited: false, callback: cb};
+    KEYS_STORE[uniqKey] = { isPressed: false, isInited: false, callback: cb };
 
     const downCb = () => {
       KEYS_STORE[uniqKey].isPressed = true;
@@ -54,11 +56,15 @@ export const useControlKey = (key: KeyboardEvent['code'] | 'mouse', cb: () => vo
       const unpressCb = () => {
         KEYS_STORE[uniqKey].isPressed = false;
         onUnpress?.();
-      }
+      };
 
       if (KEYS_STORE[uniqKey].isInited) {
         const prevCb = KEYS_STORE[uniqKey].callback;
-        KEYS_STORE[uniqKey].callback = () => { prevCb?.(); unpressCb(); KEYS_STORE[uniqKey].callback = prevCb;}
+        KEYS_STORE[uniqKey].callback = () => {
+          prevCb?.();
+          unpressCb();
+          KEYS_STORE[uniqKey].callback = prevCb;
+        };
         KEYS_STORE[uniqKey].isInited = false;
 
         return;
@@ -73,7 +79,7 @@ export const useControlKey = (key: KeyboardEvent['code'] | 'mouse', cb: () => vo
       KEYS_STORE[uniqKey] = { isPressed: false, isInited: false, callback: null };
       window.removeEventListener(key === 'mouse' ? 'keydown' : 'mousedown', _downCb);
       window.removeEventListener(key === 'mouse' ? 'keyup' : 'mouseup', _upCb);
-    }
+    };
 
     if (key === 'mouse') {
       window.addEventListener('mousedown', downCb);
@@ -90,4 +96,4 @@ export const useControlKey = (key: KeyboardEvent['code'] | 'mouse', cb: () => vo
 
     return clearFunc(keyboardDownCb, keyboardUpCb);
   }, [cb, uniqKey, key, onUnpress]);
-}
+};
