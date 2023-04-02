@@ -1,6 +1,6 @@
 import { memo } from 'react';
-import { Sprite as PIXI_Sprite } from 'pixi.js';
-import { _ReactPixi } from '@inlet/react-pixi';
+import { Sprite as PIXI_Sprite } from '@pixi/sprite';
+import { _ReactPixi } from '@pixi/react';
 import { useBodyParams } from '../../Body/context';
 import { ContainerContextProvider, useMakeContainer } from '../ViewController/context';
 import { ISpriteProps, Sprite } from '../../Sprite';

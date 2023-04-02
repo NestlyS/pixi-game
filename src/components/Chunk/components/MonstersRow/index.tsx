@@ -1,7 +1,10 @@
+import { Container } from '@pixi/react';
 import { memo, useCallback, useMemo } from 'react';
+import { AI_SENSOR_LABEL } from '../../../../constants';
 import { getRandomValue } from '../../../../utils/getRandomValue';
 import { Body } from '../../../Body';
 import { Monster } from '../../../Monster';
+import { MonsterWithTrash } from '../../../Monster/MonsterWithTrash';
 import {
   MIDDLE_PART_NAME,
   DIRT_MIDDLE_PART_NAME,
@@ -19,13 +22,6 @@ export const MONSTERS_ROW_WIDTH = 10;
 
 export const MonstersRow = memo(
   ({ spritesheetUrl, x, y, tileSize, tilesHeight, width = MONSTERS_ROW_WIDTH }: ChunkProps) => {
-    const monstersX = useMemo(
-      () =>
-        new Array(getRandomValue(0, 1))
-          .fill(0)
-          .map((_, index, { length }) => x + (width / length) * 2 + (width * index) / 2),
-      [width, x],
-    );
     const textureModifier = useCallback(
       (indexX: number, indexY: number, length: number, height: number) => {
         if (indexY === 0 && indexX <= length - 1) {
@@ -38,12 +34,9 @@ export const MonstersRow = memo(
     );
 
     return (
-      <>
-        {monstersX.map((x) => (
-          <Monster x={x} y={y - ((tilesHeight + 1) * tileSize) / 2} />
-        ))}
+      <Container sortableChildren>
         <Body
-          label="ai-sensor"
+          label={AI_SENSOR_LABEL}
           x={x}
           y={y - (tilesHeight * tileSize) / 2}
           width={tileSize}
@@ -60,14 +53,18 @@ export const MonstersRow = memo(
           tilesHeight={tilesHeight}
         />
         <Body
-          label="ai-sensor"
+          label={AI_SENSOR_LABEL}
           x={x + width * tileSize}
           y={y - (tilesHeight * tileSize) / 2}
           width={tileSize}
           height={tileSize * 4}
           options={AI_SENSOR_OPTIONS}
         />
-      </>
+        <MonsterWithTrash
+          x={x + width * tileSize * 0.7}
+          y={y - ((tilesHeight + 1) * tileSize) / 2}
+        />
+      </Container>
     );
   },
 );

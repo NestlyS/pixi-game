@@ -22,11 +22,6 @@ export const createBodyGroup = (name: string): BodyGroupMap => {
       if (!deletableBody) return;
 
       bodies = bodies.filter(({ id }) => id !== deletableBody.id);
-      console.log(
-        'COMPOSITE_REMOVED',
-        callbacks,
-        bodies.map((body) => body.id),
-      );
       callbacks.map((cb) => cb('remove', deletableBody));
     },
     get: () => [...bodies],

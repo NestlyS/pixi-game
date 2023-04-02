@@ -1,4 +1,5 @@
 import uniqueId from 'lodash.uniqueid';
+import { OutlineFilter } from 'pixi-filters';
 import React, { useCallback, useRef, useState } from 'react';
 import { USER_BODY_GROUP } from '../../../bodyGroups/user';
 import { Body } from '../../Body';
@@ -16,6 +17,8 @@ const TRASH_PARAMS: Matter.IChamferableBodyDefinition = {
   isStatic: true,
 };
 
+const WHITE_OUTLINE_FILTER = new OutlineFilter(3, 0xffffff, 0.05);
+
 type Props = {
   x: number;
   y: number;
@@ -32,6 +35,7 @@ export const Trash = ({ x, y, animationName, spritesheetUrl, type, onDelete }: P
 
   const onCollision = useCallback(
     (e: Matter.IEventCollision<Matter.Engine>) => {
+      console.log('COLLIDED PAIR', [...e.pairs]);
       if (isTouched) return;
 
       const collidedPair = e.pairs.find((pair) =>
@@ -39,6 +43,7 @@ export const Trash = ({ x, y, animationName, spritesheetUrl, type, onDelete }: P
           (body) => body.id === pair.bodyA.id || body.id === pair.bodyB.id,
         ),
       );
+
       if (!collidedPair) return;
 
       const collidedUser =
@@ -73,7 +78,8 @@ export const Trash = ({ x, y, animationName, spritesheetUrl, type, onDelete }: P
         initialAnimation={animationName}
         width={TRASH_WIDTH}
         height={TRASH_HEIGHT}
-        zIndex={20}
+        zIndex={100}
+        filters={[WHITE_OUTLINE_FILTER]}
       />
     </Body>
   );

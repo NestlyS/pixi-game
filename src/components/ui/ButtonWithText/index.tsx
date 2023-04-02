@@ -1,5 +1,5 @@
 import { TextStyle } from 'pixi.js';
-import { Container, Text } from '@inlet/react-pixi';
+import { Container, Text } from '@pixi/react';
 import React from 'react';
 import { Button } from '../Button';
 
@@ -28,6 +28,7 @@ export const ButtonWithText = ({
   children,
   marginLeft = 0,
   marginTop = 0,
+  onClick,
 }: Props) => {
   return (
     // @ts-ignore
@@ -40,13 +41,9 @@ export const ButtonWithText = ({
         y={0}
         textureUrl={textureUrl}
         pixelised
+        onClick={onClick}
       />
-      <Text
-        x={marginLeft}
-        y={marginTop}
-        text={children}
-        style={fontStyle}
-      />
+      <Text x={marginLeft} y={marginTop} text={children} style={fontStyle} />
     </Container>
   );
 };

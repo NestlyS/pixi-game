@@ -1,4 +1,4 @@
-import { Container } from '@inlet/react-pixi';
+import { Container } from '@pixi/react';
 import { useHealth } from '../../HealthStorage/context';
 import { useMainUserId } from '../../MainUserStorage/context';
 import { Sprite } from '../../Sprite';

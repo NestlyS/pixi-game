@@ -1,4 +1,4 @@
-import { _ReactPixi } from '@inlet/react-pixi';
+import { _ReactPixi } from '@pixi/react';
 import { DisplayObject } from 'pixi.js';
 import { createContext, useContext, useMemo, useRef } from 'react';
 

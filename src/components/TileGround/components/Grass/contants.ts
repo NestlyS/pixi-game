@@ -6,7 +6,8 @@ export const DIRT_MIDDLE_PART_NAME = 'dirt-middle.png';
 export const DIRT_RIGHT_EDGE_NAME = 'dirt-corner-right.png';
 export const DIRT_TO_GRASS_NAME = '113.png';
 export const GRASS_TO_DIRT_NAME = '107.png';
-export const GRASS_SMOOTH_UP_TRANSITION = 'grass-pre-middle.png';
+export const GRASS_SMOOTH_UP_TRANSITION = 'grass-diag-up.png';
+export const GRASS_SMOOTH_DOWN_TRANSITION = 'grass-diag-down.png';
 
 export enum Decorations {
   Decoration1 = 'deco1',

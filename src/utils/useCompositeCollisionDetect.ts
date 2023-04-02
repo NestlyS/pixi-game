@@ -1,4 +1,4 @@
-import { useTick } from '@inlet/react-pixi';
+import { useTick } from '@pixi/react';
 import { Composite, Detector, Body, Collision } from 'matter-js';
 import { useEffect, useRef, useState } from 'react';
 import { BodyGroupMap } from '../bodyGroups/typings';

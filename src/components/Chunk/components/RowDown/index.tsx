@@ -2,11 +2,19 @@ import { memo, useCallback } from 'react';
 import {
   MIDDLE_PART_NAME,
   DIRT_MIDDLE_PART_NAME,
+  GRASS_SMOOTH_UP_TRANSITION,
+  GRASS_SMOOTH_DOWN_TRANSITION,
 } from '../../../TileGround/components/Grass/contants';
 import { Grass } from '../../../TileGround/components/Grass/Grass';
 import { ChunkProps } from '../../typings';
+import { Body } from '../../../Body';
+import { Sprite } from '../../../Sprite';
 
 export const ROW_WIDTH = 8;
+
+const TRAMPLIN_CONFIG = {
+  isStatic: true,
+};
 
 export const RowDown = memo(
   ({ spritesheetUrl, x, y, tileSize, tilesHeight, width = ROW_WIDTH }: ChunkProps) => {
@@ -33,6 +41,22 @@ export const RowDown = memo(
           tileSize={tileSize}
           tilesWidth={halfWidth}
           tilesHeight={tilesHeight}
+        />
+        <Body
+          x={x + halfWidth * tileSize + tileSize * 0.2}
+          y={y - tilesHeight * tileSize + tileSize * 1.9}
+          width={tileSize * 1.5}
+          height={tileSize}
+          rotation={0.7}
+          options={TRAMPLIN_CONFIG}
+        />
+        <Sprite
+          x={x + halfWidth * tileSize}
+          y={y - tilesHeight * tileSize + tileSize}
+          width={tileSize}
+          height={tileSize}
+          spritesheet={spritesheetUrl}
+          textureUrl={GRASS_SMOOTH_DOWN_TRANSITION}
         />
         <Grass
           textureModifier={textureModifier}

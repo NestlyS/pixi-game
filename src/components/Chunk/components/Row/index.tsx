@@ -21,8 +21,6 @@ export const Row = memo(
       [],
     );
 
-    console.log('RERENDER');
-
     return (
       <Grass
         textureModifier={textureModifier}

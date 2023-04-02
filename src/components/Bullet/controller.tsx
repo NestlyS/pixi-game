@@ -1,6 +1,7 @@
-import { useTick } from '@inlet/react-pixi';
-import { Body } from 'matter-js';
+import { useTick } from '@pixi/react';
+import Matter, { Body } from 'matter-js';
 import React, { useEffect, useRef } from 'react';
+import { useEngine } from '../../utils/useEngine';
 import { useBody } from '../Body/context';
 import { applyForce } from '../Body/utils';
 
@@ -48,8 +49,6 @@ export const BulletController = ({ direction, speed, setCurrentDistance }: Props
   const distanceRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
-    if (!body) return;
-
     distanceRef.current = { x: body.position.x, y: body.position.y };
 
     return () => {
@@ -58,21 +57,23 @@ export const BulletController = ({ direction, speed, setCurrentDistance }: Props
   }, [body]);
 
   useTick((delta) => {
-    if (!body) return;
-
     deltaRef.current += delta;
+
+    if (deltaRef.current < 10) return;
     deltaRef.current = 0;
 
-    const { x: xMult, y: yMult } = getDirectionMultiplier(direction);
-
-    Body.setPosition(body, {
-      x: body.position.x + speed * xMult,
-      y: body.position.y + speed * yMult,
-    });
     const distance = Math.sqrt(
       Math.pow(body.position.x - distanceRef.current.x, 2) -
         Math.pow(body.position.y - distanceRef.current.y, 2),
     );
+
+    const { x: xMult, y: yMult } = getDirectionMultiplier(direction);
+
+    Body.setVelocity(body, {
+      x: speed * xMult,
+      y: speed * yMult,
+    });
+
     setCurrentDistance(distance);
   });
 

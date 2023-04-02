@@ -1,153 +1,103 @@
-import { useTick } from '@inlet/react-pixi';
-import React, { useCallback, useEffect, useRef } from 'react';
-import { EPS } from '../../../constants';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import { Filter } from 'pixi.js';
 import { useAnimation } from '../../AnimatedSprite/context';
-import { useBody, useBodyParams } from '../../Body/context';
-import { useAttackingAnimation } from '../AttackController/context';
-import { useDeath, useDeathWrapper } from '../DeathController/context';
-import { useGroundTouch } from '../GroundTouchController/context';
-import { useBodyHealth } from '../HealthController/context';
-import { useSliding } from '../SlideController/context';
+import { AnimationControllerProvider, AnimationList, AnimationState } from './context';
 
-const X_IDLE_BORDER = EPS * 10;
-const Y_IDLE_BORDER = EPS * 100;
-
-const enum AnimationList {
-  Idle = 'idle',
-  Run = 'run',
-  Fall = 'fall',
-  Jump = 'jump',
-  Hurt = 'hurt',
-  Slide = 'slide',
-  Attack = 'attack',
-  Die = 'die',
-}
+type AnimationParams = {
+  name: string;
+  speed?: number;
+  loop?: boolean;
+  priority: number;
+  filters?: Filter[];
+};
+type AnimationRecord<T extends string = string> = Record<T, AnimationParams | null>;
 
 type Props = {
-  animationNames: Record<
-    keyof typeof AnimationList,
-    { name: string; speed?: number; loop?: boolean; trigger?: boolean } | undefined
+  animationParams: { [AnimationList.Idle]: AnimationParams } & Partial<
+    AnimationRecord<AnimationList>
   >;
+  children: React.ReactNode;
 };
 
-export const AnimationController = ({ animationNames }: Props) => {
-  const { vx, vy } = useBodyParams();
-
-  const { body } = useBody();
-
-  const { isCooldown } = useBodyHealth();
-
-  const { isAttack, onActionFinish } = useAttackingAnimation();
-  const isDead = useDeath();
-  const isSliding = useSliding();
-
-  const isGroundTouchedRef = useRef(true);
-  const onChange = useCallback((isGroundTouched: boolean) => {
-    isGroundTouchedRef.current = isGroundTouched;
-  }, []);
-
-  useGroundTouch(onChange);
-
+export const AnimationController = ({ animationParams, children }: Props) => {
   const { animations, onComplete, setAnimation } = useAnimation();
 
-  const lastAnim = useRef<AnimationList | null>(null);
+  const animationStack = useRef<[name: AnimationList, priority: number][]>([
+    [AnimationList.Idle, animationParams[AnimationList.Idle].priority],
+  ]);
 
-  useEffect(() => {
-    if (!animationNames.Idle) return;
+  const refreshAnimations = useCallback(() => {
+    if (!animationStack.current[0][0]) return;
 
-    setAnimation(animationNames.Idle);
-  }, [animationNames.Idle, setAnimation]);
+    const topAnimationParams = animationParams[animationStack.current[0][0]];
 
-  useTick(() => {
-    if (!body) {
+    if (!topAnimationParams) {
+      console.error('Нет анимаций для отображения. Стек пуст');
       return;
     }
 
-    if (animationNames.Die && lastAnim.current !== AnimationList.Die && isDead) {
-      setAnimation(animationNames.Die);
-      lastAnim.current = AnimationList.Die;
-      return;
-    }
+    console.log({ ...animationStack.current }, topAnimationParams);
 
-    if (isDead) {
-      return;
-    }
+    setAnimation({
+      name: topAnimationParams.name,
+      loop: topAnimationParams.loop,
+      speed: topAnimationParams.speed,
+      _filters: topAnimationParams.filters,
+    });
+  }, [animationParams, setAnimation]);
 
-    if (animationNames.Attack && lastAnim.current !== AnimationList.Attack && isAttack) {
-      setAnimation(animationNames.Attack);
-      if (animationNames.Attack.trigger) {
-        const cb = () => {
-          console.log('ATTACK!!!');
-          onActionFinish();
-        };
+  useEffect(() => refreshAnimations(), []);
 
-        onComplete(cb, true);
+  const requestAnimation = useCallback<AnimationState['requestAnimation']>(
+    ({ name, onFinish }) => {
+      console.log(animations, name, animationParams);
+
+      if (!animationParams[name]?.name || !animations.includes(animationParams[name]?.name ?? '')) {
+        console.error('Для данного имени нет анимаций.');
+        return;
       }
-      lastAnim.current = AnimationList.Attack;
-      return;
-    }
 
-    if (isAttack) {
-      return;
-    }
+      const animationParam = Object.entries(animationParams).find(
+        ([animationName]) => animationName === name,
+      )?.[1];
 
-    if (animationNames.Hurt && lastAnim.current !== AnimationList.Hurt && isCooldown) {
-      setAnimation(animationNames.Hurt);
-      lastAnim.current = AnimationList.Hurt;
-      return;
-    }
+      console.log(animationParam, animationParams);
 
-    if (isCooldown) {
-      return;
-    }
+      if (!animationParam) {
+        return;
+      }
 
-    if (animationNames.Slide && lastAnim.current !== AnimationList.Slide && isSliding) {
-      setAnimation(animationNames.Slide);
-      lastAnim.current = AnimationList.Slide;
-      return;
-    }
+      if (!animationStack.current.some(([animationName]) => animationName === name)) {
+        animationStack.current.push([name, animationParam.priority]);
+        // Сортировка в восходящем порядке, так у нас всегда элемент на первом месте
+        animationStack.current.sort(([, priorA], [, priorB]) => priorB - priorA);
+      }
 
-    if (isSliding) {
-      return;
-    }
+      refreshAnimations();
+      if (onFinish) onComplete(onFinish, true);
+    },
+    [animationParams, animations, onComplete, refreshAnimations],
+  );
 
-    if (
-      animationNames.Idle &&
-      lastAnim.current !== AnimationList.Idle &&
-      isGroundTouchedRef.current &&
-      Math.abs(vx) < X_IDLE_BORDER &&
-      Math.abs(vy) < Y_IDLE_BORDER
-    ) {
-      setAnimation(animationNames.Idle);
-      // Венсти в useAnimation
-      lastAnim.current = AnimationList.Idle;
-      return;
-    }
+  const releaseAnimation = useCallback<AnimationState['releaseAnimation']>(
+    (name) => {
+      console.log(...animationStack.current);
+      animationStack.current = animationStack.current.filter(
+        ([animationName]) => animationName !== name,
+      );
+      console.log(...animationStack.current);
+      refreshAnimations();
+    },
+    [refreshAnimations],
+  );
 
-    if (animationNames.Fall && lastAnim.current !== AnimationList.Fall && vy > Y_IDLE_BORDER) {
-      setAnimation(animationNames.Fall);
-      lastAnim.current = AnimationList.Fall;
-      return;
-    }
+  const value = useMemo(
+    () => ({
+      requestAnimation,
+      releaseAnimation,
+    }),
+    [releaseAnimation, requestAnimation],
+  );
 
-    if (animationNames.Jump && lastAnim.current !== AnimationList.Jump && vy < -Y_IDLE_BORDER) {
-      setAnimation(animationNames.Jump);
-      lastAnim.current = AnimationList.Jump;
-      return;
-    }
-
-    if (
-      animationNames.Run &&
-      lastAnim.current !== AnimationList.Run &&
-      isGroundTouchedRef.current &&
-      Math.abs(vx) > X_IDLE_BORDER &&
-      Math.abs(vy) < Y_IDLE_BORDER
-    ) {
-      setAnimation(animationNames.Run);
-      lastAnim.current = AnimationList.Run;
-      return;
-    }
-  });
-
-  return null;
+  return <AnimationControllerProvider value={value}>{children}</AnimationControllerProvider>;
 };

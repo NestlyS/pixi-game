@@ -1,4 +1,6 @@
-import React, { useEffect } from 'react';
+import { Body } from 'matter-js';
+import React, { useCallback, useEffect, useRef } from 'react';
+import { SignalList, useCatchSignal } from '../../utils/signaller/emitSignal';
 import { useBody } from '../Body/context';
 import { useMainUserId } from './context';
 
@@ -9,7 +11,7 @@ export const MainUserController = () => {
   useEffect(() => {
     if (!body) return;
 
-    const id = body.label ?? body.id;
+    const id = body.label;
     setId(id);
   }, [body, setId]);
 

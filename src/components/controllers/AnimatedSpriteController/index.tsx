@@ -3,13 +3,13 @@ import { AnimatedSprite as PIXI_AnimatedSprite, Container as PIXI_Container } fr
 import { useBody, useBodyParams } from '../../Body/context';
 import { AnimatedSprite, IAnimatedSprite } from '../../AnimatedSprite';
 import { ContainerContextProvider, useMakeContainer } from '../ViewController/context';
-import { useTick } from '@inlet/react-pixi';
+import { useTick } from '@pixi/react';
 import { EPS } from '../../../constants';
 
 type Props = {
   children?: React.ReactElement | React.ReactElement[];
   ignoreRotation?: boolean;
-} & Omit<Omit<Omit<IAnimatedSprite, 'x'>, 'y'>, 'rotation'>;
+} & Omit<Omit<IAnimatedSprite, 'x'>, 'y'>;
 
 export const AnimatedSpriteController = memo(({ children, ignoreRotation, ...props }: Props) => {
   const { x, y, rotation } = useBodyParams();
@@ -20,10 +20,6 @@ export const AnimatedSpriteController = memo(({ children, ignoreRotation, ...pro
   const [scaleX, setScaleX] = useState<1 | -1>(1);
 
   useTick(() => {
-    if (!body) {
-      return;
-    }
-
     if (scaleX !== 1 && body.velocity.x > EPS * 10) {
       setScaleX(1);
     }
@@ -33,7 +29,7 @@ export const AnimatedSpriteController = memo(({ children, ignoreRotation, ...pro
     }
   });
 
-  const { ref, value } = useMakeContainer<PIXI_Container<PIXI_AnimatedSprite>>();
+  const { ref, value } = useMakeContainer<PIXI_AnimatedSprite>();
 
   const scaleObj = useMemo(() => {
     const currentScale = ref.current?.children?.[0]?.scale;

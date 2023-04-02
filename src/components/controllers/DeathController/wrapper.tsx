@@ -1,31 +1,48 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
-import { DeathListenerContextProvider, DeathWrapperContextProvider } from './context';
+import { Body } from 'matter-js';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useGlobalViewportShaking } from '../../GlobalViewport/hooks';
+import { usePausedState } from '../../ui/Settings/context';
+import {
+  DeathListenerContextProvider,
+  DeathWrapperContextProvider,
+  KillDispatcher,
+} from './context';
 
 type Props = {
   cooldown?: number;
+  onDeath?: (body?: Body) => void;
   children: React.ReactNode;
 };
 
-export const DeathWrapper = ({ cooldown = 0, children }: Props) => {
+export const DeathWrapper = ({ cooldown = 0, onDeath, children }: Props) => {
   const [isVisible, setVisibility] = useState(true);
-  const [isDead, setDead] = useState(false);
+  const [isDeadBody, setDeadBody] = useState<Body | undefined>();
+  // TODO Плохо реагиует на паузу, пофиксить
   const callbacksRef = useRef<(() => void)[]>([]);
 
-  const kill = useCallback(() => {
-    console.log('KILL INITIED', callbacksRef.current);
-    setDead(true);
+  useEffect(() => {
+    if (!isDeadBody) return;
+
     callbacksRef.current.forEach((cb) => cb());
-    setTimeout(() => {
+    const deadCallback = () => {
       console.log('KILL ENDED', cooldown);
       setVisibility(false);
-    }, cooldown);
-  }, [cooldown]);
+      onDeath?.(isDeadBody);
+    };
+
+    setTimeout(deadCallback, cooldown);
+  }, [cooldown, isDeadBody, onDeath]);
+
+  const kill = useCallback<KillDispatcher>((body) => {
+    console.log('KILL INITIED', callbacksRef.current);
+    setDeadBody(body);
+  }, []);
 
   if (!isVisible) return null;
 
   return (
     <DeathWrapperContextProvider value={kill}>
-      <DeathListenerContextProvider value={isDead}>{children}</DeathListenerContextProvider>
+      <DeathListenerContextProvider value={!!isDeadBody}>{children}</DeathListenerContextProvider>
     </DeathWrapperContextProvider>
   );
 };

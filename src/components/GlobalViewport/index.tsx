@@ -20,8 +20,6 @@ export const GlobalViewport = ({ width, height, children }: Props) => {
   const [isMounted, setIsMounted] = useState(false);
   const { isFocusedOnMainBody } = useSettings();
 
-  console.log('GLOBAL_VIEWPORT_RERENDER');
-
   useGlobalViewportControls(viewportRef.current, isFocusedOnMainBody);
 
   useEffect(() => setIsMounted(true), []);

@@ -1,9 +1,12 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
+import { Point } from 'pixi.js';
 import { useGlobalViewport } from '../../GlobalViewport/context';
 import { useSettings } from '../../ui/Settings/context';
-import { useApp } from '@inlet/react-pixi';
+import { useApp } from '@pixi/react';
 import { useContainer } from './context';
-import { WORLD_HEIGHT, WORLD_WIDTH } from '../../../App';
+import { WORLD_HEIGHT } from '../../../App';
+import { Body } from 'matter-js';
+import { useCatchSignal, SignalList } from '../../../utils/signaller/emitSignal';
 
 export const ViewController = () => {
   const { globalViewport } = useGlobalViewport();
@@ -13,7 +16,14 @@ export const ViewController = () => {
   const isFocused = useRef<boolean>(false);
   const app = useApp();
 
-  console.log(container, 'CONTAINER');
+  const cb = useCallback(() => {
+    if (!globalViewport || !container) return;
+
+    globalViewport.plugins.pause('follow');
+    globalViewport.moveCenter(container.x, container.y);
+    globalViewport.follow(container, { speed: 150 });
+  }, [container, globalViewport]);
+  useCatchSignal(SignalList.Reset, cb);
 
   useEffect(() => {
     if (!globalViewport || !container) {
@@ -21,19 +31,15 @@ export const ViewController = () => {
     }
 
     if (isFocused.current && !isFocusedOnMainBody) {
-      globalViewport.pivot = { x: 0, y: 0 };
-      globalViewport.snapZoom({ width: WORLD_WIDTH, height: WORLD_HEIGHT });
       globalViewport.plugins.pause('follow');
 
       isFocused.current = false;
     }
 
-    console.log(container);
-
     if (!isFocused.current && isFocusedOnMainBody) {
-      globalViewport.pivot = { x: 0, y: -container.y * 0.75 };
-      globalViewport.snapZoom({ width: WORLD_WIDTH / 3, height: WORLD_HEIGHT / 1.5 });
-      globalViewport.follow(container, { speed: 35 });
+      globalViewport.pivot = { x: 0, y: -WORLD_HEIGHT / 6 };
+      globalViewport.snapZoom({ height: 500 });
+      globalViewport.follow(container, { speed: 500 });
 
       isFocused.current = true;
     }

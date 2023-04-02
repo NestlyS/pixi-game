@@ -4,6 +4,7 @@ import { useBody, useBodyParams } from '../../Body/context';
 import { applyForce } from '../../Body/utils';
 import { EPS } from '../../../constants';
 import { useGroundTouch } from '../GroundTouchController/context';
+import { AnimationList, useAnimationController } from '../AnimationController/context';
 
 const DEFAULT_JUMPS = 1;
 const VERTICAL_SPEED = -10;
@@ -14,6 +15,7 @@ type Props = {
 
 export const JumpController = ({ maxJumps = DEFAULT_JUMPS }: Props) => {
   const jumpsLeft = useRef(maxJumps);
+  const { releaseAnimation, requestAnimation } = useAnimationController();
 
   const onChange = useCallback(
     (isGroundTouched: boolean) => {
@@ -30,9 +32,14 @@ export const JumpController = ({ maxJumps = DEFAULT_JUMPS }: Props) => {
   const WCb = useCallback(() => {
     if (!body || jumpsLeft.current <= 0 || body.velocity.y > EPS) return;
     applyForce(body, body.velocity.x, VERTICAL_SPEED);
+    requestAnimation({
+      name: AnimationList.Jump,
+      onFinish: () => releaseAnimation(AnimationList.Jump),
+    });
     jumpsLeft.current -= 1;
-  }, [body]);
+  }, [body, releaseAnimation, requestAnimation]);
 
   useControlKey('KeyW', WCb);
+  useControlKey('Space', WCb);
   return null;
 };

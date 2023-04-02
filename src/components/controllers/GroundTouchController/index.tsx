@@ -24,7 +24,5 @@ export const GroundTouchController = ({ children }: Props) => {
     [isGroundTouched],
   );
 
-  // console.log('TOUCHEDGROUND', isGroundTouched)
-
   return <GroundTouchContextProvider value={value}>{children}</GroundTouchContextProvider>;
 };

@@ -1,4 +1,4 @@
-import { PixiComponent } from '@inlet/react-pixi';
+import { PixiComponent } from '@pixi/react';
 import * as PIXI3D from 'pixi3d';
 
 type Props = {

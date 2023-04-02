@@ -1,4 +1,4 @@
-import { useTick } from '@inlet/react-pixi';
+import { useTick } from '@pixi/react';
 import { useState, useEffect, useRef, useMemo } from 'react';
 import uniqueId from 'lodash.uniqueid';
 
@@ -77,13 +77,24 @@ export const useControlKey = (
     const clearFunc = (_downCb: (e: any) => void, _upCb: (e: any) => void) => () => {
       console.log('CLEAR', uniqKey, KEYS_STORE[uniqKey]);
       KEYS_STORE[uniqKey] = { isPressed: false, isInited: false, callback: null };
-      window.removeEventListener(key === 'mouse' ? 'keydown' : 'mousedown', _downCb);
-      window.removeEventListener(key === 'mouse' ? 'keyup' : 'mouseup', _upCb);
+      if (key === 'mouse') {
+        window.removeEventListener('mousedown', _downCb);
+        window.removeEventListener('mouseup', _upCb);
+
+        window.removeEventListener('touchstart', _downCb);
+        window.removeEventListener('touchend', _upCb);
+      } else {
+        window.removeEventListener('keydown', _downCb);
+        window.removeEventListener('keyup', _upCb);
+      }
     };
 
     if (key === 'mouse') {
       window.addEventListener('mousedown', downCb);
       window.addEventListener('mouseup', upCb);
+
+      window.addEventListener('touchstart', downCb);
+      window.addEventListener('touchend', upCb);
 
       return clearFunc(downCb, upCb);
     }

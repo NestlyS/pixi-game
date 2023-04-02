@@ -1,4 +1,4 @@
-import { Container } from '@inlet/react-pixi';
+import { Container } from '@pixi/react';
 import { memo, useMemo } from 'react';
 import { getRandomValue } from '../../../../utils/getRandomValue';
 import { Sprite } from '../../../Sprite';
@@ -59,17 +59,6 @@ const getLayer = (layer: Layer, width: number, step: number, y: number) =>
   new Array(width / step).fill(0).reduce(
     (acc: ReducerAccType, _, index, arr) => {
       if (layer.startIndex > index || index > arr.length - 1 - layer.endIndex) return acc;
-
-      // return {
-      //   percentages: acc.percentages,
-      //   sprites: [...acc.sprites, {
-      //       x: index * step,
-      //       y,
-      //       textureUrl: layer.sprites[0],
-      //       key: `${layer.sprites[0]}-${acc.percentages.length}`
-      //     } as SpriteParams
-      //   ]
-      // }
 
       if (acc.lastAdditionAgo >= 0) {
         acc.lastAdditionAgo -= 1;
@@ -143,6 +132,7 @@ export const GrassDeco = memo(({ x, y, width, step, spritesheetUrl }: Props) => 
             key={tex.key}
             anchor={anchor}
             scale={scale}
+            zIndex={1}
           />
         )),
       )}

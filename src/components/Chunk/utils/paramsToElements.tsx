@@ -75,7 +75,6 @@ export const paramsToElements: ParamsToElements = ({
       return null;
     };
 
-    console.log(item.y, arr[index - 1]?.y, isPrevLower, body);
     return [
       <Grass
         key={key}

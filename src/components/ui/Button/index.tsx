@@ -1,4 +1,4 @@
-import { _ReactPixi } from '@inlet/react-pixi';
+import { _ReactPixi } from '@pixi/react';
 import { Texture } from 'pixi.js';
 import React, { useCallback, useMemo } from 'react';
 import { Sprite } from '../../Sprite';
@@ -27,13 +27,11 @@ export const Button = ({
   <Sprite
     x={x}
     y={y}
-    pointertap={onClick}
+    onClick={onClick}
     width={width}
     height={height}
     spritesheet={spritesheetUrl}
     textureUrl={textureUrl}
-    interactive
-    buttonMode
     pixelised={pixelised}
   />
 );

@@ -1,5 +1,5 @@
 import { Graphics as PIXI_Grapics } from 'pixi.js';
-import { Graphics } from '@inlet/react-pixi';
+import { Graphics } from '@pixi/react';
 import React, { useRef, useCallback, forwardRef, memo } from 'react';
 
 // TODO Разделить

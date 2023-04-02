@@ -24,13 +24,6 @@ export const TrashRowChunk = memo(
 
     return (
       <>
-        <TrashRow
-          x={x + tileSize}
-          y={y - ((tilesHeight + 1) * tileSize) / 2}
-          tileSize={tileSize}
-          width={width - 2}
-          type="random"
-        />
         <Grass
           textureModifier={textureModifier}
           spritesheetUrl={spritesheetUrl}
@@ -39,6 +32,13 @@ export const TrashRowChunk = memo(
           tileSize={tileSize}
           tilesWidth={width}
           tilesHeight={tilesHeight}
+        />
+        <TrashRow
+          x={x + tileSize}
+          y={y - ((tilesHeight + 1) * tileSize) / 2}
+          tileSize={tileSize}
+          width={width - 2}
+          type="random"
         />
       </>
     );

@@ -31,6 +31,7 @@ export const TileGround = memo(
       То же самое относится и к innerX.
     */
           const getInnerY = (index: number) => y - bodyHeight / 2 + index * tileSize + tileSize / 2;
+          const cb = (indexX: number) => getTexture(indexX, index, tilesWidth, tilesHeight);
           const innerX = x - bodyWidth / 2 + tileSize / 2;
 
           if (index === 0) {
@@ -42,7 +43,7 @@ export const TileGround = memo(
                 startY={getInnerY(index)}
                 tileSize={tileSize}
                 spritesheet={spritesheetUrl}
-                getTexture={(indexX: number) => getTexture(indexX, index, tilesWidth, tilesHeight)}
+                getTexture={cb}
               />
             );
           }
@@ -55,11 +56,22 @@ export const TileGround = memo(
               startY={getInnerY(index)}
               tileSize={tileSize}
               spritesheet={spritesheetUrl}
-              getTexture={(indexX: number) => getTexture(indexX, index, tilesWidth, tilesHeight)}
+              getTexture={cb}
             />
           );
         }),
-      [arr, bodyHeight, bodyWidth, getTexture, tileSize, tilesHeight, tilesWidth, x, y],
+      [
+        arr,
+        bodyHeight,
+        bodyWidth,
+        getTexture,
+        spritesheetUrl,
+        tileSize,
+        tilesHeight,
+        tilesWidth,
+        x,
+        y,
+      ],
     );
 
     return (

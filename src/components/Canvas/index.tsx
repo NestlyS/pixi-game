@@ -1,83 +1,67 @@
-import { Container, Text, useApp } from '@inlet/react-pixi';
+import { flushSync } from 'react-dom';
+import { Container, Text, useApp } from '@pixi/react';
+import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { useGlobalCheck } from '../../utils/useControlKey';
 import { ControllableBody } from '../Controllable';
 import { GlobalViewport } from '../GlobalViewport';
-import { PIXEL_FONT } from '../../constants';
+import { GODRAY_FILTER, PIXEL_FONT } from '../../constants';
 import { Grass } from '../TileGround/components/Grass/Grass';
 import { LevelManager } from '../LevelManager';
 import { HealthStorage } from '../HealthStorage';
-import { HeartBar } from '../ui/HeartBar';
-import { Box } from '../Box';
-import { Background } from '../Background';
-import { Monster } from '../Monster';
-import { useCallback, useEffect, useState } from 'react';
-import { TrashCounter } from '../ui/TrashCounter';
-import { Bottle } from '../trashes/Bottle';
-import { Chips } from '../trashes/Chips';
-import { Paper } from '../trashes/Paper';
 import { TrashStorage } from '../TrashStorage';
 import { MainUserStorage } from '../MainUserStorage';
 import { WORLD_HEIGHT } from '../../App';
-import { Button } from '../ui/Button';
-import { Menu } from '../ui/Menu';
-import { Sprite } from '../Sprite';
+import { Assets } from 'pixi.js';
+import { Background } from '../Background';
+import { SignalList, useCatchSignal } from '../../utils/signaller/emitSignal';
+import { UI } from '../ui/UI';
+import { Healer } from '../Healer';
 
 export const spritesheetUrl = './sprites/atlas.json';
 
 export const Canvas = () => {
+  const [isLoaded, setLoaded] = useState(false);
   useGlobalCheck();
+
+  useLayoutEffect(() => {
+    Assets.loadBundle('game-screen').then(() => setLoaded(true));
+  }, []);
+
+  const cb = useCallback(() => {
+    flushSync(() => setLoaded(false));
+    setTimeout(() => flushSync(() => setLoaded(true)));
+  }, []);
+  useCatchSignal(SignalList.Reset, cb);
+
+  if (!isLoaded) return null;
 
   return (
     <MainUserStorage>
       <HealthStorage>
         <TrashStorage>
-          <Background />
-          {/* @ts-ignore */}
-          <Container sortableChildren={true}>
-            <Menu />
+          <Container filters={[GODRAY_FILTER]}>
+            <Background />
             <GlobalViewport width={WORLD_HEIGHT} height={WORLD_HEIGHT}>
               <Grass
-                x={400}
-                y={410}
-                tilesWidth={5}
-                tilesHeight={3}
-                tileSize={60}
-                spritesheetUrl={spritesheetUrl}
-              />
-              <Grass
-                x={700}
-                y={410}
-                tilesWidth={5}
-                tilesHeight={3}
-                tileSize={60}
-                spritesheetUrl={spritesheetUrl}
-              />
-              <Grass
-                x={800}
-                y={210}
-                tilesWidth={4}
-                tilesHeight={1}
-                tileSize={60}
+                x={440}
+                y={500}
+                tilesWidth={14}
+                tilesHeight={2}
+                tileSize={80}
                 spritesheetUrl={spritesheetUrl}
               />
               <LevelManager
                 x={1000}
                 y={500}
-                tileSize={60}
-                chunkWidth={10}
-                tilesHeight={5}
+                tileSize={80}
+                chunkWidth={20}
+                tilesHeight={2}
                 spritesheetUrl={spritesheetUrl}
               />
-              <Bottle x={1100} y={200} />
-              <Chips x={1150} y={200} />
-              <Paper x={1200} y={200} />
-              <Bottle x={1100} y={150} />
-              <Chips x={1150} y={150} />
-              <Paper x={1200} y={150} />
-              <Monster x={1300} y={150} />
               <ControllableBody />
             </GlobalViewport>
           </Container>
+          <UI />
         </TrashStorage>
       </HealthStorage>
     </MainUserStorage>

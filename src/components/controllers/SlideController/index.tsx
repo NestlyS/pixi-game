@@ -4,11 +4,11 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useControlKey } from '../../../utils/useControlKey';
 import { useBody, useBodyParams } from '../../Body/context';
 import { BODY_FRICTION } from '../../Controllable';
+import { AnimationList, useAnimationController } from '../AnimationController/context';
 import { useAttacking, useAttackingAnimation } from '../AttackController/context';
 import { useGroundTouch } from '../GroundTouchController/context';
 import { useBodyHealth } from '../HealthController/context';
 import { useContainer } from '../ViewController/context';
-import { initialState, SlidingContextProvider } from './context';
 
 export const SLIDING_FRICTION = 0.001;
 
@@ -20,25 +20,21 @@ export const SLIDING_FRICTION = 0.001;
  * Мне вообще не нравится это решение, но пока что оно самое очевидное.
  */
 const { moveSpriteCenter, returnSpriteCenter } = (() => {
-  let prevValue: number = 0;
+  let prevValue = { x: 0, y: 0 };
 
   return {
-    moveSpriteCenter: (container: Container, offset: number, isBack: boolean) => {
-      prevValue = container.children[0].position.y;
+    moveSpriteCenter: (container: Container, offset: number) => {
+      prevValue = { x: container.pivot.x, y: container.pivot.y };
 
-      container.children[0].position.y -= offset;
+      container.pivot.set(prevValue.x, offset);
     },
     returnSpriteCenter: (container: Container) => {
-      container.children[0].position.y = prevValue;
+      container.pivot.set(prevValue.x, prevValue.y);
     },
   };
 })();
 
-type Props = {
-  children: React.ReactNode;
-};
-
-export const SlideController = ({ children }: Props) => {
+export const SlideController = () => {
   const { body } = useBody();
   const { isCooldown } = useBodyHealth();
   const { isAttack } = useAttackingAnimation();
@@ -47,11 +43,13 @@ export const SlideController = ({ children }: Props) => {
     isGroundTouchedRef.current = isTouched;
   }, []);
 
+  const { requestAnimation, releaseAnimation } = useAnimationController();
+
   const container = useContainer<Container>();
   useGroundTouch(onChange);
 
-  const [isSliding, setSliding] = useState(initialState);
-  const slidingRef = useRef(initialState);
+  const [isSliding, setSliding] = useState(false);
+  const slidingRef = useRef(false);
 
   const isUnsladed = isCooldown || isAttack;
 
@@ -69,7 +67,7 @@ export const SlideController = ({ children }: Props) => {
 
     slidingRef.current = true;
 
-    moveSpriteCenter(container, bodyWidth * 0.6, false);
+    moveSpriteCenter(container, bodyWidth * 0.2);
     Body.setAngle(body, 1.5708);
     Body.setPosition(body, { x: body.position.x, y: bodyNewY });
     Body.setInertia(body, Infinity);
@@ -98,5 +96,14 @@ export const SlideController = ({ children }: Props) => {
     if (isUnsladed && slidingRef.current) unpressCb();
   }, [isUnsladed, unpressCb]);
 
-  return <SlidingContextProvider value={isSliding}>{children}</SlidingContextProvider>;
+  useEffect(() => {
+    if (isSliding) {
+      requestAnimation({ name: AnimationList.Slide });
+      return;
+    }
+
+    releaseAnimation(AnimationList.Slide);
+  }, [isSliding, releaseAnimation, requestAnimation]);
+
+  return null;
 };

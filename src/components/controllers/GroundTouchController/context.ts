@@ -15,7 +15,6 @@ export const useGroundTouch = (onChange?: (isGroundTouched: boolean) => void) =>
   const { isGroundTouched } = useContext(GroundTouchContext);
 
   useEffect(() => {
-    console.log('CHANGED');
     onChange?.(isGroundTouched);
   }, [isGroundTouched, onChange]);
 };

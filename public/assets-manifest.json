@@ -1,0 +1,33 @@
+{
+  "bundles": [
+    {
+      "name": "game-screen",
+      "assets": [
+        {
+          "name": "eva",
+          "srcs": "/eva/eva.json"
+        },
+        {
+          "name": "monster",
+          "srcs": "/monsters/monster.json"
+        },
+        {
+          "name": "atlas",
+          "srcs": "/sprites/atlas.json"
+        },
+        {
+          "name": "backround",
+          "srcs": "/sprites/backround.json"
+        },
+        {
+          "name": "menuAtlas",
+          "srcs": "/sprites/menuAtlas.json"
+        },
+        {
+          "name": "healer",
+          "srcs": "/healer/healer.json"
+        }
+      ]
+    }
+  ]
+}

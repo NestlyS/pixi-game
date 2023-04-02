@@ -1,18 +1,20 @@
-import { Container, useTick } from '@inlet/react-pixi';
+import { Container, useTick } from '@pixi/react';
 import { useRef, useState } from 'react';
 import { WORLD_HEIGHT, WORLD_WIDTH } from '../../App';
 import { Sprite } from '../Sprite';
+import { usePausedState } from '../ui/Settings/context';
 
 const DELTA = 10;
 
 export const Background = () => {
   const [x, setX] = useState(0);
   const deltaRef = useRef(0);
+  const isPaused = usePausedState();
 
   useTick((delta) => {
     deltaRef.current += delta;
 
-    if (deltaRef.current < DELTA) return;
+    if (isPaused || deltaRef.current < DELTA) return;
 
     deltaRef.current = 0;
 

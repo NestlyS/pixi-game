@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text } from '@inlet/react-pixi';
+import { Text } from '@pixi/react';
 import {
   BOTTLE_TEXTURE,
   CHIPS_TEXTURE,
@@ -28,7 +28,7 @@ type Props = {
 };
 
 export const TrashCounter = ({ x, y, width, height, pad, spritesheetUrl }: Props) => {
-  const { onChange, clearOnChange } = useTrash();
+  const { onChange, clearOnChange, get } = useTrash();
   const { id } = useMainUserId();
   const [counters, setCounters] = useState(
     TRASH_TYPES.reduce((acc, type) => {
@@ -36,6 +36,18 @@ export const TrashCounter = ({ x, y, width, height, pad, spritesheetUrl }: Props
       return acc;
     }, {} as Record<TrashTypes, number>),
   );
+
+  useEffect(() => {
+    if (!id) return;
+
+    setCounters(
+      TRASH_TYPES.reduce((acc, type) => {
+        acc[type] = get(id, type) ?? 0;
+        return acc;
+      }, {} as Record<TrashTypes, number>),
+    );
+  }, [get, id]);
+
   useEffect(() => {
     if (!id) return;
 
@@ -59,7 +71,7 @@ export const TrashCounter = ({ x, y, width, height, pad, spritesheetUrl }: Props
       {TEXTURE_URLS.map((textureUrl, index) => (
         <TrashCount
           key={index}
-          x={x + (width * 2 + pad * 6) * index}
+          x={x + (width * 2 + pad * 2) * index}
           y={y}
           width={width}
           height={height}

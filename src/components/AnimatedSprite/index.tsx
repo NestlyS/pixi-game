@@ -3,7 +3,7 @@ import {
   Container,
   useApp,
   _ReactPixi,
-} from '@inlet/react-pixi';
+} from '@pixi/react';
 import {
   Application,
   ISpritesheetData,
@@ -12,7 +12,10 @@ import {
   IPointData,
   Container as PIXI_Container,
   SCALE_MODES,
+  Spritesheet,
+  Filter,
 } from 'pixi.js';
+import { Assets } from '@pixi/assets';
 import React, {
   forwardRef,
   memo,
@@ -23,8 +26,8 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { loadData } from '../../utils/asyncPIXILoader';
 import { AnimationContextProvider, AnimationState } from './context';
+import { usePausedState } from '../ui/Settings/context';
 
 export type IAnimatedSprite = {
   spritesheet: string;
@@ -40,11 +43,12 @@ export type IAnimatedSprite = {
   scale?: IPointData;
   animationSpeed?: number;
   zIndex?: number;
+  filters?: Filter[];
   onComplete?: (currentAnimationName: string | null) => void;
 };
 
 export const AnimatedSprite = memo(
-  forwardRef<PIXI_Container<PIXI_AnimatedSprite>, IAnimatedSprite>(
+  forwardRef<PIXI_AnimatedSprite, IAnimatedSprite>(
     (
       {
         spritesheet,
@@ -60,6 +64,7 @@ export const AnimatedSprite = memo(
         animationSpeed: initialAnimationSpeed = 1,
         setDefault,
         zIndex,
+        filters: initialFilters,
         onComplete,
       },
       ref,
@@ -72,39 +77,25 @@ export const AnimatedSprite = memo(
         [(currentAnimationName: string | null) => void, boolean][]
       >([]);
       const [isLooped, setIsLooped] = useState<boolean>(true);
+      const [filters, setFilters] = useState<Filter[]>([]);
       const app = useApp();
+      const isPaused = usePausedState();
 
       // load
       useEffect(() => {
-        if (!app?.loader) {
-          return;
-        }
-
-        const cb = async () => {
-          let loadedSpritesheet = app.loader.resources[spritesheet]
-            ? (app.loader.resources[spritesheet].data as ISpritesheetData)
-            : await loadData<ISpritesheetData>(spritesheet, app);
-          console.log('spritesheet', spritesheet, app.loader.resources, loadedSpritesheet);
-
-          console.log(
-            'ANIMATION!!!- ---- -- -- -',
-            loadedSpritesheet,
-            initialAnimation,
-            setDefault,
-          );
-          if (!loadedSpritesheet.animations) {
+        const processSpritesheet = (loadedSpritesheet?: Spritesheet) => {
+          if (!loadedSpritesheet?.animations) {
             throw new Error('Не обнаружено анимаций');
           }
 
           const animationMapRaw = Object.entries(loadedSpritesheet.animations).reduce(
             (acc, [animationName, frameUrls]) => {
-              const textures = frameUrls
-                .map((frameUrl) => Texture.from(frameUrl))
-                .map((texture) => {
-                  texture.baseTexture.scaleMode = SCALE_MODES.NEAREST;
+              const textures = frameUrls.map((texture) => {
+                texture.baseTexture.scaleMode = SCALE_MODES.NEAREST;
+                console.log('TEXTURE');
 
-                  return texture;
-                });
+                return texture;
+              });
 
               acc[animationName] = textures;
 
@@ -123,6 +114,28 @@ export const AnimatedSprite = memo(
             );
             currentAnimationNameRef.current = initialAnimation || Object.keys(animationMapRaw)[0];
           }
+        };
+
+        console.log('SPRITESHEET', spritesheet, Assets.cache.has(spritesheet));
+        if (Assets.cache.has(spritesheet)) {
+          const spritesheetData = Assets.cache.get<Spritesheet>(spritesheet);
+          return processSpritesheet(spritesheetData);
+        }
+
+        const cb = async () => {
+          let loadedSpritesheet = null;
+          if (Assets.cache.has(spritesheet)) {
+            loadedSpritesheet = Assets.cache.get<Spritesheet>(spritesheet);
+          } else {
+            console.log(
+              'SPRITESHEET',
+              spritesheet,
+              Assets.cache.has(spritesheet),
+              Assets.cache.get<Spritesheet>(spritesheet),
+            );
+            loadedSpritesheet = await Assets.load<Spritesheet>(spritesheet);
+          }
+          return processSpritesheet(loadedSpritesheet);
         };
 
         cb();
@@ -145,30 +158,43 @@ export const AnimatedSprite = memo(
           return !once;
         });
       }, [onComplete]);
+
       const setAnimation = useCallback(
         ({
           name,
           loop,
           speed,
+          _filters,
         }: {
           name: string;
           loop?: boolean | undefined;
           speed?: number | undefined;
+          _filters?: Filter[] | undefined;
         }) => {
           setCurrentAnimation(animationMap[name]);
           currentAnimationNameRef.current = name;
 
           if (loop !== undefined) setIsLooped(loop);
           if (speed !== undefined) setAnimationSpeed(speed);
+          setFilters(_filters ?? []);
 
-          console.log(name, ref);
-
-          (
-            ref as MutableRefObject<PIXI_Container<PIXI_AnimatedSprite> | null>
-          )?.current?.children[0].play();
+          if (!ref || typeof ref === 'function') return;
+          if (!isPaused) ref.current?.play();
+          setCurrentAnimation(animationMap[name]);
         },
-        [animationMap, ref],
+        [animationMap, isPaused, ref],
       );
+
+      useEffect(() => {
+        if (!ref || typeof ref === 'function') return;
+
+        if (isPaused) {
+          ref.current?.stop();
+          return;
+        }
+
+        ref.current?.play();
+      }, [isPaused, currentAnimation, ref]);
 
       const value = useMemo(
         () =>
@@ -187,30 +213,24 @@ export const AnimatedSprite = memo(
 
       return (
         <>
-          {/* @ts-ignore */}
-          <Container
-            ref={ref}
+          <ReactPIXIAnimatedSprite
             x={x}
             y={y}
+            onLoop={innerOnComplete}
+            onComplete={innerOnComplete}
+            animationSpeed={animationSpeed}
+            isPlaying={true}
             rotation={rotation}
+            textures={currentAnimation}
+            anchor={anchor}
             width={width}
+            ref={ref}
             height={height}
-            zIndex={5}
-          >
-            <ReactPIXIAnimatedSprite
-              onLoop={innerOnComplete}
-              onComplete={innerOnComplete}
-              animationSpeed={animationSpeed}
-              isPlaying={true}
-              textures={currentAnimation}
-              anchor={anchor}
-              width={width}
-              loop={isLooped}
-              height={height}
-              zIndex={zIndex}
-              {...(scale ? { scale } : {})}
-            />
-          </Container>
+            loop={isLooped}
+            zIndex={zIndex}
+            filters={[...(initialFilters ?? []), ...filters]}
+            {...(scale ? { scale } : {})}
+          />
           <AnimationContextProvider value={value}>{children}</AnimationContextProvider>
         </>
       );

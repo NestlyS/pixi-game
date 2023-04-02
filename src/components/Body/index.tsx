@@ -1,4 +1,4 @@
-import { useTick } from '@inlet/react-pixi';
+import { useTick } from '@pixi/react';
 import isEqual from 'lodash/isEqual';
 import {
   Bodies,
@@ -50,7 +50,7 @@ export const Body: React.FC<Props> = React.memo(
     children,
     onCollision,
   }) => {
-    const [body, setBody] = useState<Matter_Body | null>(null);
+    const [body, setBody] = useState<Matter_Body>();
 
     const engine = useEngine();
     const [x, setX] = useState(initialX);
@@ -81,7 +81,6 @@ export const Body: React.FC<Props> = React.memo(
 
       return () => {
         Composite.remove(engine.world, rawBody);
-        setBody(null);
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [engine]);
@@ -144,6 +143,16 @@ export const Body: React.FC<Props> = React.memo(
 
       body.label = label;
     }, [body, label]);
+
+    /**
+     * У монстров и юзера hp хранятся в id и лейбле
+     * Почини это
+     */
+    useEffect(() => {
+      if (!body || rotation !== null || rotation !== undefined) return;
+
+      Matter_Body.setAngle(body, rotation);
+    }, [body, rotation]);
 
     // ------------------------------------ ON COLLISION --------------------
 
@@ -209,16 +218,17 @@ export const Body: React.FC<Props> = React.memo(
       [rotation, vx, vy, x, y],
     );
 
-    const bodyValue = useMemo(
-      () => ({
+    const bodyValue = useMemo(() => {
+      if (!body) return {};
+
+      return {
         body,
         onCollision: subscribeOnCollision,
         clearCollision: clearCollisionSubscription,
-      }),
-      [body, clearCollisionSubscription, subscribeOnCollision],
-    );
+      };
+    }, [body, clearCollisionSubscription, subscribeOnCollision]);
 
-    if (!children && !isCollisionVisible) return null;
+    if ((!children && !isCollisionVisible) || !bodyValue.body) return null;
 
     return (
       <BodyStateContextProvider value={value}>

@@ -2,10 +2,16 @@ import { memo, useCallback } from 'react';
 import {
   MIDDLE_PART_NAME,
   DIRT_MIDDLE_PART_NAME,
+  GRASS_SMOOTH_UP_TRANSITION,
 } from '../../../TileGround/components/Grass/contants';
 import { Grass } from '../../../TileGround/components/Grass/Grass';
 import { ChunkProps } from '../../typings';
+import { Body } from '../../../Body';
+import { Sprite } from '../../../Sprite';
 
+const TRAMPLIN_CONFIG = {
+  isStatic: true,
+};
 export const ROW_WIDTH = 8;
 
 export const RowUp = memo(
@@ -34,6 +40,24 @@ export const RowUp = memo(
           tilesWidth={halfWidth}
           tilesHeight={tilesHeight}
         />
+
+        <Sprite
+          x={x + halfWidth * tileSize - tileSize}
+          y={y - tilesHeight * tileSize}
+          width={tileSize}
+          height={tileSize}
+          spritesheet={spritesheetUrl}
+          textureUrl={GRASS_SMOOTH_UP_TRANSITION}
+        />
+        <Body
+          x={x + halfWidth * tileSize - tileSize * 0.4}
+          y={y - tilesHeight * tileSize + tileSize * 1}
+          width={tileSize * 2}
+          height={tileSize}
+          rotation={-0.7}
+          options={TRAMPLIN_CONFIG}
+        />
+
         <Grass
           textureModifier={textureModifier}
           spritesheetUrl={spritesheetUrl}

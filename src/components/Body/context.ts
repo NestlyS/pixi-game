@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { Body } from 'matter-js';
+import { Bodies, Body } from 'matter-js';
 import { CleanEventListener } from './typing';
 import { plug } from '../../utils/plug';
 
@@ -37,13 +37,13 @@ export const useBodyParams = () => {
 };
 
 type BodyContextState = {
-  body: Body | null;
+  body: Body;
   onCollision: (cb: CleanEventListener) => void;
   clearCollision: (cb: CleanEventListener) => void;
 };
 
 const bodyInitialState = {
-  body: null,
+  body: Bodies.rectangle(-1000, -1000, 1, 1),
   onCollision: plug,
   clearCollision: plug,
 };

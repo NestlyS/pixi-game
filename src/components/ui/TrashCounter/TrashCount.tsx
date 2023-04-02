@@ -1,12 +1,12 @@
 import { memo, useEffect, useRef, useState } from 'react';
 import { TextStyle } from 'pixi.js';
-import { Text, useTick } from '@inlet/react-pixi';
+import { Text, useTick } from '@pixi/react';
 import { Sprite } from '../../Sprite';
 
 const ANIMATION_TIMEOUT = 300;
 const DELTA_TIMEOUT = 3;
 const ROTATION_AMPLITUDE = 0.15;
-const ROTATION_MULT = 0.20;
+const ROTATION_MULT = 0.2;
 
 const getRotation = (() => {
   let scale: 1 | -1 = 1;
@@ -63,7 +63,8 @@ export const TrashCount = memo(
 
     return (
       <>
-        <Sprite x={x + width / 2}
+        <Sprite
+          x={x + width / 2}
           y={y + height / 2 + rotation * 30}
           pixelised
           spritesheet={spritesheetUrl}

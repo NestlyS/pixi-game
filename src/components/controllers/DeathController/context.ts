@@ -1,8 +1,10 @@
+import { Body } from 'matter-js';
 import { createContext, useContext } from 'react';
 
-const initialState = () => {};
+export type KillDispatcher = (body?: Body) => void;
+const initialState: KillDispatcher = () => {};
 
-const DeathWrapperContext = createContext(initialState);
+const DeathWrapperContext = createContext<KillDispatcher>(initialState);
 export const DeathWrapperContextProvider = DeathWrapperContext.Provider;
 export const useDeathWrapper = () => {
   const kill = useContext(DeathWrapperContext);

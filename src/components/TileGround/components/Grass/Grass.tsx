@@ -11,17 +11,16 @@ export type GrassProps = {
     length: number,
     height: number,
   ) => string | null;
+  isSingleGrass?: boolean;
   spritesheetUrl: string;
 } & Omit<Props, 'getTexture'>;
 
-export const Grass = ({ textureModifier, ...props }: GrassProps) => {
+export const Grass = ({ textureModifier, isSingleGrass = false, ...props }: GrassProps) => {
   const getTexture = useCallback(
     (indexX: number, indexY: number, length: number, height: number) =>
-      getMainTexture(textureModifier)(indexX, indexY, length, height),
-    [textureModifier],
+      getMainTexture(textureModifier)(indexX, indexY, length, height, isSingleGrass),
+    [isSingleGrass, textureModifier],
   );
-  // const getDecorationTexture = useMemo(() => generateDecorationGenerator(), []);
-  // const getGrassTexture = useCallback((indexX: number) => getDecorationTexture(props.tilesWidth, props.tilesHeight)(indexX), [getDecorationTexture, props.tilesHeight, props.tilesWidth]);
 
   console.log(
     props.x,

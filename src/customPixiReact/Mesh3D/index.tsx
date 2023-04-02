@@ -1,4 +1,4 @@
-import { PixiComponent } from '@inlet/react-pixi';
+import { PixiComponent } from '@pixi/react';
 import { Material, MeshGeometry3D, Mesh3D as Mesh3DInstance } from 'pixi3d';
 import { ForwardedRef, forwardRef } from 'react';
 import { getMeshInstance, MESH_TYPE, updateMeshProps } from './utils';

@@ -33,7 +33,6 @@ export const Chunk = memo(
       [landscape, spritesheetUrl, tileSize, tilesHeight, x, y],
     );
 
-    console.log(elements);
     return <>{elements}</>;
   },
 );

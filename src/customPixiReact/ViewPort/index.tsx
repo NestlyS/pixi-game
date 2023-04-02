@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
 import * as PIXI from 'pixi.js';
-import { PixiComponent, useApp } from '@inlet/react-pixi';
+import { PixiComponent, useApp } from '@pixi/react';
 import { Viewport as PixiViewport } from 'pixi-viewport';
 
 export interface ViewportProps {

@@ -1,5 +1,7 @@
 import { createContext, useCallback, useContext, useMemo } from 'react';
+import { Body } from 'matter-js';
 import { FuncValueType, HealthState, IdType, ValueType } from './typings';
+import { getBodyId } from './utils';
 
 export const initialState: HealthState = {
   healthMap: {},
@@ -18,11 +20,17 @@ export const useHealth = (id?: IdType | null) => {
   const currentHealth = id ? healthMap[id] : null;
 
   const setCurrentHealth = useCallback(
-    (value: ValueType | FuncValueType, _id?: IdType, cooldownTimeout?: number) => {
-      const innerId = id || _id;
+    (value: ValueType | FuncValueType, _id?: IdType | Body, cooldownTimeout?: number) => {
+      const getId = () => {
+        if (id) return id;
+        if (!_id) throw new Error(`id не представлен: val: ${value} id: ${innerId}`);
+        if (typeof _id === 'string' || typeof _id === 'number') return _id;
+        return getBodyId(_id);
+      };
+
+      const innerId = getId();
       console.log(_id, id, value, cooldownTimeout);
 
-      if (!innerId) throw new Error(`id не представлен: val: ${value} id: ${innerId}`);
       if (!setHealth) return initialState.setHealth(innerId, value, cooldownTimeout);
 
       return setHealth(innerId, value, cooldownTimeout);

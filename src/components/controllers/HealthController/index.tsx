@@ -1,6 +1,9 @@
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { useBody } from '../../Body/context';
+import { useGlobalViewportShaking } from '../../GlobalViewport/hooks';
 import { useHealth } from '../../HealthStorage/context';
+import { getBodyId } from '../../HealthStorage/utils';
+import { AnimationList, useAnimationController } from '../AnimationController/context';
 import { BodyHealthContextProvider } from './context';
 
 type Props = {
@@ -12,22 +15,19 @@ type Props = {
 
 export const HealthController = memo(({ bodyId, initialHealth, children, cooldown }: Props) => {
   const { body } = useBody();
-
-  const id = bodyId ?? body?.id;
+  const { requestAnimation, releaseAnimation } = useAnimationController();
+  const shakeViewport = useGlobalViewportShaking();
+  const id = useMemo(() => getBodyId(body), [body]);
 
   const { currentHealth, setHealth, onCooldown, clearCooldown } = useHealth(id);
 
   const [isCooldown, setCooldown] = useState(false);
 
   useEffect(() => {
-    if (!id) return;
-
     setHealth(initialHealth, id, cooldown);
   }, [cooldown, id, initialHealth, setHealth]);
 
   useEffect(() => {
-    if (!id) return;
-
     const cb = (cooldown: boolean) => {
       setCooldown(cooldown);
     };
@@ -37,45 +37,23 @@ export const HealthController = memo(({ bodyId, initialHealth, children, cooldow
     return () => clearCooldown(cb, id);
   }, [clearCooldown, id, onCooldown]);
 
-  const calculateHealth = useCallback(
-    (value: number) => {
-      if (!id) return;
+  useEffect(() => {
+    if (isCooldown) {
+      shakeViewport();
+      requestAnimation({ name: AnimationList.Hurt });
+    }
 
-      setHealth(value);
-    },
-    [id, setHealth],
-  );
-
-  const addHealth = useCallback(
-    (amount: number) => currentHealth && calculateHealth(currentHealth + amount),
-    [calculateHealth, currentHealth],
-  );
-  const makeDamage = useCallback(
-    (amount: number) => currentHealth && calculateHealth(currentHealth - amount),
-    [calculateHealth, currentHealth],
-  );
+    if (!isCooldown) {
+      releaseAnimation(AnimationList.Hurt);
+    }
+  }, [isCooldown, releaseAnimation, requestAnimation, shakeViewport]);
 
   const value = useMemo(() => {
     return {
       isCooldown,
       currentHealth,
-      addHealth,
-      makeDamage,
     };
-  }, [isCooldown, currentHealth, addHealth, makeDamage]);
+  }, [isCooldown, currentHealth]);
 
-  console.log(isCooldown, currentHealth, value);
-
-  return (
-    <BodyHealthContextProvider
-      value={{
-        isCooldown,
-        currentHealth,
-        addHealth,
-        makeDamage,
-      }}
-    >
-      {children}
-    </BodyHealthContextProvider>
-  );
+  return <BodyHealthContextProvider value={value}>{children}</BodyHealthContextProvider>;
 });

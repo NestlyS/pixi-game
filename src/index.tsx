@@ -1,14 +1,13 @@
-import ReactDOM from 'react-dom';
-import './index.css';
+import { createRoot } from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-export const __IS_DEV__ = process.env.NODE_ENV === 'development';
+import './index.css';
 
-const element = document.getElementById('root');
-
-if (element) {
-  const root = ReactDOM.render(<App />, element);
+const container = document.getElementById('root');
+if (container) {
+  const root = createRoot(container); // createRoot(container!) if you use TypeScript
+  root.render(<App />);
 }
 
 // If you want to start measuring performance in your app, pass a function

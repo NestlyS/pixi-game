@@ -1,27 +1,25 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { DAMAGING_BODY_GROUP } from '../../../bodyGroups/damaging';
 import { useBody } from '../../Body/context';
 import { CleanEventType } from '../../Body/typing';
-import { useBodyHealth } from '../HealthController/context';
+import { useHealth } from '../../HealthStorage/context';
+import { TouchController } from '../TouchController';
 
 export const DamageTouchController = () => {
-  const { makeDamage } = useBodyHealth();
+  const { body } = useBody();
+  const { setHealth } = useHealth();
 
-  const { onCollision, clearCollision } = useBody();
-
-  useEffect(() => {
-    const cb = (e: CleanEventType) => {
+  const onTouch = useCallback(
+    (e: CleanEventType) => {
       const isDamaged = e.pairs.find(
         (pair) =>
           DAMAGING_BODY_GROUP.get().includes(pair.bodyA) ||
           DAMAGING_BODY_GROUP.get().includes(pair.bodyB),
       );
-      if (isDamaged && makeDamage) makeDamage(1);
-    };
+      if (isDamaged) setHealth((hp) => hp && hp - 1, body);
+    },
+    [body, setHealth],
+  );
 
-    onCollision(cb);
-    return () => clearCollision(cb);
-  }, [clearCollision, makeDamage, onCollision]);
-
-  return null;
+  return <TouchController onTouch={onTouch} />;
 };

@@ -1,16 +1,21 @@
 import React, { memo, useCallback } from 'react';
+import { Body as Matter_Body } from 'matter-js';
 import {
   DIRT_MIDDLE_PART_NAME,
-  DIRT_RIGHT_EDGE_NAME,
   MIDDLE_PART_NAME,
-  RIGHT_EDGE_NAME,
 } from '../../../TileGround/components/Grass/contants';
 import { Grass } from '../../../TileGround/components/Grass/Grass';
 import { TrashRow } from '../../../trashes/TrashRow';
 import { ChunkProps } from '../../typings';
+import { Body } from '../../../Body';
+import { DAMAGING_BODY_GROUP } from '../../../../bodyGroups/damaging';
+import { isUserLabel } from '../../../controllers/ConntectedSensorController/utils';
 
+const TRAMPLIN_CONFIG = {
+  isStatic: true,
+};
 export const CRACK_ROW_WIDTH = 8;
-const CRACK_WIDTH = 4;
+const CRACK_WIDTH = 2;
 
 export const Crack = memo(
   ({ spritesheetUrl, x, y, tileSize, tilesHeight, width = CRACK_ROW_WIDTH }: ChunkProps) => {
@@ -21,23 +26,52 @@ export const Crack = memo(
       (crackWidth * tileSize) / 2 +
       (crackWidth * tileSize) / 2 +
       CRACK_WIDTH * tileSize;
-    const textureModifier = useCallback(
+    const textureModifierLeft = useCallback(
       (indexX: number, indexY: number, length: number, height: number) => {
         if (indexY === 0 && indexX === 0) {
           return MIDDLE_PART_NAME;
         }
 
+        if (indexY > 0 && indexX === 0) {
+          return DIRT_MIDDLE_PART_NAME;
+        }
+
+        return null;
+      },
+      [],
+    );
+
+    const textureModifierRight = useCallback(
+      (indexX: number, indexY: number, length: number, height: number) => {
         if (indexY === 0 && indexX === length - 1) {
-          return RIGHT_EDGE_NAME;
+          return MIDDLE_PART_NAME;
         }
 
         if (indexY > 0 && indexX === length - 1) {
-          return DIRT_RIGHT_EDGE_NAME;
+          return DIRT_MIDDLE_PART_NAME;
         }
 
-        return DIRT_MIDDLE_PART_NAME;
+        return null;
       },
       [],
+    );
+
+    const onCollision = useCallback(
+      (e: Matter.IEventCollision<Matter.Engine>) => {
+        const userCollided = e.pairs.find(
+          (item) => isUserLabel(item.bodyA) || isUserLabel(item.bodyB),
+        );
+
+        if (!userCollided) return null;
+
+        const userBody = isUserLabel(userCollided.bodyA) ? userCollided.bodyA : userCollided.bodyB;
+
+        Matter_Body.setPosition(userBody, {
+          x: secondCrackCenter,
+          y: y - (tilesHeight * tileSize) / 2,
+        });
+      },
+      [secondCrackCenter, tileSize, tilesHeight, y],
     );
 
     return (
@@ -50,21 +84,33 @@ export const Crack = memo(
           type={'random'}
         />
         <Grass
-          textureModifier={textureModifier}
+          textureModifier={textureModifierLeft}
           spritesheetUrl={spritesheetUrl}
           x={firstCrackCenter}
           y={y}
           tileSize={tileSize}
           tilesWidth={crackWidth}
           tilesHeight={tilesHeight}
+          isSingleGrass
         />
         <Grass
+          textureModifier={textureModifierRight}
           spritesheetUrl={spritesheetUrl}
           x={secondCrackCenter}
           y={y}
           tileSize={tileSize}
           tilesWidth={crackWidth}
           tilesHeight={tilesHeight}
+          isSingleGrass
+        />
+        <Body
+          x={x + (width * tileSize) / 2}
+          y={y + (tilesHeight * tileSize) / 2}
+          width={width * tileSize}
+          height={tileSize}
+          bodyGroup={[DAMAGING_BODY_GROUP]}
+          onCollision={onCollision}
+          options={TRAMPLIN_CONFIG}
         />
       </>
     );
