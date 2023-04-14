@@ -3,10 +3,20 @@ import { useEffect } from 'react';
 export enum SignalList {
   Reset = 'reset-signal',
   GameOver = 'game-over',
+  KeyDown = 'keydown',
+  KeyUp = 'keyup',
 }
 
 export const emitSignal = (signalName: SignalList) => {
   const event = new Event(signalName);
+  document.body.dispatchEvent(event);
+};
+
+export const emitKeyboardSignal = (
+  signalName: SignalList.KeyDown | SignalList.KeyUp,
+  extraOptions?: KeyboardEventInit,
+) => {
+  const event = new KeyboardEvent(signalName, { ...extraOptions, bubbles: true });
   document.body.dispatchEvent(event);
 };
 

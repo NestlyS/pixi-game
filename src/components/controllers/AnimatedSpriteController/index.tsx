@@ -1,5 +1,5 @@
 import { memo, useMemo, useState } from 'react';
-import { AnimatedSprite as PIXI_AnimatedSprite, Container as PIXI_Container } from 'pixi.js';
+import { AnimatedSprite as PIXI_AnimatedSprite } from 'pixi.js';
 import { useBody, useBodyParams } from '../../Body/context';
 import { AnimatedSprite, IAnimatedSprite } from '../../AnimatedSprite';
 import { ContainerContextProvider, useMakeContainer } from '../ViewController/context';
@@ -42,7 +42,6 @@ export const AnimatedSpriteController = memo(({ children, ignoreRotation, ...pro
       x: Math.abs(currentScale.x) * scaleX,
       y: currentScale.y,
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref.current?.children?.[0]?.scale.x, scaleX]);
 
   return (

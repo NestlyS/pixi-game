@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import { getRandomValue } from '../../../utils/getRandomValue';
 import { Bottle } from '../Bottle';
 import { Chips } from '../Chips';
 import { Paper } from '../Paper';

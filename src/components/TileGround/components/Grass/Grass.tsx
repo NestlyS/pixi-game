@@ -1,6 +1,5 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { Props, TileGround } from '../..';
-import { Row } from '../../Row';
 import { GrassDeco } from '../GrassDeco';
 import { getMainTexture } from './utils';
 

@@ -1,7 +1,14 @@
 export const GRASS_DECORATION_1 = 'deco1.png';
 export const GRASS_DECORATION_2 = 'deco2.png';
 export const GRASS_DECORATION_3 = 'grass.png';
+export const GRASS_DECORATION_4 = 'grass2.png';
+export const GRASS_DECORATION_5 = 'flower.png';
+export const GRASS_DECORATION_6 = 'flower2.png';
+export const GRASS_DECORATION_7 = 'grassLong.png';
+export const GRASS_FLOOR = 'grass_floor.png';
+export const GRASS_FLOOR_2 = 'grass_floor2.png';
 export const GRASS_DECORATION_BUSH = 'bush.png';
 export const GRASS_DECORATION_BUSH_SMALL = 'bushSmall.png';
 export const GRASS_DECORATION_BUSH_BERRY = 'bushBerry.png';
 export const GRASS_DECORATION_TREE = 'tree.png';
+export const GRASS_DECORATION_TREE_2 = 'birch tree.png';

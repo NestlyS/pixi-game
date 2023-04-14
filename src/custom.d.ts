@@ -1,5 +1,3 @@
-import { _ReactPixi } from '@pixi/react';
-
 declare module '*.svg' {
   import * as React from 'react';
 

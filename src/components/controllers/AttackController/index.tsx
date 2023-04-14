@@ -1,4 +1,6 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { DAMAGABLE_BODY_GROUP } from '../../../bodyGroups/damagable';
 import { USER_BODY_GROUP } from '../../../bodyGroups/user';
 import { useControlKey } from '../../../utils/useControlKey';
@@ -10,7 +12,10 @@ import { AnimationList, useAnimationController } from '../AnimationController/co
 import { ConnectedSensorController } from '../ConntectedSensorController';
 import { isSensorLabel } from '../ConntectedSensorController/utils';
 import { initialState, AttackingContextProvider, AttackingAnimationProvider } from './context';
-import { usePausedState } from '../../ui/Settings/context';
+import { ATTACK_KEY_CODE, ATTACK_KEY_CODE_EXTRA } from '../../../constants';
+import { selectSettingsPauseState } from '../../../redux/settings/selectors';
+import { setAttackCooldown } from '../../../redux/mainUser';
+import { selectMainUserAttackCooldown } from '../../../redux/mainUser/selectors';
 
 const DAMAGE_VALUE = 1;
 const ATTACK_BOOST = -5;
@@ -19,16 +24,19 @@ type Props = {
   children: React.ReactNode;
   width: number;
   height: number;
+  cooldown: number;
 };
 
-export const AttackController = ({ children, width, height }: Props) => {
+export const AttackController = ({ children, width, height, cooldown = 1000 }: Props) => {
   const { body } = useBody();
   const { setHealth } = useHealth();
   const { releaseAnimation, requestAnimation } = useAnimationController();
-  const isPaused = usePausedState();
-
   const [isAttacing, setAttacting] = useState(initialState);
-  const attackRef = useRef(false);
+  const attackColldown = useSelector(selectMainUserAttackCooldown);
+  const isPaused = useSelector(selectSettingsPauseState);
+
+  const dispatch = useDispatch();
+
 
   const onCollision = useCallback(
     (e: Matter.IEventCollision<Matter.Engine>) => {
@@ -48,34 +56,32 @@ export const AttackController = ({ children, width, height }: Props) => {
     [setHealth],
   );
 
-  const cb = useCallback(() => {
-    releaseAnimation(AnimationList.Attack);
-    setAttacting(false);
-    attackRef.current = false;
-  }, [releaseAnimation]);
-
   const mouseCb = useCallback(() => {
-    if (isPaused) return;
+    if (isPaused || attackColldown) return;
 
-    requestAnimation({ name: AnimationList.Attack, onFinish: cb });
+    requestAnimation({
+      name: AnimationList.Attack, onFinish: () => {
+        releaseAnimation(AnimationList.Attack);
+        setAttacting(false);
+      }
+    });
+
     setAttacting(true);
-    attackRef.current = true;
+    dispatch(setAttackCooldown(cooldown));
+
+    setTimeout(() => {
+      dispatch(setAttackCooldown(0));
+    }, cooldown);
+
     applyForce(body, body.velocity.x, ATTACK_BOOST);
-  }, [body, cb, isPaused, requestAnimation]);
+  }, [body, isPaused, requestAnimation, attackColldown]);
 
-  useControlKey('mouse', mouseCb);
-
-  const value = useMemo(
-    () => ({
-      isAttack: isAttacing,
-      onActionFinish: cb,
-    }),
-    [cb, isAttacing],
-  );
+  useControlKey(ATTACK_KEY_CODE, mouseCb);
+  useControlKey(ATTACK_KEY_CODE_EXTRA, mouseCb);
 
   return (
     <AttackingContextProvider value={isAttacing}>
-      <AttackingAnimationProvider value={value}>
+      <AttackingAnimationProvider value={isAttacing}>
         <ConnectedSensorController
           isHidden={!isAttacing}
           bodyGroup={USER_BODY_GROUP}

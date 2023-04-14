@@ -1,8 +1,8 @@
 import { useCallback, useRef } from 'react';
 import { useControlKey } from '../../../utils/useControlKey';
-import { useBody, useBodyParams } from '../../Body/context';
+import { useBody } from '../../Body/context';
 import { applyForce } from '../../Body/utils';
-import { EPS } from '../../../constants';
+import { EPS, JUMP_KEY_CODE, JUMP_KEY_CODE_1, JUMP_KEY_CODE_2 } from '../../../constants';
 import { useGroundTouch } from '../GroundTouchController/context';
 import { AnimationList, useAnimationController } from '../AnimationController/context';
 
@@ -39,7 +39,8 @@ export const JumpController = ({ maxJumps = DEFAULT_JUMPS }: Props) => {
     jumpsLeft.current -= 1;
   }, [body, releaseAnimation, requestAnimation]);
 
-  useControlKey('KeyW', WCb);
-  useControlKey('Space', WCb);
+  useControlKey(JUMP_KEY_CODE, WCb);
+  useControlKey(JUMP_KEY_CODE_1, WCb);
+  useControlKey(JUMP_KEY_CODE_2, WCb);
   return null;
 };

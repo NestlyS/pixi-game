@@ -1,9 +1,7 @@
 import { useTick } from '@pixi/react';
-import Matter, { Body } from 'matter-js';
-import React, { useEffect, useRef } from 'react';
-import { useEngine } from '../../utils/useEngine';
+import { Body } from 'matter-js';
+import { useEffect, useRef } from 'react';
 import { useBody } from '../Body/context';
-import { applyForce } from '../Body/utils';
 
 export enum Directions {
   Up = 'up',
@@ -64,7 +62,7 @@ export const BulletController = ({ direction, speed, setCurrentDistance }: Props
 
     const distance = Math.sqrt(
       Math.pow(body.position.x - distanceRef.current.x, 2) -
-        Math.pow(body.position.y - distanceRef.current.y, 2),
+      Math.pow(body.position.y - distanceRef.current.y, 2),
     );
 
     const { x: xMult, y: yMult } = getDirectionMultiplier(direction);

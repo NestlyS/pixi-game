@@ -9,10 +9,10 @@ export const HealerChunk = memo(
   ({ spritesheetUrl, x, y, tileSize, tilesHeight, width = HEALER_ROW_WIDTH }: ChunkProps) => {
     return (
       <>
-        <Healer x={x - (tileSize * width) / 2} y={y} />
+        <Healer x={x} y={y} />
         <Grass
           spritesheetUrl={spritesheetUrl}
-          x={x}
+          x={x + (width * tileSize) / 2}
           y={y}
           tileSize={tileSize}
           tilesWidth={width}

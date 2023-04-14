@@ -1,6 +1,5 @@
-import { _ReactPixi } from '@pixi/react';
 import { DisplayObject } from 'pixi.js';
-import { createContext, useContext, useMemo, useRef } from 'react';
+import { createContext, useContext, useRef } from 'react';
 
 type State = DisplayObject | null;
 

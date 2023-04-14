@@ -6,14 +6,12 @@ type GenerateChunkType = (prevChunk: ChunkParams, tileSize: number) => ChunkPara
 
 const generateChunk: GenerateChunkType = (prevChunk, tileSize) => {
   const randomValue = getRandomValue(0, SUM_CHANCES);
-  const randomType = MAX_CHANCES.find(([chance, value]) => randomValue < Number(chance));
+  const randomType = MAX_CHANCES.find(([chance]) => randomValue < Number(chance));
   if (!randomType || !randomType[1]) return;
 
   const type = randomType[1] as Chunks;
 
   const randomParams = CHUNKS_TYPE[type];
-
-  console.log('RANDOM', randomValue, randomType, randomParams);
 
   return {
     type,

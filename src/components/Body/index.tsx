@@ -1,4 +1,5 @@
 import { useTick } from '@pixi/react';
+import { useSelector } from 'react-redux';
 import isEqual from 'lodash/isEqual';
 import {
   Bodies,
@@ -12,10 +13,10 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { BodyGroupMap as BodyGroup } from '../../bodyGroups/typings';
 import { useEngine } from '../../utils/useEngine';
 import { RectangleController } from '../controllers/RectangleGraphicsController';
-import { useSettings } from '../ui/Settings/context';
 import { BodyContextProvider, BodyStateContextProvider } from './context';
-import { CleanEventListener, CleanEventType } from './typing';
+import { CleanEventListener } from './typing';
 import { checkIsBodyInPairs } from './utils';
+import { selectSettingsCollisionsVisiblity } from '../../redux/settings/selectors';
 
 export type ControllerProps = {
   x: number;
@@ -60,7 +61,7 @@ export const Body: React.FC<Props> = React.memo(
     const [rotation, setRotation] = useState(initialRotation);
     const collisionListentersRef = useRef<CleanEventListener[]>([]);
 
-    const { isCollisionVisible } = useSettings();
+    const isCollisionVisible = useSelector(selectSettingsCollisionsVisiblity);
 
     // ------------------------ INIT --------------------
 
@@ -82,7 +83,6 @@ export const Body: React.FC<Props> = React.memo(
       return () => {
         Composite.remove(engine.world, rawBody);
       };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [engine]);
 
     // ------------------ UPDATERS ---------------------------------------------
@@ -178,7 +178,7 @@ export const Body: React.FC<Props> = React.memo(
 
     // ------------------------------------ TICK UPDATER ------------------
 
-    useTick((delt) => {
+    useTick(() => {
       if (!body) {
         return;
       }

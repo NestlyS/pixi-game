@@ -5,8 +5,8 @@ import { AnimatedSpriteController } from '../controllers/AnimatedSpriteControlle
 import { AnimationController } from '../controllers/AnimationController';
 import { AnimationList } from '../controllers/AnimationController/context';
 import { HealerTouchController } from './onTouchController';
+import { BLACK_OUTLINE_FILTER, SHADOW_FILTER } from '../../constants';
 
-const BLACK_OUTLINE_FILTER = new OutlineFilter(4, 0x251059, 0.05);
 const GREEN_OUTLINE_FILTER = new OutlineFilter(4, 0x7df740, 0.05);
 
 const HEALER_PARAMS: Matter.IChamferableBodyDefinition = {
@@ -44,7 +44,7 @@ export const Healer = ({ x, y }: Props) => {
         animationSpeed={0.07}
         setDefault
         zIndex={100}
-        filters={[BLACK_OUTLINE_FILTER, GREEN_OUTLINE_FILTER]}
+        filters={[BLACK_OUTLINE_FILTER, GREEN_OUTLINE_FILTER, SHADOW_FILTER]}
       >
         <AnimationController animationParams={animationMap}>
           <HealerTouchController />

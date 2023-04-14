@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { TrashContextProvider } from './context';
 import { State, TrashState, TrashTypes } from './typings';
 import { initTrash } from './utils';
@@ -9,7 +9,6 @@ type Props = {
 
 export const TrashStorage = ({ children }: Props) => {
   const [trash, setTrash] = useState<TrashState>({});
-  const onChangeListenersRef = useRef<((type: TrashTypes, value: number) => void)[]>([]);
 
   const get = useCallback<State['get']>(
     (id, type) => {

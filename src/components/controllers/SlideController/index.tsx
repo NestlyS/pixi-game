@@ -1,14 +1,15 @@
 import { Body } from 'matter-js';
 import { Container } from 'pixi.js';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useControlKey } from '../../../utils/useControlKey';
-import { useBody, useBodyParams } from '../../Body/context';
+import { useBody } from '../../Body/context';
 import { BODY_FRICTION } from '../../Controllable';
 import { AnimationList, useAnimationController } from '../AnimationController/context';
-import { useAttacking, useAttackingAnimation } from '../AttackController/context';
+import { useAttackingAnimation } from '../AttackController/context';
 import { useGroundTouch } from '../GroundTouchController/context';
 import { useBodyHealth } from '../HealthController/context';
 import { useContainer } from '../ViewController/context';
+import { SLIDE_KEY_CODE, SLIDE_KEY_CODE_EXTRA } from '../../../constants';
 
 export const SLIDING_FRICTION = 0.001;
 
@@ -37,7 +38,7 @@ const { moveSpriteCenter, returnSpriteCenter } = (() => {
 export const SlideController = () => {
   const { body } = useBody();
   const { isCooldown } = useBodyHealth();
-  const { isAttack } = useAttackingAnimation();
+  const isAttack = useAttackingAnimation();
   const isGroundTouchedRef = useRef(false);
   const onChange = useCallback((isTouched: boolean) => {
     isGroundTouchedRef.current = isTouched;
@@ -90,7 +91,8 @@ export const SlideController = () => {
     body.friction = BODY_FRICTION;
   }, [body, container]);
 
-  useControlKey('KeyS', SCb, unpressCb);
+  useControlKey(SLIDE_KEY_CODE, SCb, unpressCb);
+  useControlKey(SLIDE_KEY_CODE_EXTRA, SCb, unpressCb);
 
   useEffect(() => {
     if (isUnsladed && slidingRef.current) unpressCb();

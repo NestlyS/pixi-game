@@ -1,19 +1,25 @@
-import { Body } from 'matter-js';
-import React, { useCallback, useEffect, useRef } from 'react';
-import { SignalList, useCatchSignal } from '../../utils/signaller/emitSignal';
-import { useBody } from '../Body/context';
-import { useMainUserId } from './context';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
-export const MainUserController = () => {
+import { useBody } from '../Body/context';
+import { setId, setMaxHp } from '../../redux/mainUser';
+
+type Props = {
+  maxHealth: number,
+}
+
+export const MainUserController = ({ maxHealth }: Props) => {
   const { body } = useBody();
-  const { setId } = useMainUserId();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!body) return;
+    dispatch(setId(body.label));
+  }, [body, dispatch]);
 
-    const id = body.label;
-    setId(id);
-  }, [body, setId]);
+  useEffect(() => {
+    console.log('MAX HEALTH')
+    dispatch(setMaxHp(maxHealth));
+  }, []);
 
   return null;
 };

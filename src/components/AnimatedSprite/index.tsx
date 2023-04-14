@@ -1,16 +1,11 @@
 import {
   AnimatedSprite as ReactPIXIAnimatedSprite,
-  Container,
   useApp,
-  _ReactPixi,
 } from '@pixi/react';
 import {
-  Application,
-  ISpritesheetData,
   AnimatedSprite as PIXI_AnimatedSprite,
   Texture,
   IPointData,
-  Container as PIXI_Container,
   SCALE_MODES,
   Spritesheet,
   Filter,
@@ -19,15 +14,15 @@ import { Assets } from '@pixi/assets';
 import React, {
   forwardRef,
   memo,
-  MutableRefObject,
   useCallback,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from 'react';
+import { useSelector } from 'react-redux';
 import { AnimationContextProvider, AnimationState } from './context';
-import { usePausedState } from '../ui/Settings/context';
+import { selectSettingsPauseState } from '../../redux/settings/selectors';
 
 export type IAnimatedSprite = {
   spritesheet: string;
@@ -79,7 +74,7 @@ export const AnimatedSprite = memo(
       const [isLooped, setIsLooped] = useState<boolean>(true);
       const [filters, setFilters] = useState<Filter[]>([]);
       const app = useApp();
-      const isPaused = usePausedState();
+      const isPaused = useSelector(selectSettingsPauseState);
 
       // load
       useEffect(() => {
@@ -92,7 +87,6 @@ export const AnimatedSprite = memo(
             (acc, [animationName, frameUrls]) => {
               const textures = frameUrls.map((texture) => {
                 texture.baseTexture.scaleMode = SCALE_MODES.NEAREST;
-                console.log('TEXTURE');
 
                 return texture;
               });
@@ -116,7 +110,6 @@ export const AnimatedSprite = memo(
           }
         };
 
-        console.log('SPRITESHEET', spritesheet, Assets.cache.has(spritesheet));
         if (Assets.cache.has(spritesheet)) {
           const spritesheetData = Assets.cache.get<Spritesheet>(spritesheet);
           return processSpritesheet(spritesheetData);
@@ -127,12 +120,6 @@ export const AnimatedSprite = memo(
           if (Assets.cache.has(spritesheet)) {
             loadedSpritesheet = Assets.cache.get<Spritesheet>(spritesheet);
           } else {
-            console.log(
-              'SPRITESHEET',
-              spritesheet,
-              Assets.cache.has(spritesheet),
-              Assets.cache.get<Spritesheet>(spritesheet),
-            );
             loadedSpritesheet = await Assets.load<Spritesheet>(spritesheet);
           }
           return processSpritesheet(loadedSpritesheet);
@@ -142,7 +129,7 @@ export const AnimatedSprite = memo(
       }, [app, initialAnimation, setDefault, spritesheet]);
 
       const onComplete_ = useCallback(
-        (cb: (currentAnimationName: string | null) => void, once: boolean = false) =>
+        (cb: (currentAnimationName: string | null) => void, once = false) =>
           onCompleteListenersRef.current.push([cb, once]),
         [],
       );
@@ -198,12 +185,12 @@ export const AnimatedSprite = memo(
 
       const value = useMemo(
         () =>
-          ({
-            setAnimation,
-            onComplete: onComplete_,
-            clearOnComplete: clearOnComplete_,
-            animations: Object.keys(animationMap),
-          } as AnimationState),
+        ({
+          setAnimation,
+          onComplete: onComplete_,
+          clearOnComplete: clearOnComplete_,
+          animations: Object.keys(animationMap),
+        } as AnimationState),
         [animationMap, clearOnComplete_, onComplete_, setAnimation],
       );
 

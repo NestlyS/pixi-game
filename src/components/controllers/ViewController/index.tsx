@@ -1,16 +1,15 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { Point } from 'pixi.js';
-import { useGlobalViewport } from '../../GlobalViewport/context';
-import { useSettings } from '../../ui/Settings/context';
 import { useApp } from '@pixi/react';
+import { useSelector } from 'react-redux';
+import { useGlobalViewport } from '../../GlobalViewport/context';
 import { useContainer } from './context';
 import { WORLD_HEIGHT } from '../../../App';
-import { Body } from 'matter-js';
 import { useCatchSignal, SignalList } from '../../../utils/signaller/emitSignal';
+import { selectSettingsMainBodyFocus } from '../../../redux/settings/selectors';
 
 export const ViewController = () => {
   const { globalViewport } = useGlobalViewport();
-  const { isFocusedOnMainBody } = useSettings();
+  const isFocusedOnMainBody = useSelector(selectSettingsMainBodyFocus);
   const container = useContainer();
 
   const isFocused = useRef<boolean>(false);
@@ -37,7 +36,7 @@ export const ViewController = () => {
     }
 
     if (!isFocused.current && isFocusedOnMainBody) {
-      globalViewport.pivot = { x: 0, y: -WORLD_HEIGHT / 6 };
+      globalViewport.pivot = { x: 0, y: -WORLD_HEIGHT / 6.5 };
       globalViewport.snapZoom({ height: 500 });
       globalViewport.follow(container, { speed: 500 });
 

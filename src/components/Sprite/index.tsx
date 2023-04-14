@@ -2,7 +2,7 @@ import React, { forwardRef, memo, useEffect, useState } from 'react';
 import { SCALE_MODES } from '@pixi/constants';
 import { Rectangle } from '@pixi/math';
 import { PixiRef, Sprite as ReactPixiSprite, useApp, _ReactPixi } from '@pixi/react';
-import { Assets, ISpritesheetData, Resource, Texture, TextureSource } from 'pixi.js';
+import { Assets, Resource, Texture, TextureSource } from 'pixi.js';
 
 export type ISpriteProps = {
   frame?: {
@@ -13,18 +13,20 @@ export type ISpriteProps = {
   };
   pixelised?: boolean;
   onClick?: () => void;
+  onHover?: () => void;
+  onHoverOut?: () => void;
 } & (
-  | {
+    | {
       textureUrl: string;
       spritesheet: string;
       image: string;
     }
-  | {
+    | {
       textureUrl: string;
       spritesheet?: string;
       image?: string;
     }
-) &
+  ) &
   _ReactPixi.ISprite;
 
 export const Sprite = memo(
@@ -37,6 +39,8 @@ export const Sprite = memo(
         frame,
         pixelised = true,
         onClick = undefined,
+        onHover = undefined,
+        onHoverOut = undefined,
         ...props
       }: ISpriteProps,
       ref,
@@ -45,7 +49,7 @@ export const Sprite = memo(
       const app = useApp();
 
       useEffect(() => {
-        let controller = new AbortController();
+        const controller = new AbortController();
         const textureSource: TextureSource = textureUrl;
 
         console.log(textureUrl, Assets.cache.has(textureUrl));
@@ -69,8 +73,8 @@ export const Sprite = memo(
           const _texture = Assets.cache.has(textureUrl)
             ? Assets.cache.get<Texture<Resource>>(textureUrl)
             : Texture.from(textureSource, {
-                scaleMode: pixelised ? SCALE_MODES.NEAREST : SCALE_MODES.LINEAR,
-              });
+              scaleMode: pixelised ? SCALE_MODES.NEAREST : SCALE_MODES.LINEAR,
+            });
 
           if (frame) {
             _texture.frame = new Rectangle(frame.x, frame.y, frame.width, frame.height);
@@ -93,6 +97,8 @@ export const Sprite = memo(
         <ReactPixiSprite
           interactive={!!onClick}
           pointertap={onClick}
+          pointerdown={onHover}
+          pointerup={onHoverOut}
           ref={ref}
           texture={texture}
           image={image}

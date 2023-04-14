@@ -11,7 +11,7 @@ import { DAMAGING_BODY_GROUP } from '../../bodyGroups/damaging';
 import { DeathWrapper } from '../controllers/DeathController/wrapper';
 import { DeathListener } from '../controllers/DeathController/listener';
 import { useRef } from 'react';
-import { MONSTER_LABEL } from '../../constants';
+import { MONSTER_LABEL, SHADOW_FILTER } from '../../constants';
 import { AnimationList } from '../controllers/AnimationController/context';
 
 const DEATH_SPEED = 0.07;
@@ -61,6 +61,7 @@ export const Monster = ({ x, y, onDeath }: Props) => {
               animationSpeed={0.07}
               setDefault
               zIndex={100}
+              filters={[SHADOW_FILTER]}
             >
               <AnimationController animationParams={animationMap}>
                 <SimpleAIController spritesheetUrl={test} animationName="bullet" />

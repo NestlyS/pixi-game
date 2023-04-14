@@ -31,7 +31,6 @@ export const ButtonWithText = ({
   onClick,
 }: Props) => {
   return (
-    // @ts-ignore
     <Container x={x} y={y}>
       <Button
         spritesheetUrl={spritesheetUrl}

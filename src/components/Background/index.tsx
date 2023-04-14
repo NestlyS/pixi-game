@@ -1,15 +1,16 @@
-import { Container, useTick } from '@pixi/react';
+import { useTick } from '@pixi/react';
 import { useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { WORLD_HEIGHT, WORLD_WIDTH } from '../../App';
 import { Sprite } from '../Sprite';
-import { usePausedState } from '../ui/Settings/context';
+import { selectSettingsPauseState } from '../../redux/settings/selectors';
 
 const DELTA = 10;
 
 export const Background = () => {
   const [x, setX] = useState(0);
   const deltaRef = useRef(0);
-  const isPaused = usePausedState();
+  const isPaused = useSelector(selectSettingsPauseState);
 
   useTick((delta) => {
     deltaRef.current += delta;
@@ -31,7 +32,7 @@ export const Background = () => {
         height={WORLD_HEIGHT}
         width={WORLD_WIDTH}
         spritesheet="./sprites/backround.json"
-        textureUrl="backgroung2.png"
+        textureUrl="backgroung3.png"
         zIndex={0}
         pixelised
       />
@@ -41,7 +42,7 @@ export const Background = () => {
         height={WORLD_HEIGHT}
         width={WORLD_WIDTH}
         spritesheet="./sprites/backround.json"
-        textureUrl="backgroung2.png"
+        textureUrl="backgroung3.png"
         zIndex={0}
         pixelised
       />

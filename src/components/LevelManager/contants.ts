@@ -15,17 +15,17 @@ export const CHUNKS_TYPE: Record<Chunks, CustomChunkParams> = {
   },
   [Chunks.Default]: {
     width: ROW_WIDTH,
-    chance: 30,
+    chance: 10,
   },
   [Chunks.Up]: {
     heightDelta: 1,
     width: ROW_WIDTH,
-    chance: 30,
+    chance: 15,
   },
   [Chunks.Down]: {
     heightDelta: -1,
     width: ROW_WIDTH,
-    chance: 30,
+    chance: 15,
   },
   [Chunks.Monsters]: {
     width: MONSTERS_ROW_WIDTH,
@@ -33,7 +33,7 @@ export const CHUNKS_TYPE: Record<Chunks, CustomChunkParams> = {
   },
   [Chunks.Healer]: {
     width: HEALER_ROW_WIDTH,
-    chance: 10,
+    chance: 2,
   },
 };
 

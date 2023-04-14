@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text } from '@pixi/react';
+import { useSelector } from 'react-redux';
 import {
   BOTTLE_TEXTURE,
   CHIPS_TEXTURE,
@@ -8,10 +8,9 @@ import {
   PIXEL_FONT_WHITE,
   PIXEL_FONT_YELLOW,
 } from '../../../constants';
-import { Sprite } from '../../Sprite';
 import { useTrash } from '../../TrashStorage/context';
 import { TrashTypes } from '../../TrashStorage/typings';
-import { useMainUserId } from '../../MainUserStorage/context';
+import { selectMainUserId } from '../../../redux/mainUser/selectors';
 import { TrashCount } from './TrashCount';
 
 const TEXTURE_URLS = [BOTTLE_TEXTURE, CHIPS_TEXTURE, PAPER_TEXTURE];
@@ -29,7 +28,7 @@ type Props = {
 
 export const TrashCounter = ({ x, y, width, height, pad, spritesheetUrl }: Props) => {
   const { onChange, clearOnChange, get } = useTrash();
-  const { id } = useMainUserId();
+  const id = useSelector(selectMainUserId);
   const [counters, setCounters] = useState(
     TRASH_TYPES.reduce((acc, type) => {
       acc[type] = 0;

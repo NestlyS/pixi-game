@@ -1,7 +1,9 @@
 import { Container } from '@pixi/react';
+import { useSelector } from 'react-redux';
 import { useHealth } from '../../HealthStorage/context';
-import { useMainUserId } from '../../MainUserStorage/context';
 import { Sprite } from '../../Sprite';
+import { selectMainUserId, selectMainUserMaxHp } from '../../../redux/mainUser/selectors';
+import { COLOR_OVERLAY_FILTER_STEP_1 } from '../../../constants';
 
 type Props = {
   x: number;
@@ -11,30 +13,44 @@ type Props = {
   pad: number;
   spritesheetUrl: string;
   textureUrl: string;
+  darkTextureUrl: string;
 };
 
-export const HeartBar = ({ x, y, width, height, pad, spritesheetUrl, textureUrl }: Props) => {
-  const { id } = useMainUserId();
+export const HeartBar = ({ x, y, width, height, pad, spritesheetUrl, textureUrl, darkTextureUrl }: Props) => {
+  const id = useSelector(selectMainUserId);
+  const maxHp = useSelector(selectMainUserMaxHp);
   const { currentHealth } = useHealth(id ?? undefined);
 
-  if (!currentHealth) return null;
+  if (currentHealth === null || currentHealth === undefined) return null;
 
-  console.log(currentHealth, id, 'HEALTH');
+  console.log(maxHp, currentHealth, maxHp - currentHealth)
 
   return (
-    /* @ts-ignore */
     <Container zIndex={10}>
-      {new Array(currentHealth).fill(0).map((_, index) => (
-        <Sprite
-          key={index}
-          x={x + (width + pad) * index}
-          y={y}
-          pixelised
-          spritesheet={spritesheetUrl}
-          textureUrl={textureUrl}
-          height={height}
-          width={width}
-        />
+      {new Array(maxHp).fill(0).map((_, index) => (
+        <>
+          <Sprite
+            key={index}
+            x={x + (width + pad) * index}
+            y={y}
+            pixelised
+            spritesheet={spritesheetUrl}
+            textureUrl={textureUrl}
+            height={height}
+            width={width}
+            filters={index + 1 > currentHealth ? [COLOR_OVERLAY_FILTER_STEP_1] : []}
+          />
+          {(index + 1 > currentHealth) && <Sprite
+            key={index}
+            x={x + (width + pad) * index}
+            y={y}
+            pixelised
+            spritesheet={spritesheetUrl}
+            textureUrl={darkTextureUrl}
+            height={height}
+            width={width}
+          />}
+        </>
       ))}
     </Container>
   );

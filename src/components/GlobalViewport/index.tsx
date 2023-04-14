@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Viewport as PixiViewport } from 'pixi-viewport';
 import Viewport from '../../customPixiReact/ViewPort';
-import { useBodyParams } from '../Body/context';
 import { GlobalViewportContextProvider } from './context';
-import { useSettings } from '../ui/Settings/context';
-import { useControlKey } from '../../utils/useControlKey';
 import { useGlobalViewportControls } from './hooks';
+import { selectSettingsMainBodyFocus } from '../../redux/settings/selectors';
 
 type Props = {
   width: number;
@@ -13,12 +12,10 @@ type Props = {
   children: React.ReactNode;
 };
 
-const plugins = ['drag', 'wheel', 'pinch'] as ('drag' | 'wheel' | 'pinch')[];
-
 export const GlobalViewport = ({ width, height, children }: Props) => {
   const viewportRef = useRef<PixiViewport>(null);
   const [isMounted, setIsMounted] = useState(false);
-  const { isFocusedOnMainBody } = useSettings();
+  const isFocusedOnMainBody = useSelector(selectSettingsMainBodyFocus);
 
   useGlobalViewportControls(viewportRef.current, isFocusedOnMainBody);
 
@@ -27,7 +24,6 @@ export const GlobalViewport = ({ width, height, children }: Props) => {
   const value = useMemo(
     () => ({
       globalViewport: viewportRef.current,
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }),
     [isMounted],
   );

@@ -2,7 +2,6 @@ import React, { useCallback, useMemo } from 'react';
 import { Container, Text, useApp } from '@pixi/react';
 import {
   PIXEL_FONT,
-  PIXEL_FONT_GREEN,
   PIXEL_FONT_RED,
   PIXEL_FONT_YELLOW,
 } from '../../../constants';

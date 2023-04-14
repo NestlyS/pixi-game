@@ -1,11 +1,11 @@
-import { Container, Stage } from '@pixi/react';
 import FontFaceObserver from 'fontfaceobserver';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import { Canvas } from './components/Canvas';
 import { World } from './components/World';
 import { Settings } from './components/ui/Settings';
 import { Assets } from 'pixi.js';
+import { ReduxStage } from './components/ReduxStage';
 
 const manifestUrl = 'assets-manifest.json';
 export let WORLD_WIDTH = 1600;
@@ -17,7 +17,7 @@ const App = () => {
 
   useEffect(() => {
     const cb = async () => {
-      let font = new FontFaceObserver('Press Start 2P', {});
+      const font = new FontFaceObserver('Press Start 2P', {});
       // Start loading the font
       await font.load().catch(() => {
         // Failed load, log the error or display a message to the user
@@ -42,7 +42,7 @@ const App = () => {
 
   return (
     <div className="App">
-      <Stage
+      <ReduxStage
         width={WORLD_WIDTH}
         height={WORLD_HEIGHT}
         options={{ backgroundColor: 0x99c5ff, antialias: false }}
@@ -52,7 +52,7 @@ const App = () => {
             <Canvas />
           </World>
         </Settings>
-      </Stage>
+      </ReduxStage>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext } from 'react';
+import { createContext, useContext } from 'react';
 import { State } from './typings';
 
 const initialState: State = {
@@ -13,7 +13,7 @@ const initialState: State = {
 
 const TrashContext = createContext<State>(initialState);
 export const TrashContextProvider = TrashContext.Provider;
-export const useTrash = (id?: number | string | null) => {
+export const useTrash = () => {
   const { get, set, onChange, clearOnChange } = useContext(TrashContext);
 
   return {

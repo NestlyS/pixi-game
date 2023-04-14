@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import { useBody } from '../../Body/context';
 import { useGlobalViewportShaking } from '../../GlobalViewport/hooks';
 import { useHealth } from '../../HealthStorage/context';
@@ -7,13 +7,12 @@ import { AnimationList, useAnimationController } from '../AnimationController/co
 import { BodyHealthContextProvider } from './context';
 
 type Props = {
-  bodyId?: number | string;
   initialHealth: number;
   children?: React.ReactNode;
   cooldown?: number;
 };
 
-export const HealthController = memo(({ bodyId, initialHealth, children, cooldown }: Props) => {
+export const HealthController = memo(({ initialHealth, children, cooldown }: Props) => {
   const { body } = useBody();
   const { requestAnimation, releaseAnimation } = useAnimationController();
   const shakeViewport = useGlobalViewportShaking();
@@ -24,6 +23,7 @@ export const HealthController = memo(({ bodyId, initialHealth, children, cooldow
   const [isCooldown, setCooldown] = useState(false);
 
   useEffect(() => {
+
     setHealth(initialHealth, id, cooldown);
   }, [cooldown, id, initialHealth, setHealth]);
 
@@ -57,3 +57,4 @@ export const HealthController = memo(({ bodyId, initialHealth, children, cooldow
 
   return <BodyHealthContextProvider value={value}>{children}</BodyHealthContextProvider>;
 });
+

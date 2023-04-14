@@ -1,6 +1,5 @@
 import { Container, useApp } from '@pixi/react';
 import { useCallback, useMemo, useState } from 'react';
-import { __IS_DEV__ } from '../../../constants';
 import { GameOverScreen } from '../GameOverScreen';
 import { InGameUI } from '../InGameUI';
 import { SignalList, useCatchSignal } from '../../../utils/signaller/emitSignal';

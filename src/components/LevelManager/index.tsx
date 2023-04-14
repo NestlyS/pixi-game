@@ -1,9 +1,7 @@
-import React, { useCallback, useRef, useState } from 'react';
-import { Container } from '@pixi/react';
+import { useCallback, useRef, useState } from 'react';
 import { Body } from '../Body';
 import { ChunkParams } from './typings';
 import { USER_BODY_GROUP } from '../../bodyGroups/user';
-import { __IS_DEV__ } from '../../constants';
 import { appendChunk, cleanChunks } from './utils';
 import { initialState } from './contants';
 

@@ -1,14 +1,27 @@
 import { TextStyle } from 'pixi.js';
-import { GodrayFilter } from 'pixi-filters';
+import { ColorOverlayFilter, DropShadowFilter, GodrayFilter, OutlineFilter } from 'pixi-filters';
 
 export const EPS = 0.03;
 export const ONE_CIRCLE_IN_RAD = 6.28;
 export const ONE_CIRCLE_IN_DEGREES = 360;
+export const MOBILE_SIZE = 800;
 export const __IS_DEV__ = process.env.NODE_ENV === 'development';
 
 export const BOTTLE_TEXTURE = 'bottle_(1).png';
 export const CHIPS_TEXTURE = 'chips_(1).png';
 export const PAPER_TEXTURE = 'paper_(1).png';
+
+export const JUMP_KEY_CODE = 'KeyW';
+export const JUMP_KEY_CODE_1 = 'Space';
+export const JUMP_KEY_CODE_2 = 'ArrowUp';
+export const SLIDE_KEY_CODE = 'KeyS';
+export const SLIDE_KEY_CODE_EXTRA = 'ArrowDown';
+export const RUN_LEFT_KEY_CODE = 'KeyA';
+export const RUN_RIGTH_KEY_CODE = 'KeyD';
+export const ATTACK_KEY_CODE = 'KeyE';
+export const ATTACK_KEY_CODE_EXTRA = 'ControlLeft';
+export const HEAL_KEY_CODE = 'KeyQ';
+export const HEAL_KEY_CODE_EXTRA = 'AltLeft';
 
 export const PIXEL_FONT = new TextStyle({
   fontFamily: 'Press Start 2P',
@@ -57,6 +70,13 @@ export const PIXEL_FONT_RED = new TextStyle({
 });
 
 export const GODRAY_FILTER = new GodrayFilter({ alpha: 0.4, lacunarity: 4 });
+export const BLACK_OUTLINE_FILTER = new OutlineFilter(4, 0x251059, 0.05);
+export const WHITE_OUTLINE_FILTER = new OutlineFilter(3, 0xffffff, 0.05);
+export const PURPLE_OUTLINE_FILTER = new OutlineFilter(3, 0xa92176, 0.05);
+export const SHADOW_FILTER = new DropShadowFilter();
+export const COLOR_OVERLAY_FILTER_STEP_0 = new ColorOverlayFilter([0.5, 0.1, 0.1], 0.8);
+export const COLOR_OVERLAY_FILTER_STEP_1 = new ColorOverlayFilter([0.5, 0.3, 0.3], 0.6);
+export const COLOR_OVERLAY_FILTER_STEP_2 = new ColorOverlayFilter([0.5, 0.5, 0.5], 0.4);
 
 export const MONSTER_LABEL = 'monster';
 export const AI_SENSOR_LABEL = 'ai-sensor';

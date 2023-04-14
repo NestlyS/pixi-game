@@ -1,7 +1,6 @@
 import { Text, Container } from '@pixi/react';
 import { PIXEL_FONT } from '../../../constants';
 import { Sprite } from '../../Sprite';
-import { Button } from '../Button';
 import { ButtonWithText } from '../ButtonWithText';
 
 const BETWEEN_ITEMS_PAD = 20;
@@ -25,7 +24,6 @@ export const DisplayWindow = ({
   x,
   y,
   width,
-  height,
   menuButtonName,
   menuName,
   spritesheetUrl,
@@ -37,7 +35,6 @@ export const DisplayWindow = ({
   const itemWidth = width - innerPadding.left - innerPadding.right;
 
   return (
-    // @ts-ignore
     <Container x={x} y={y}>
       <Sprite
         spritesheet={spritesheetUrl}
@@ -48,12 +45,12 @@ export const DisplayWindow = ({
           innerPadding.down
         }
         y={0}
-        x={x + width / 2}
+        x={0}
         textureUrl={menuName}
         pixelised
       />
       <Text
-        x={x + width}
+        x={width / 2}
         y={innerPadding.up}
         anchor={{ x: 0.5, y: 0 }}
         text="Пауза"
@@ -64,7 +61,7 @@ export const DisplayWindow = ({
           key={index}
           marginLeft={40}
           marginTop={10}
-          x={innerPadding.left + width / 2}
+          x={innerPadding.left}
           y={innerPadding.up + (itemHeight + BETWEEN_ITEMS_PAD) * (index + 1)}
           width={itemWidth}
           height={itemHeight}

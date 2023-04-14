@@ -1,36 +1,50 @@
 import React from 'react';
-import { PIXEL_FONT, __IS_DEV__ } from '../../../constants';
-import { Text, Container } from '@pixi/react';
+import { MOBILE_SIZE, PIXEL_FONT } from '../../../constants';
+import { Text, Container, useApp } from '@pixi/react';
 import { spritesheetUrl } from '../../Canvas';
 import { HeartBar } from '../HeartBar';
 import { TrashCounter } from '../TrashCounter';
-import { MenuButton } from './menuButton';
-import { MENU_BUTTON_NAME } from '../UI';
+import { Menu } from './components/Menu';
+import { Controls } from '../Controls';
 
 const TEXTURE_URL = 'heart.png';
+const DARK_TEXTURE_URL = 'heart-empty.png';
+
+const HEART_WIDTH = 60;
+const HEART_HEIGHT = 55;
+const TRASH_SIZE = 50;
 
 export const InGameUI = () => {
+  const app = useApp();
+  const { width } = app.screen;
+  const heartWidth = width <= MOBILE_SIZE ? HEART_WIDTH / 1.7 : HEART_WIDTH;
+  const heartHeight = width <= MOBILE_SIZE ? HEART_HEIGHT / 1.7 : HEART_HEIGHT;
+  const trashSize = width <= MOBILE_SIZE ? TRASH_SIZE / 1.7 : TRASH_SIZE;
+  const trashYPos = width <= MOBILE_SIZE ? 100 : 120;
+
   return (
     <Container>
       <Text x={90} y={10} text="Ева" style={PIXEL_FONT} />
       <HeartBar
         x={90}
         y={50}
-        width={60}
-        height={55}
+        width={heartWidth}
+        height={heartHeight}
         pad={10}
         spritesheetUrl={spritesheetUrl}
         textureUrl={TEXTURE_URL}
+        darkTextureUrl={DARK_TEXTURE_URL}
       />
       <TrashCounter
         x={90}
-        y={120}
-        height={50}
-        width={50}
+        y={trashYPos}
+        height={trashSize}
+        width={trashSize}
         spritesheetUrl={spritesheetUrl}
         pad={10}
       />
-      <MenuButton menuButtonName={MENU_BUTTON_NAME} />
+      <Menu />
+      <Controls />
     </Container>
   );
 };

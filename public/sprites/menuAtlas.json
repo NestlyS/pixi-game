@@ -120,7 +120,7 @@
         "y": 0.5
       }
     },
-    "icon attack.png": {
+    "icon_attack.png": {
       "frame": {
         "x": 154,
         "y": 65,
@@ -144,7 +144,7 @@
         "y": 0.5
       }
     },
-    "icon heal.png": {
+    "icon_heal.png": {
       "frame": {
         "x": 154,
         "y": 99,

@@ -1,9 +1,7 @@
-import { _ReactPixi } from '@pixi/react';
-import { Texture } from 'pixi.js';
-import React, { useCallback, useMemo } from 'react';
+import { Container, DisplayObject, Filter, MaskData } from 'pixi.js';
 import { Sprite } from '../../Sprite';
 
-type Props = {
+export type Props = {
   x: number;
   y: number;
   width: number;
@@ -12,6 +10,10 @@ type Props = {
   textureUrl: string;
   pixelised?: boolean;
   onClick?: () => void;
+  onHover?: () => void;
+  onHoverOut?: () => void;
+  filters?: Filter[];
+  mask?: Container<DisplayObject> | MaskData | null;
 };
 
 export const Button = ({
@@ -23,15 +25,23 @@ export const Button = ({
   textureUrl,
   pixelised = false,
   onClick,
+  onHover,
+  onHoverOut,
+  filters,
+  mask
 }: Props) => (
   <Sprite
     x={x}
     y={y}
     onClick={onClick}
+    onHover={onHover}
+    onHoverOut={onHoverOut}
     width={width}
     height={height}
     spritesheet={spritesheetUrl}
     textureUrl={textureUrl}
     pixelised={pixelised}
+    filters={filters}
+    mask={mask}
   />
 );

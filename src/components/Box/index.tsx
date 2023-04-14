@@ -1,5 +1,3 @@
-import uniqueId from 'lodash.uniqueid';
-import { useState } from 'react';
 import { DAMAGABLE_BODY_GROUP } from '../../bodyGroups/damagable';
 import { DAMAGING_BODY_GROUP } from '../../bodyGroups/damaging';
 import { GROUND_BODY_GROUP } from '../../bodyGroups/ground';

@@ -4,7 +4,6 @@ export const sizesToParams = (
   sizes: LandscapeBlockSize[],
   globalX: number,
   globalY: number,
-  tileSize: number,
 ): LandscapeParamsType[] =>
   sizes.reduce((acc, item, index) => {
     if (index === 0) {

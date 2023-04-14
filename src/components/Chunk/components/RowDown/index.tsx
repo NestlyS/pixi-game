@@ -2,15 +2,17 @@ import { memo, useCallback } from 'react';
 import {
   MIDDLE_PART_NAME,
   DIRT_MIDDLE_PART_NAME,
-  GRASS_SMOOTH_UP_TRANSITION,
   GRASS_SMOOTH_DOWN_TRANSITION,
+  GRASS_UNDER_SMOOTH_DOWN_TRANSITION,
 } from '../../../TileGround/components/Grass/contants';
 import { Grass } from '../../../TileGround/components/Grass/Grass';
 import { ChunkProps } from '../../typings';
 import { Body } from '../../../Body';
 import { Sprite } from '../../../Sprite';
+import { Row } from '../../../TileGround/Row';
 
 export const ROW_WIDTH = 8;
+const getTexture = () => DIRT_MIDDLE_PART_NAME;
 
 const TRAMPLIN_CONFIG = {
   isStatic: true,
@@ -21,7 +23,7 @@ export const RowDown = memo(
     const halfWidth = width / 2;
 
     const textureModifier = useCallback(
-      (indexX: number, indexY: number, length: number, height: number) => {
+      (indexX: number, indexY: number, length: number) => {
         if (indexY === 0 && indexX <= length - 1) {
           return MIDDLE_PART_NAME;
         }
@@ -58,6 +60,7 @@ export const RowDown = memo(
           spritesheet={spritesheetUrl}
           textureUrl={GRASS_SMOOTH_DOWN_TRANSITION}
         />
+
         <Grass
           textureModifier={textureModifier}
           spritesheetUrl={spritesheetUrl}
@@ -66,6 +69,24 @@ export const RowDown = memo(
           tileSize={tileSize}
           tilesWidth={halfWidth}
           tilesHeight={tilesHeight}
+        />
+
+        <Sprite
+          x={x + halfWidth * tileSize}
+          y={y - tilesHeight * tileSize + tileSize * 2}
+          width={tileSize}
+          height={tileSize}
+          spritesheet={spritesheetUrl}
+          textureUrl={GRASS_UNDER_SMOOTH_DOWN_TRANSITION}
+        />
+
+        <Row
+          tilesCount={width / 2}
+          startX={x + tileSize / 2}
+          startY={y + (tileSize * (tilesHeight + 1)) / 2}
+          tileSize={tileSize}
+          spritesheet={spritesheetUrl}
+          getTexture={getTexture}
         />
       </>
     );

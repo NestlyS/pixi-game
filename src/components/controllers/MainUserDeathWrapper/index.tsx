@@ -3,6 +3,8 @@ import { useCallback } from 'react';
 import { DeathWrapper } from '../DeathController/wrapper';
 import { AnimationList, useAnimationController } from '../AnimationController/context';
 import { SignalList, emitSignal } from '../../../utils/signaller/emitSignal';
+import { Container } from '@pixi/display/lib/Container';
+import { useContainer } from '../ViewController/context';
 
 type Props = {
   cooldown?: number;
@@ -10,8 +12,19 @@ type Props = {
   children: React.ReactNode;
 };
 
+
+/**
+ * Из-за того, что спрайт не может корректно определить свое расположение относительно пола,
+ *  мы ему с этим помогаем, сдвигая на самую узкую часть объекта.
+ * Мне вообще не нравится это решение, но пока что оно самое очевидное.
+ */
+const moveSpriteCenter = (container: Container, offset: number) => {
+  container.pivot.set(container.pivot.x, offset);
+};
+
 export const MainUserDeathWrapper = ({ cooldown = 0, onDeath, children }: Props) => {
   const { requestAnimation } = useAnimationController();
+  const container = useContainer<Container>();
 
   const onDeathHandler = useCallback(
     (body?: Body) => {
@@ -20,8 +33,9 @@ export const MainUserDeathWrapper = ({ cooldown = 0, onDeath, children }: Props)
         onFinish: () => emitSignal(SignalList.GameOver),
       });
       onDeath?.(body);
+      if (container) moveSpriteCenter(container, -3);
     },
-    [onDeath, requestAnimation],
+    [onDeath, requestAnimation, container],
   );
 
   return (

@@ -41,7 +41,6 @@ export const Rectangle = memo(
             x={x}
             y={y}
             rotation={rotation}
-            /* @ts-ignore */
             geometry={originalRef.current}
             pivot={{ x: width / 2, y: height / 2 }}
           />

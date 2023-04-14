@@ -40,12 +40,8 @@ export const MonsterWithTrash = ({ x, y }: MonsterProps) => {
   if (!isKilled) {
     return <Monster x={x} y={y} onDeath={onDeath} />;
   }
-  /**
-   * МУСОР РИСУЕТСЯ НЕКОРРЕКТНО. ПОДКЛЮЧИ Pixi/layers
-   */
 
   return (
-    // @ts-ignore
     <>
       {randomTrashTypes.map((Component, index, arr) => (
         <Component
@@ -53,14 +49,14 @@ export const MonsterWithTrash = ({ x, y }: MonsterProps) => {
           x={
             trashPositionRef.current.x +
             Math.cos((ONE_CIRCLE_IN_RAD / arr.length) * (index + 1)) *
-              SHIFT_MULTIPLIER *
-              trashAnimationState
+            SHIFT_MULTIPLIER *
+            trashAnimationState
           }
           y={
             trashPositionRef.current.y +
             Math.sin((ONE_CIRCLE_IN_RAD / arr.length) * (index + 1)) *
-              SHIFT_MULTIPLIER *
-              trashAnimationState
+            SHIFT_MULTIPLIER *
+            trashAnimationState
           }
         />
       ))}

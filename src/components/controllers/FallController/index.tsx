@@ -1,9 +1,5 @@
-import { useCallback, useRef } from 'react';
-import { useControlKey } from '../../../utils/useControlKey';
-import { useBody, useBodyParams } from '../../Body/context';
-import { applyForce } from '../../Body/utils';
-import { EPS } from '../../../constants';
-import { useGroundTouch } from '../GroundTouchController/context';
+import { useRef } from 'react';
+import { useBody } from '../../Body/context';
 import { AnimationList, useAnimationController } from '../AnimationController/context';
 import { useTick } from '@pixi/react';
 

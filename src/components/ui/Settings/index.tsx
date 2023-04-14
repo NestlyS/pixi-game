@@ -1,9 +1,9 @@
-import { Container, Text, useApp, useTick } from '@pixi/react';
+import { Container, Text, useTick } from '@pixi/react';
 import { TextStyle } from '@pixi/text';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { useEffect } from 'react';
-import { __IS_DEV__ } from '../../../constants';
-import { initialState, PausedContextProvider, SettingsContextProvider } from './context';
+import React, { useEffect, useRef, useState } from 'react';
+import { useScreenWidth } from '../../../utils/useScreenWidth';
+import { useSelector } from 'react-redux';
+import { selectSettingsFPSCounterVisiblity } from '../../../redux/settings/selectors';
 
 const TEXT_STYLE_POSITIVE = new TextStyle({
   fontFamily: 'Press Start 2P',
@@ -25,45 +25,11 @@ type Props = {
 };
 
 export const Settings = ({ children }: Props) => {
-  const [isFocusedOnMainBody, setFocused] = useState(initialState.isFocusedOnMainBody);
-  const [isCollisionVisible, setCollisionVisible] = useState<boolean>(
-    initialState.isCollisionVisible,
-  );
-  const [isFPSCounterVisible, setFPSCounterVisible] = useState<boolean>(true);
-  const [isPaused, setPaused] = useState(false);
   const [fps, setFps] = useState(0);
   const frameCounter = useRef(0);
-  const app = useApp();
+  const screenWidth = useScreenWidth();
 
-  const onFocusedClick = useCallback(() => {
-    setFocused((val) => !val);
-  }, []);
-
-  const onCollisionVisibleClick = useCallback(() => {
-    setCollisionVisible((val) => !val);
-  }, []);
-
-  const onFPSCounterClick = useCallback(() => {
-    setFPSCounterVisible((val) => !val);
-  }, []);
-
-  const value = useMemo(
-    () => ({
-      isFocusedOnMainBody,
-      onFocusedClick,
-      setPaused,
-      isCollisionVisible,
-      onCollisionVisibleClick,
-      onFPSCounterClick,
-    }),
-    [
-      isFocusedOnMainBody,
-      onFocusedClick,
-      isCollisionVisible,
-      onCollisionVisibleClick,
-      onFPSCounterClick,
-    ],
-  );
+  const isFPSCounterVisible = useSelector(selectSettingsFPSCounterVisiblity);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -79,16 +45,13 @@ export const Settings = ({ children }: Props) => {
   });
 
   return (
-    <SettingsContextProvider value={value}>
-      <PausedContextProvider value={isPaused}>
-        {/* @ts-ignore */}
-        {children}
-      </PausedContextProvider>
-      <Container x={app.view.width - 200} width={500} zIndex={100}>
+    <>
+      {children}
+      <Container x={screenWidth - 200} width={500} zIndex={100}>
         {isFPSCounterVisible && (
           <Text text={`${fps}`} style={fps > 30 ? TEXT_STYLE_POSITIVE : TEXT_STYLE_NEGATIVE} />
         )}
       </Container>
-    </SettingsContextProvider>
+    </>
   );
 };

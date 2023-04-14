@@ -5,7 +5,6 @@ import {
   CooldownState,
   HealthSetter,
   IdType,
-  OnCooldownCallback,
   OnCooldownListener,
 } from './typings';
 
@@ -13,7 +12,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-const initCooldown = (cooldownState: CooldownState, id: IdType, cooldownTimeout: number = 0) => {
+const initCooldown = (cooldownState: CooldownState, id: IdType, cooldownTimeout = 0) => {
   cooldownState[id] = { isCooldown: false, cooldownTimeout, listeners: [] };
 };
 

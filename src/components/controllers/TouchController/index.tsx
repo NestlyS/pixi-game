@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { CleanEventType } from '../../Body/typing';
 import { useBody } from '../../Body/context';
 import { useHealth } from '../../HealthStorage/context';

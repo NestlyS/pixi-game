@@ -36,8 +36,6 @@ export const AnimationController = ({ animationParams, children }: Props) => {
       return;
     }
 
-    console.log({ ...animationStack.current }, topAnimationParams);
-
     setAnimation({
       name: topAnimationParams.name,
       loop: topAnimationParams.loop,
@@ -50,8 +48,6 @@ export const AnimationController = ({ animationParams, children }: Props) => {
 
   const requestAnimation = useCallback<AnimationState['requestAnimation']>(
     ({ name, onFinish }) => {
-      console.log(animations, name, animationParams);
-
       if (!animationParams[name]?.name || !animations.includes(animationParams[name]?.name ?? '')) {
         console.error('Для данного имени нет анимаций.');
         return;
@@ -60,8 +56,6 @@ export const AnimationController = ({ animationParams, children }: Props) => {
       const animationParam = Object.entries(animationParams).find(
         ([animationName]) => animationName === name,
       )?.[1];
-
-      console.log(animationParam, animationParams);
 
       if (!animationParam) {
         return;
@@ -81,11 +75,9 @@ export const AnimationController = ({ animationParams, children }: Props) => {
 
   const releaseAnimation = useCallback<AnimationState['releaseAnimation']>(
     (name) => {
-      console.log(...animationStack.current);
       animationStack.current = animationStack.current.filter(
         ([animationName]) => animationName !== name,
       );
-      console.log(...animationStack.current);
       refreshAnimations();
     },
     [refreshAnimations],

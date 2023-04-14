@@ -1,5 +1,5 @@
 import { useTick } from '@pixi/react';
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
 import uniqueId from 'lodash.uniqueid';
 
 type StoreDataType = {
@@ -10,7 +10,9 @@ type StoreDataType = {
 const INPUT_CHECK = 1;
 const KEYS_STORE: Record<KeyboardEvent['key'], StoreDataType> = {};
 
-const chechIsCorrectCode = (e: KeyboardEvent, key: KeyboardEvent['code']) => e.code !== key;
+const chechIsCorrectCode = (e: KeyboardEvent, key: KeyboardEvent['code']) => (
+  e.code === 'KeyW' && console.log('LOLOLO', e.code), e.code !== key
+);
 
 export const useGlobalCheck = () => {
   const timer = useRef(0);
@@ -48,6 +50,7 @@ export const useControlKey = (
     KEYS_STORE[uniqKey] = { isPressed: false, isInited: false, callback: cb };
 
     const downCb = () => {
+      if (key === 'KeyW') console.log('OLOLO', key);
       KEYS_STORE[uniqKey].isPressed = true;
       KEYS_STORE[uniqKey].isInited = true;
     };
@@ -107,4 +110,26 @@ export const useControlKey = (
 
     return clearFunc(keyboardDownCb, keyboardUpCb);
   }, [cb, uniqKey, key, onUnpress]);
+};
+
+export const useControlKey2 = (key: KeyboardEvent['code'] | 'mouse', cb: () => void) => {
+  useEffect(() => {
+    console.log('lol?');
+    let cooldownTimeout: NodeJS.Timeout | null = null;
+
+    const _cb = (e: KeyboardEvent) => {
+      console.log('COOOOOOLDOWN', cooldownTimeout);
+      if (e.code !== key || cooldownTimeout) return;
+      console.log('NICE COOOOOOLDOWN', cooldownTimeout);
+      cooldownTimeout = setTimeout(() => {
+        if (cooldownTimeout) clearTimeout(cooldownTimeout);
+        cooldownTimeout = null;
+        cb();
+      }, 100);
+    };
+
+    document.body.addEventListener('keydown', _cb);
+
+    return () => document.body.removeEventListener('keydown', _cb);
+  }, [cb, key]);
 };

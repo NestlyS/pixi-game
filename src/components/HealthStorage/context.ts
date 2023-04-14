@@ -14,54 +14,60 @@ export const initialState: HealthState = {
 const HealthContext = createContext<HealthState>(initialState);
 
 export const HealthContextProvider = HealthContext.Provider;
-export const useHealth = (id?: IdType | null) => {
+export const useHealth = (id?: IdType | Body | null) => {
   const { healthMap, setHealth, onCooldown, removeCooldown } = useContext(HealthContext);
 
-  const currentHealth = id ? healthMap[id] : null;
+  const currentId = id
+    ? typeof id === 'string' || typeof id === 'number'
+      ? id
+      : getBodyId(id)
+    : null;
+
+  const currentHealth = currentId ? healthMap[currentId] : null;
 
   const setCurrentHealth = useCallback(
     (value: ValueType | FuncValueType, _id?: IdType | Body, cooldownTimeout?: number) => {
       const getId = () => {
-        if (id) return id;
+        if (currentId) return currentId;
         if (!_id) throw new Error(`id не представлен: val: ${value} id: ${innerId}`);
         if (typeof _id === 'string' || typeof _id === 'number') return _id;
         return getBodyId(_id);
       };
 
       const innerId = getId();
-      console.log(_id, id, value, cooldownTimeout);
+      console.log(_id, currentId, value, cooldownTimeout);
 
       if (!setHealth) return initialState.setHealth(innerId, value, cooldownTimeout);
 
       return setHealth(innerId, value, cooldownTimeout);
     },
-    [id, setHealth],
+    [currentId, setHealth],
   );
 
   const onCurrentHealthCooldown = useCallback(
     (cb: (cooldown: boolean) => void, _id?: IdType) => {
-      const innerId = id || _id;
-      console.log(_id, id, cb);
+      const innerId = currentId || _id;
+      console.log(_id, currentId, cb);
 
       if (!innerId) throw new Error('id не представлен');
       if (!onCooldown) return initialState.onCooldown(innerId, cb);
 
       return onCooldown(innerId, cb);
     },
-    [id, onCooldown],
+    [currentId, onCooldown],
   );
 
   const clearCurrentHealthCooldown = useCallback(
     (cb: (cooldown: boolean) => void, _id?: IdType) => {
-      const innerId = id || _id;
-      console.log(_id, id, cb);
+      const innerId = currentId || _id;
+      console.log(_id, currentId, cb);
 
       if (!innerId) throw new Error('id не представлен');
       if (!removeCooldown) return initialState.removeCooldown(innerId, cb);
 
       return removeCooldown(innerId, cb);
     },
-    [id, removeCooldown],
+    [currentId, removeCooldown],
   );
 
   return useMemo(

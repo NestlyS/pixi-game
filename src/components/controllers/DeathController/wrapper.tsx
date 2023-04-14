@@ -1,7 +1,5 @@
 import { Body } from 'matter-js';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useGlobalViewportShaking } from '../../GlobalViewport/hooks';
-import { usePausedState } from '../../ui/Settings/context';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   DeathListenerContextProvider,
   DeathWrapperContextProvider,

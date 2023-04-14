@@ -1,8 +1,9 @@
 import { useTick } from '@pixi/react';
+import { useSelector } from 'react-redux';
 import { Body, Vector } from 'matter-js';
 import { useRef } from 'react';
 import { useBody } from '../../Body/context';
-import { usePausedState } from '../../ui/Settings/context';
+import { selectSettingsPauseState } from '../../../redux/settings/selectors';
 
 type Props = {
   amplitude: number;
@@ -16,14 +17,14 @@ export const TrashBodyController = ({ amplitude, isTouched, onDelete }: Props) =
   const directionRef = useRef<-1 | 1 | -10>(1);
   const bodyAmplitudeRef = useRef<number>(0);
   const deltaRef = useRef(0);
-  const isPaused = usePausedState();
+  const isPaused = useSelector(selectSettingsPauseState);
 
   useTick((delta) => {
     if (!body) return;
 
     deltaRef.current += delta;
 
-    if (!isPaused && !isTouched && deltaRef.current < 3) return;
+    if (isPaused || (!isTouched && deltaRef.current < 3)) return;
 
     deltaRef.current = 0;
 

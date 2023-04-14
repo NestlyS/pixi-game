@@ -1,5 +1,4 @@
 import uniqueId from 'lodash.uniqueid';
-import { OutlineFilter } from 'pixi-filters';
 import React, { useCallback, useRef, useState } from 'react';
 import { USER_BODY_GROUP } from '../../../bodyGroups/user';
 import { Body } from '../../Body';
@@ -7,6 +6,7 @@ import { AnimatedSpriteController } from '../../controllers/AnimatedSpriteContro
 import { useTrash } from '../../TrashStorage/context';
 import { TrashTypes } from '../../TrashStorage/typings';
 import { TrashBodyController } from './controller';
+import { WHITE_OUTLINE_FILTER } from '../../../constants';
 
 const TRASH_WIDTH = 40;
 const TRASH_HEIGHT = 40;
@@ -17,7 +17,6 @@ const TRASH_PARAMS: Matter.IChamferableBodyDefinition = {
   isStatic: true,
 };
 
-const WHITE_OUTLINE_FILTER = new OutlineFilter(3, 0xffffff, 0.05);
 
 type Props = {
   x: number;

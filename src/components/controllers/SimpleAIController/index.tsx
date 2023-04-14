@@ -1,7 +1,7 @@
 import { useTick } from '@pixi/react';
 import uniqueId from 'lodash.uniqueid';
 import { IEventCollision, Engine } from 'matter-js';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { USER_BODY_GROUP } from '../../../bodyGroups/user';
 import { AI_SENSOR_LABEL, EPS, MONSTER_LABEL } from '../../../constants';
 import { useBody } from '../../Body/context';
@@ -10,7 +10,6 @@ import { applyForce } from '../../Body/utils';
 import { Bullet } from '../../Bullet';
 import { Directions } from '../../Bullet/controller';
 import { AnimationList, useAnimationController } from '../AnimationController/context';
-import { AttackingAnimationProvider } from '../AttackController/context';
 import { ConnectedSensorController } from '../ConntectedSensorController';
 import { useDeath } from '../DeathController/context';
 

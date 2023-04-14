@@ -1,9 +1,7 @@
 import { Container } from '@pixi/react';
-import { memo, useCallback, useMemo } from 'react';
+import { memo, useCallback } from 'react';
 import { AI_SENSOR_LABEL } from '../../../../constants';
-import { getRandomValue } from '../../../../utils/getRandomValue';
 import { Body } from '../../../Body';
-import { Monster } from '../../../Monster';
 import { MonsterWithTrash } from '../../../Monster/MonsterWithTrash';
 import {
   MIDDLE_PART_NAME,
@@ -23,7 +21,7 @@ export const MONSTERS_ROW_WIDTH = 10;
 export const MonstersRow = memo(
   ({ spritesheetUrl, x, y, tileSize, tilesHeight, width = MONSTERS_ROW_WIDTH }: ChunkProps) => {
     const textureModifier = useCallback(
-      (indexX: number, indexY: number, length: number, height: number) => {
+      (indexX: number, indexY: number, length: number) => {
         if (indexY === 0 && indexX <= length - 1) {
           return MIDDLE_PART_NAME;
         }

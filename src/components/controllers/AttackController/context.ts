@@ -13,23 +13,14 @@ export const useAttacking = () => {
   return isAttacking ?? initialState;
 };
 
-type State = {
-  isAttack: boolean;
-  onActionFinish: () => void;
-};
+type State = boolean;
 
-const initialStateAttacking = {
-  isAttack: false,
-  onActionFinish: () => {},
-};
+const initialStateAttacking = false;
 
 const AttackingAnimationIContext = createContext<State>(initialStateAttacking);
 export const AttackingAnimationProvider = AttackingAnimationIContext.Provider;
 export const useAttackingAnimation = () => {
-  const { isAttack, onActionFinish } = useContext(AttackingAnimationIContext);
+  const isAttack = useContext(AttackingAnimationIContext);
 
-  return {
-    isAttack,
-    onActionFinish,
-  };
+  return isAttack ?? initialStateAttacking;
 };
