@@ -1,7 +1,4 @@
-import {
-  AnimatedSprite as ReactPIXIAnimatedSprite,
-  useApp,
-} from '@pixi/react';
+import { AnimatedSprite as ReactPIXIAnimatedSprite, useApp } from '@pixi/react';
 import {
   AnimatedSprite as PIXI_AnimatedSprite,
   Texture,
@@ -11,15 +8,7 @@ import {
   Filter,
 } from 'pixi.js';
 import { Assets } from '@pixi/assets';
-import React, {
-  forwardRef,
-  memo,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { forwardRef, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { AnimationContextProvider, AnimationState } from './context';
 import { selectSettingsPauseState } from '../../redux/settings/selectors';
@@ -185,12 +174,12 @@ export const AnimatedSprite = memo(
 
       const value = useMemo(
         () =>
-        ({
-          setAnimation,
-          onComplete: onComplete_,
-          clearOnComplete: clearOnComplete_,
-          animations: Object.keys(animationMap),
-        } as AnimationState),
+          ({
+            setAnimation,
+            onComplete: onComplete_,
+            clearOnComplete: clearOnComplete_,
+            animations: Object.keys(animationMap),
+          } as AnimationState),
         [animationMap, clearOnComplete_, onComplete_, setAnimation],
       );
 

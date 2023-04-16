@@ -1,14 +1,10 @@
 import React, { useCallback, useMemo } from 'react';
 import { Container, Text, useApp } from '@pixi/react';
-import {
-  PIXEL_FONT,
-  PIXEL_FONT_RED,
-  PIXEL_FONT_YELLOW,
-} from '../../../constants';
+import { PIXEL_FONT, PIXEL_FONT_RED, PIXEL_FONT_YELLOW } from '../../../constants';
 import { ButtonWithText } from '../ButtonWithText';
 import { SignalList, emitSignal } from '../../../utils/signaller/emitSignal';
 import { TrashCounter } from '../TrashCounter';
-import { spritesheetUrl as _spritesheetUrl } from '../../Canvas';
+import { spritesheetUrl as _spritesheetUrl } from '../../../pages/game';
 
 type Props = {
   spritesheetUrl: string;

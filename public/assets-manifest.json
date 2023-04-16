@@ -28,6 +28,27 @@
           "srcs": "/healer/healer.json"
         }
       ]
+    },
+    {
+      "name": "novel-screen",
+      "assets": [
+        {
+          "name": "backround",
+          "srcs": "/sprites/backround.json"
+        },
+        {
+          "name": "script",
+          "srcs": "/novel/script.json"
+        },
+        {
+          "name": "menuAtlas",
+          "srcs": "/sprites/menuAtlas.json"
+        },
+        {
+          "name": "novel",
+          "srcs": "/novel/novel.json"
+        }
+      ]
     }
   ]
 }

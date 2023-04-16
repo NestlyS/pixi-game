@@ -1,60 +1,65 @@
-import { memo, useEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { useBody } from '../../Body/context';
 import { useGlobalViewportShaking } from '../../GlobalViewport/hooks';
-import { useHealth } from '../../HealthStorage/context';
-import { getBodyId } from '../../HealthStorage/utils';
 import { AnimationList, useAnimationController } from '../AnimationController/context';
-import { BodyHealthContextProvider } from './context';
+
+import { initHealthEntity, setInvicibility, unsetInvicibility } from '../../../redux/health';
+import { Health } from '../../../redux/health/adapter';
+import { selectHealthValueByBody } from '../../../redux/health/selectors';
+import { getBodyId } from '../../../utils/getBodyId';
 
 type Props = {
   initialHealth: number;
-  children?: React.ReactNode;
+  maxHealth: number;
   cooldown?: number;
 };
 
-export const HealthController = memo(({ initialHealth, children, cooldown }: Props) => {
+export const HealthController = memo(({ initialHealth, maxHealth, cooldown }: Props) => {
   const { body } = useBody();
   const { requestAnimation, releaseAnimation } = useAnimationController();
+
+  const healthAmount = useSelector(selectHealthValueByBody(body));
+  const prevValue = useRef<Health['value'] | null>(null);
+  const dispatch = useDispatch();
+
   const shakeViewport = useGlobalViewportShaking();
-  const id = useMemo(() => getBodyId(body), [body]);
-
-  const { currentHealth, setHealth, onCooldown, clearCooldown } = useHealth(id);
-
-  const [isCooldown, setCooldown] = useState(false);
 
   useEffect(() => {
-
-    setHealth(initialHealth, id, cooldown);
-  }, [cooldown, id, initialHealth, setHealth]);
-
-  useEffect(() => {
-    const cb = (cooldown: boolean) => {
-      setCooldown(cooldown);
-    };
-
-    onCooldown(cb, id);
-
-    return () => clearCooldown(cb, id);
-  }, [clearCooldown, id, onCooldown]);
+    dispatch(initHealthEntity({ id: getBodyId(body), value: initialHealth, maxValue: maxHealth }));
+  }, [initialHealth, maxHealth]);
 
   useEffect(() => {
-    if (isCooldown) {
+    if (!healthAmount || !body) {
+      return;
+    }
+
+    if (prevValue.current === null) {
+      prevValue.current = healthAmount;
+      return;
+    }
+
+    const isHealthDecrease = prevValue.current > healthAmount;
+    prevValue.current = healthAmount;
+
+    if (isHealthDecrease) {
       shakeViewport();
       requestAnimation({ name: AnimationList.Hurt });
     }
 
-    if (!isCooldown) {
+    if (isHealthDecrease && cooldown) {
+      dispatch(setInvicibility(getBodyId(body)));
+      setTimeout(() => {
+        dispatch(unsetInvicibility(getBodyId(body)));
+        releaseAnimation(AnimationList.Hurt);
+      }, cooldown);
+    }
+
+    if (!isHealthDecrease) {
       releaseAnimation(AnimationList.Hurt);
     }
-  }, [isCooldown, releaseAnimation, requestAnimation, shakeViewport]);
+  }, [healthAmount, releaseAnimation, requestAnimation, shakeViewport]);
 
-  const value = useMemo(() => {
-    return {
-      isCooldown,
-      currentHealth,
-    };
-  }, [isCooldown, currentHealth]);
-
-  return <BodyHealthContextProvider value={value}>{children}</BodyHealthContextProvider>;
+  return null;
 });
-

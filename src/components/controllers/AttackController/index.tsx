@@ -6,8 +6,6 @@ import { USER_BODY_GROUP } from '../../../bodyGroups/user';
 import { useControlKey } from '../../../utils/useControlKey';
 import { useBody } from '../../Body/context';
 import { applyForce } from '../../Body/utils';
-import { useHealth } from '../../HealthStorage/context';
-import { getBodyId } from '../../HealthStorage/utils';
 import { AnimationList, useAnimationController } from '../AnimationController/context';
 import { ConnectedSensorController } from '../ConntectedSensorController';
 import { isSensorLabel } from '../ConntectedSensorController/utils';
@@ -16,6 +14,8 @@ import { ATTACK_KEY_CODE, ATTACK_KEY_CODE_EXTRA } from '../../../constants';
 import { selectSettingsPauseState } from '../../../redux/settings/selectors';
 import { setAttackCooldown } from '../../../redux/mainUser';
 import { selectMainUserAttackCooldown } from '../../../redux/mainUser/selectors';
+import { makeDamageToHealthEntity } from '../../../redux/health';
+import { getBodyId } from '../../../utils/getBodyId';
 
 const DAMAGE_VALUE = 1;
 const ATTACK_BOOST = -5;
@@ -29,7 +29,6 @@ type Props = {
 
 export const AttackController = ({ children, width, height, cooldown = 1000 }: Props) => {
   const { body } = useBody();
-  const { setHealth } = useHealth();
   const { releaseAnimation, requestAnimation } = useAnimationController();
   const [isAttacing, setAttacting] = useState(initialState);
   const attackColldown = useSelector(selectMainUserAttackCooldown);
@@ -37,33 +36,29 @@ export const AttackController = ({ children, width, height, cooldown = 1000 }: P
 
   const dispatch = useDispatch();
 
+  const onCollision = useCallback((e: Matter.IEventCollision<Matter.Engine>) => {
+    const collidedBodies = e.pairs.map((pair) =>
+      isSensorLabel(pair.bodyA.label) ? pair.bodyB : pair.bodyA,
+    );
 
-  const onCollision = useCallback(
-    (e: Matter.IEventCollision<Matter.Engine>) => {
-      const collidedBodies = e.pairs.map((pair) =>
-        isSensorLabel(pair.bodyA.label) ? pair.bodyB : pair.bodyA,
-      );
+    const collidedBody = DAMAGABLE_BODY_GROUP.get().find((damagableBody) =>
+      collidedBodies.includes(damagableBody),
+    );
 
-      const collidedBody = DAMAGABLE_BODY_GROUP.get().find((damagableBody) =>
-        collidedBodies.includes(damagableBody),
-      );
-
-      console.log('DAMAGING', DAMAGABLE_BODY_GROUP.get(), collidedBody);
-      if (collidedBody?.id) {
-        setHealth((value) => (value ? value - DAMAGE_VALUE : value), getBodyId(collidedBody));
-      }
-    },
-    [setHealth],
-  );
+    if (collidedBody) {
+      dispatch(makeDamageToHealthEntity({ amount: DAMAGE_VALUE, id: getBodyId(collidedBody) }));
+    }
+  }, []);
 
   const mouseCb = useCallback(() => {
     if (isPaused || attackColldown) return;
 
     requestAnimation({
-      name: AnimationList.Attack, onFinish: () => {
+      name: AnimationList.Attack,
+      onFinish: () => {
         releaseAnimation(AnimationList.Attack);
         setAttacting(false);
-      }
+      },
     });
 
     setAttacting(true);

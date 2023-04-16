@@ -1,22 +1,27 @@
-import React, { useMemo } from 'react'
-import { useScreenWidth } from '../../../../../utils/useScreenWidth'
+import React, { useMemo } from 'react';
+import { useScreenWidth } from '../../../../../utils/useScreenWidth';
 import { DisplayWindow } from '../../../DisplayWindow';
 import { MENU_BUTTON_NAME, UI_SPRITESHEET } from '../../../UI';
 import { SignalList, emitSignal } from '../../../../../utils/signaller/emitSignal';
-import { revertCollisions, revertFPSCounter, revertFocusOnMainBody } from '../../../../../redux/settings';
+import {
+  revertCollisions,
+  revertFPSCounter,
+  revertFocusOnMainBody,
+} from '../../../../../redux/settings';
 import { useDispatch, useSelector } from 'react-redux';
 import { __IS_DEV__ } from '../../../../../constants';
-import { selectSettingsCollisionsVisiblity, selectSettingsMainBodyFocus } from '../../../../../redux/settings/selectors';
+import {
+  selectSettingsCollisionsVisiblity,
+  selectSettingsMainBodyFocus,
+} from '../../../../../redux/settings/selectors';
 
 const MENU_NAME = 'menu.png';
 
 type Props = {
   onExit: () => void;
-}
+};
 
-export const MenuWithText = ({
-  onExit
-}: Props) => {
+export const MenuWithText = ({ onExit }: Props) => {
   const screenWidth = useScreenWidth();
   const isFocusedOnMainBody = useSelector(selectSettingsMainBodyFocus);
   const isCollisionVisible = useSelector(selectSettingsCollisionsVisiblity);
@@ -41,21 +46,18 @@ export const MenuWithText = ({
       },
       ...(__IS_DEV__
         ? [
-          {
-            text: isFocusedOnMainBody ? 'V Камера прикреплена' : 'X Камера откреплена',
-            onClick: () => dispatch(revertFocusOnMainBody()),
-          },
-          {
-            text: isCollisionVisible ? 'V Границы видны' : 'X Границы скрыты',
-            onClick: () => dispatch(revertCollisions()),
-          },
-        ]
+            {
+              text: isFocusedOnMainBody ? 'V Камера прикреплена' : 'X Камера откреплена',
+              onClick: () => dispatch(revertFocusOnMainBody()),
+            },
+            {
+              text: isCollisionVisible ? 'V Границы видны' : 'X Границы скрыты',
+              onClick: () => dispatch(revertCollisions()),
+            },
+          ]
         : []),
     ];
-  }, [
-    isCollisionVisible,
-    isFocusedOnMainBody,
-  ]);
+  }, [isCollisionVisible, isFocusedOnMainBody]);
 
   return (
     <DisplayWindow
@@ -71,5 +73,5 @@ export const MenuWithText = ({
     >
       {[...buttons]}
     </DisplayWindow>
-  )
-}
+  );
+};

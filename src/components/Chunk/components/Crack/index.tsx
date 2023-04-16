@@ -26,35 +26,29 @@ export const Crack = memo(
       (crackWidth * tileSize) / 2 +
       (crackWidth * tileSize) / 2 +
       CRACK_WIDTH * tileSize;
-    const textureModifierLeft = useCallback(
-      (indexX: number, indexY: number) => {
-        if (indexY === 0 && indexX === 0) {
-          return MIDDLE_PART_NAME;
-        }
+    const textureModifierLeft = useCallback((indexX: number, indexY: number) => {
+      if (indexY === 0 && indexX === 0) {
+        return MIDDLE_PART_NAME;
+      }
 
-        if (indexY > 0 && indexX === 0) {
-          return DIRT_MIDDLE_PART_NAME;
-        }
+      if (indexY > 0 && indexX === 0) {
+        return DIRT_MIDDLE_PART_NAME;
+      }
 
-        return null;
-      },
-      [],
-    );
+      return null;
+    }, []);
 
-    const textureModifierRight = useCallback(
-      (indexX: number, indexY: number, length: number) => {
-        if (indexY === 0 && indexX === length - 1) {
-          return MIDDLE_PART_NAME;
-        }
+    const textureModifierRight = useCallback((indexX: number, indexY: number, length: number) => {
+      if (indexY === 0 && indexX === length - 1) {
+        return MIDDLE_PART_NAME;
+      }
 
-        if (indexY > 0 && indexX === length - 1) {
-          return DIRT_MIDDLE_PART_NAME;
-        }
+      if (indexY > 0 && indexX === length - 1) {
+        return DIRT_MIDDLE_PART_NAME;
+      }
 
-        return null;
-      },
-      [],
-    );
+      return null;
+    }, []);
 
     const onCollision = useCallback(
       (e: Matter.IEventCollision<Matter.Engine>) => {

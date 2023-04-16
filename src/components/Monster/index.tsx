@@ -29,6 +29,7 @@ const animationMap = {
 };
 
 export const BODY_FRICTION = 0.01;
+const MONSTER_HEALTH = 1;
 const MAIN_BODY_OPTIONS = { inertia: Infinity, friction: BODY_FRICTION, weight: 300 };
 
 export type Props = {
@@ -52,22 +53,21 @@ export const Monster = ({ x, y, onDeath }: Props) => {
         bodyGroup={[DAMAGABLE_BODY_GROUP, DAMAGING_BODY_GROUP]}
       >
         <GroundTouchController>
-          <HealthController initialHealth={1}>
-            <DeathListener />
-            <AnimatedSpriteController
-              width={190}
-              height={180}
-              spritesheet={test}
-              animationSpeed={0.07}
-              setDefault
-              zIndex={100}
-              filters={[SHADOW_FILTER]}
-            >
-              <AnimationController animationParams={animationMap}>
-                <SimpleAIController spritesheetUrl={test} animationName="bullet" />
-              </AnimationController>
-            </AnimatedSpriteController>
-          </HealthController>
+          <HealthController initialHealth={MONSTER_HEALTH} />
+          <DeathListener />
+          <AnimatedSpriteController
+            width={190}
+            height={180}
+            spritesheet={test}
+            animationSpeed={0.07}
+            setDefault
+            zIndex={100}
+            filters={[SHADOW_FILTER]}
+          >
+            <AnimationController animationParams={animationMap}>
+              <SimpleAIController spritesheetUrl={test} animationName="bullet" />
+            </AnimationController>
+          </AnimatedSpriteController>
         </GroundTouchController>
       </Body>
     </DeathWrapper>

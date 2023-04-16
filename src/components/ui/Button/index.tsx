@@ -28,7 +28,7 @@ export const Button = ({
   onHover,
   onHoverOut,
   filters,
-  mask
+  mask,
 }: Props) => (
   <Sprite
     x={x}

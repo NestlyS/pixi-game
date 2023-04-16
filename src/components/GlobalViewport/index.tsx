@@ -10,9 +10,10 @@ type Props = {
   width: number;
   height: number;
   children: React.ReactNode;
+  outsideViewport?: React.ReactNode;
 };
 
-export const GlobalViewport = ({ width, height, children }: Props) => {
+export const GlobalViewport = ({ width, height, children, outsideViewport }: Props) => {
   const viewportRef = useRef<PixiViewport>(null);
   const [isMounted, setIsMounted] = useState(false);
   const isFocusedOnMainBody = useSelector(selectSettingsMainBodyFocus);
@@ -29,8 +30,11 @@ export const GlobalViewport = ({ width, height, children }: Props) => {
   );
 
   return (
-    <Viewport ref={viewportRef} width={width} height={height}>
-      <GlobalViewportContextProvider value={value}>{children}</GlobalViewportContextProvider>
-    </Viewport>
+    <GlobalViewportContextProvider value={value}>
+      {outsideViewport}
+      <Viewport ref={viewportRef} width={width} height={height}>
+        {children}
+      </Viewport>
+    </GlobalViewportContextProvider>
   );
 };

@@ -6,12 +6,12 @@ import { MenuButton } from '../MenuButton';
 
 export const Menu = () => {
   const [isVisible, setVisible] = useState(false);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const onClick = useCallback(() => {
     setVisible((state) => {
-      if (!state) dispatch(setPause())
-      if (state) dispatch(setPlay())
+      if (!state) dispatch(setPause());
+      if (state) dispatch(setPlay());
       return !state;
     });
   }, [setPause]);
@@ -27,13 +27,10 @@ export const Menu = () => {
     return () => window.removeEventListener('keydown', cb);
   }, [onClick]);
 
-
   return (
     <>
       <MenuButton onClick={onClick} />
-      {isVisible && (
-        <MenuWithText onExit={onClick} />
-      )}
+      {isVisible && <MenuWithText onExit={onClick} />}
     </>
   );
 };

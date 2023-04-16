@@ -1,19 +1,39 @@
 import FontFaceObserver from 'fontfaceobserver';
-import { useEffect, useState } from 'react';
-import './App.css';
-import { Canvas } from './components/Canvas';
+import { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Assets } from 'pixi.js';
+import { Text } from '@pixi/react';
+
+import { Game } from './pages/game';
 import { World } from './components/World';
 import { Settings } from './components/ui/Settings';
-import { Assets } from 'pixi.js';
 import { ReduxStage } from './components/ReduxStage';
+import { selectAppControllerPage } from './redux/appController/selectors';
+import { NORMAL_NOVEL_FONT, Pages } from './constants';
+import { Novel } from './pages/novel';
+
+import './App.css';
+import { setPage } from './redux/appController';
 
 const manifestUrl = 'assets-manifest.json';
 export let WORLD_WIDTH = 1600;
 export let WORLD_HEIGHT = 900;
 
+const getPage = (page: Pages) => {
+  switch (page) {
+    case Pages.game:
+      return <Game />;
+    case Pages.novel:
+      return <Novel />;
+  }
+};
+
 const App = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [root, setRoot] = useState<HTMLElement | null>(null);
+  const page = useSelector(selectAppControllerPage);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const cb = async () => {
@@ -38,6 +58,10 @@ const App = () => {
     setRoot(root);
   }, []);
 
+  const handlePageChange = useCallback(() => {
+    dispatch(setPage(page === Pages.game ? Pages.novel : Pages.game));
+  }, [page]);
+
   if (!isLoaded || !root) return null;
 
   return (
@@ -45,13 +69,19 @@ const App = () => {
       <ReduxStage
         width={WORLD_WIDTH}
         height={WORLD_HEIGHT}
-        options={{ backgroundColor: 0x99c5ff, antialias: false }}
+        options={{ backgroundColor: 0xffffff, antialias: false }}
       >
         <Settings>
-          <World>
-            <Canvas />
-          </World>
+          <World>{getPage(page)}</World>
         </Settings>
+        <Text
+          text={page[0]}
+          x={20}
+          y={20}
+          style={NORMAL_NOVEL_FONT}
+          interactive
+          onpointerdown={handlePageChange}
+        />
       </ReduxStage>
     </div>
   );

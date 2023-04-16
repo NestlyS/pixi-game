@@ -20,6 +20,7 @@ import { ResetUserController } from '../controllers/ResetUserController';
 import { DeathListener } from '../controllers/DeathController/listener';
 import { MainUserDeathWrapper } from '../controllers/MainUserDeathWrapper';
 import { HealController } from '../controllers/HealController';
+import { MainUserSpriteDirectionController } from '../controllers/MainUserSpriteDirectionController';
 
 const test = '/eva/eva.json';
 const animationMap = {
@@ -40,26 +41,32 @@ const animationMap = {
   },
 };
 
+const MAX_HEALTH = 3;
 export const USER_COOLDOWN = 700;
 export const BODY_FRICTION = 0.05;
 const HEAL_COOLDOWN_VALUE = 30 * 1000;
 const MAIN_BODY_OPTIONS = { inertia: Infinity, friction: BODY_FRICTION, weight: 300 };
-const INVICIBILITY_PERIOD = 1000;
+const INVICIBILITY_PERIOD = 2000;
 
-export const ControllableBody = () => {
+type Props = {
+  x: number;
+  y: number;
+};
+
+export const ControllableBody = ({ x, y }: Props) => {
   const userLabelRef = useRef(uniqueId(USER_LABEL));
 
   return (
     <Body
-      x={500}
-      y={0}
+      x={x}
+      y={y}
       width={50}
       height={120}
       options={MAIN_BODY_OPTIONS}
       label={userLabelRef.current}
       bodyGroup={USER_BODY_GROUP}
     >
-      <MainUserController maxHealth={3} />
+      <MainUserController maxHealth={MAX_HEALTH} />
       <GroundTouchController>
         <AnimatedSpriteController
           ignoreRotation
@@ -72,20 +79,24 @@ export const ControllableBody = () => {
           filters={[SHADOW_FILTER]}
         >
           <AnimationController animationParams={animationMap}>
+            <MainUserSpriteDirectionController />
             <MainUserDeathWrapper>
               <MoveController />
               <JumpController />
               <FallController />
               <HealController cooldown={HEAL_COOLDOWN_VALUE} />
-              <HealthController initialHealth={3} cooldown={INVICIBILITY_PERIOD}>
-                <DeathListener />
-                <ResetUserController x={500} y={0} />
-                <AttackController width={70} height={100} cooldown={USER_COOLDOWN}>
-                  <ViewController />
-                  <DamageTouchController />
-                  <SlideController />
-                </AttackController>
-              </HealthController>
+              <HealthController
+                initialHealth={MAX_HEALTH}
+                maxHealth={MAX_HEALTH}
+                cooldown={INVICIBILITY_PERIOD}
+              />
+              <DeathListener />
+              <ResetUserController x={x} y={y} />
+              <AttackController width={70} height={100} cooldown={USER_COOLDOWN}>
+                <ViewController />
+                <DamageTouchController />
+                <SlideController />
+              </AttackController>
             </MainUserDeathWrapper>
           </AnimationController>
         </AnimatedSpriteController>

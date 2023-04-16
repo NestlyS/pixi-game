@@ -5,8 +5,8 @@ import { useBody } from '../Body/context';
 import { setId, setMaxHp } from '../../redux/mainUser';
 
 type Props = {
-  maxHealth: number,
-}
+  maxHealth: number;
+};
 
 export const MainUserController = ({ maxHealth }: Props) => {
   const { body } = useBody();
@@ -17,7 +17,7 @@ export const MainUserController = ({ maxHealth }: Props) => {
   }, [body, dispatch]);
 
   useEffect(() => {
-    console.log('MAX HEALTH')
+    console.log('MAX HEALTH');
     dispatch(setMaxHp(maxHealth));
   }, []);
 

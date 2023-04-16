@@ -62,7 +62,7 @@ export const BulletController = ({ direction, speed, setCurrentDistance }: Props
 
     const distance = Math.sqrt(
       Math.pow(body.position.x - distanceRef.current.x, 2) -
-      Math.pow(body.position.y - distanceRef.current.y, 2),
+        Math.pow(body.position.y - distanceRef.current.y, 2),
     );
 
     const { x: xMult, y: yMult } = getDirectionMultiplier(direction);

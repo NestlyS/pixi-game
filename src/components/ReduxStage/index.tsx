@@ -1,6 +1,6 @@
-import { Stage, _ReactPixi } from '@pixi/react'
+import { Stage, _ReactPixi } from '@pixi/react';
 import { ReactReduxContext } from 'react-redux';
-import React from 'react'
+import React from 'react';
 import { ContextBridge } from '../ContextBridge';
 
 type Props = {

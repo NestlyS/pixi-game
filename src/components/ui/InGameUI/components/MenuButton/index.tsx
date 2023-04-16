@@ -1,5 +1,5 @@
-import React from 'react'
-import { Button } from '../../../Button'
+import React from 'react';
+import { Button } from '../../../Button';
 import { useScreenWidth } from '../../../../../utils/useScreenWidth';
 import { UI_SPRITESHEET } from '../../../UI';
 
@@ -7,7 +7,7 @@ const PAUSE_NAME = 'pause.png';
 
 type Props = {
   onClick: () => void;
-}
+};
 
 export const MenuButton = ({ onClick }: Props) => {
   const screenWidth = useScreenWidth();
@@ -23,5 +23,5 @@ export const MenuButton = ({ onClick }: Props) => {
       textureUrl={PAUSE_NAME}
       pixelised
     />
-  )
-}
+  );
+};

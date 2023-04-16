@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { __IS_DEV__ } from '../../constants';
 
 type InitialState = {
-  isFocusedOnMainBody?: boolean;
+  isNotFocusedOnMainBody?: boolean;
   isCollisionVisible?: boolean;
   isFPSCounterVisible: boolean;
   isPaused: boolean;
@@ -11,7 +11,7 @@ type InitialState = {
 export const initialState: InitialState = {
   isPaused: false,
   isFPSCounterVisible: true,
-  ...(__IS_DEV__ ? { isCollisionVisible: true, isFocusedOnMainBody: true } : {}),
+  ...(__IS_DEV__ ? { isCollisionVisible: true, isNotFocusedOnMainBody: false } : {}),
 };
 
 const settingsSlice = createSlice({
@@ -47,17 +47,17 @@ const settingsSlice = createSlice({
 
     revertFocusOnMainBody: (state) => {
       if (!__IS_DEV__) return;
-      state.isFocusedOnMainBody = !state.isFocusedOnMainBody;
+      state.isNotFocusedOnMainBody = !state.isNotFocusedOnMainBody;
     },
 
     setFocusOnMainBody: (state) => {
       if (!__IS_DEV__) return;
-      state.isFocusedOnMainBody = true;
+      state.isNotFocusedOnMainBody = false;
     },
 
     unsetFocusOnMainBody: (state) => {
       if (!__IS_DEV__) return;
-      state.isFocusedOnMainBody = false;
+      state.isNotFocusedOnMainBody = true;
     },
 
     revertFPSCounter: (state) => {

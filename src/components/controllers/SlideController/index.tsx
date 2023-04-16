@@ -7,7 +7,6 @@ import { BODY_FRICTION } from '../../Controllable';
 import { AnimationList, useAnimationController } from '../AnimationController/context';
 import { useAttackingAnimation } from '../AttackController/context';
 import { useGroundTouch } from '../GroundTouchController/context';
-import { useBodyHealth } from '../HealthController/context';
 import { useContainer } from '../ViewController/context';
 import { SLIDE_KEY_CODE, SLIDE_KEY_CODE_EXTRA } from '../../../constants';
 
@@ -37,7 +36,6 @@ const { moveSpriteCenter, returnSpriteCenter } = (() => {
 
 export const SlideController = () => {
   const { body } = useBody();
-  const { isCooldown } = useBodyHealth();
   const isAttack = useAttackingAnimation();
   const isGroundTouchedRef = useRef(false);
   const onChange = useCallback((isTouched: boolean) => {
@@ -52,7 +50,7 @@ export const SlideController = () => {
   const [isSliding, setSliding] = useState(false);
   const slidingRef = useRef(false);
 
-  const isUnsladed = isCooldown || isAttack;
+  const isUnsladed = isAttack;
 
   const SCb = useCallback(() => {
     if (

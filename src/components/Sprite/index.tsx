@@ -16,17 +16,17 @@ export type ISpriteProps = {
   onHover?: () => void;
   onHoverOut?: () => void;
 } & (
-    | {
+  | {
       textureUrl: string;
       spritesheet: string;
       image: string;
     }
-    | {
+  | {
       textureUrl: string;
       spritesheet?: string;
       image?: string;
     }
-  ) &
+) &
   _ReactPixi.ISprite;
 
 export const Sprite = memo(
@@ -52,7 +52,6 @@ export const Sprite = memo(
         const controller = new AbortController();
         const textureSource: TextureSource = textureUrl;
 
-        console.log(textureUrl, Assets.cache.has(textureUrl));
         if (Assets.cache.has(textureUrl)) {
           const _texture = Assets.cache.get<Texture<Resource>>(textureUrl);
           if (pixelised) _texture.baseTexture.scaleMode = SCALE_MODES.NEAREST;
@@ -73,8 +72,8 @@ export const Sprite = memo(
           const _texture = Assets.cache.has(textureUrl)
             ? Assets.cache.get<Texture<Resource>>(textureUrl)
             : Texture.from(textureSource, {
-              scaleMode: pixelised ? SCALE_MODES.NEAREST : SCALE_MODES.LINEAR,
-            });
+                scaleMode: pixelised ? SCALE_MODES.NEAREST : SCALE_MODES.LINEAR,
+              });
 
           if (frame) {
             _texture.frame = new Rectangle(frame.x, frame.y, frame.width, frame.height);

@@ -1,26 +1,28 @@
 import React, { memo, useCallback, useState } from 'react';
 import { Filter } from 'pixi.js';
 import { Text } from '@pixi/react';
-import { Button } from '../../../Button'
-import { COLOR_OVERLAY_FILTER_STEP_0, JUMP_KEY_CODE, PIXEL_FONT, PURPLE_OUTLINE_FILTER } from '../../../../../constants';
+import { Button } from '../../../Button';
+import {
+  COLOR_OVERLAY_FILTER_STEP_0,
+  JUMP_KEY_CODE,
+  PIXEL_FONT,
+  PURPLE_OUTLINE_FILTER,
+} from '../../../../../constants';
 import { emitKeyboardSignal, SignalList } from '../../../../../utils/signaller/emitSignal';
 import { UI_SPRITESHEET } from '../../../UI';
 
 const JUMP_BUTTON = 'jump.png';
 
 type Props = {
-  y: number,
-  x: number,
-}
+  y: number;
+  x: number;
+};
 
-export const ButtonJump = memo(({
-  y,
-  x,
-}: Props) => {
+export const ButtonJump = memo(({ y, x }: Props) => {
   const [filter, setFilter] = useState<Filter[]>([]);
 
   // Странный баг если удалить эту функцию
-  const onJump = useCallback(() => { }, []);
+  const onJump = useCallback(() => {}, []);
 
   const onHover = useCallback(() => {
     setFilter([COLOR_OVERLAY_FILTER_STEP_0]);
@@ -51,5 +53,5 @@ export const ButtonJump = memo(({
       />
       <Text filters={[PURPLE_OUTLINE_FILTER]} x={x + 80} y={y} text={text} style={PIXEL_FONT} />
     </>
-  )
+  );
 });

@@ -2,7 +2,7 @@ import { DAMAGABLE_BODY_GROUP } from '../../bodyGroups/damagable';
 import { DAMAGING_BODY_GROUP } from '../../bodyGroups/damaging';
 import { GROUND_BODY_GROUP } from '../../bodyGroups/ground';
 import { Body } from '../Body';
-import { spritesheetUrl } from '../Canvas';
+import { spritesheetUrl } from '../../pages/game';
 import { DeathListener } from '../controllers/DeathController/listener';
 import { DeathWrapper } from '../controllers/DeathController/wrapper';
 import { HealthController } from '../controllers/HealthController';
@@ -22,9 +22,8 @@ export const Box = ({ x, y, width, height }: Props) => {
   return (
     <DeathWrapper>
       <Body x={x} y={y} width={width} height={height} bodyGroup={BOX_GROUP} label="box">
-        <HealthController initialHealth={1}>
-          <DeathListener />
-        </HealthController>
+        <HealthController initialHealth={1} maxHealth={1} />
+        <DeathListener />
         <SpriteController
           width={width}
           height={height}

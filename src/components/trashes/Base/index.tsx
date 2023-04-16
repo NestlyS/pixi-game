@@ -17,7 +17,6 @@ const TRASH_PARAMS: Matter.IChamferableBodyDefinition = {
   isStatic: true,
 };
 
-
 type Props = {
   x: number;
   y: number;

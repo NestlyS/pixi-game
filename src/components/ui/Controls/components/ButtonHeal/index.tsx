@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react'
+import { memo, useCallback } from 'react';
 import { Text } from '@pixi/react';
 import { useSelector } from 'react-redux';
 
@@ -13,14 +13,11 @@ const HEIGHT = 100;
 const HEAL_BUTTON = 'icon_heal.png';
 
 type Props = {
-  y: number,
-  x: number,
-}
+  y: number;
+  x: number;
+};
 
-export const ButtonHeal = memo(({
-  y,
-  x,
-}: Props) => {
+export const ButtonHeal = memo(({ y, x }: Props) => {
   const healCooldown = useSelector(selectMainUserSpecialCooldown);
 
   const onClick = useCallback(() => {
@@ -44,5 +41,5 @@ export const ButtonHeal = memo(({
       />
       <Text filters={[PURPLE_OUTLINE_FILTER]} x={x + 80} y={y} text={text} style={PIXEL_FONT} />
     </>
-  )
+  );
 });

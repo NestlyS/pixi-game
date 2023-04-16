@@ -9,7 +9,7 @@ import { selectSettingsMainBodyFocus } from '../../../redux/settings/selectors';
 
 export const ViewController = () => {
   const { globalViewport } = useGlobalViewport();
-  const isFocusedOnMainBody = useSelector(selectSettingsMainBodyFocus);
+  const isNotFocusedOnMainBody = useSelector(selectSettingsMainBodyFocus);
   const container = useContainer();
 
   const isFocused = useRef<boolean>(false);
@@ -29,20 +29,20 @@ export const ViewController = () => {
       return;
     }
 
-    if (isFocused.current && !isFocusedOnMainBody) {
+    if (isFocused.current && isNotFocusedOnMainBody) {
       globalViewport.plugins.pause('follow');
 
       isFocused.current = false;
     }
 
-    if (!isFocused.current && isFocusedOnMainBody) {
+    if (!isFocused.current && !isNotFocusedOnMainBody) {
       globalViewport.pivot = { x: 0, y: -WORLD_HEIGHT / 6.5 };
       globalViewport.snapZoom({ height: 500 });
       globalViewport.follow(container, { speed: 500 });
 
       isFocused.current = true;
     }
-  }, [globalViewport, isFocusedOnMainBody, app.stage, container]);
+  }, [globalViewport, isNotFocusedOnMainBody, app.stage, container]);
 
   return null;
 };

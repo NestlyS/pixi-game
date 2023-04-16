@@ -1,10 +1,11 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { TrashTypes } from '../../components/TrashStorage/typings';
+import { Directions } from '../../components/Bullet/controller';
 
 type MainUserState = {
   id: number | string | null;
   maxHp: number;
-  currentHp: number;
+  direction: Directions.Left | Directions.Right;
   specialCooldown: number;
   attackCooldown: number;
   trashCount: Record<TrashTypes, number>;
@@ -13,7 +14,7 @@ type MainUserState = {
 const initialState: MainUserState = {
   id: null,
   maxHp: 0,
-  currentHp: 0,
+  direction: Directions.Right,
   specialCooldown: 0,
   attackCooldown: 0,
   trashCount: {
@@ -42,8 +43,13 @@ const mainUserSlice = createSlice({
     setAttackCooldown: (state, action: PayloadAction<MainUserState['attackCooldown']>) => {
       state.attackCooldown = action.payload;
     },
+
+    setDirection: (state, action: PayloadAction<MainUserState['direction']>) => {
+      state.direction = action.payload;
+    },
   },
 });
 
 export const mainUserReducer = mainUserSlice.reducer;
-export const { setId, setMaxHp, setSpeciaCooldown, setAttackCooldown } = mainUserSlice.actions;
+export const { setId, setMaxHp, setSpeciaCooldown, setAttackCooldown, setDirection } =
+  mainUserSlice.actions;

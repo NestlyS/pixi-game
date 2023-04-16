@@ -1,15 +1,17 @@
 import uniqueId from 'lodash.uniqueid';
 import { useCallback, useMemo, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
+
 import { DAMAGABLE_BODY_GROUP } from '../../bodyGroups/damagable';
 import { BodyGroupMap } from '../../bodyGroups/typings';
 import { UNGRAVITY_BODY_GROUP } from '../../bodyGroups/ungravity';
 import { USER_BODY_GROUP } from '../../bodyGroups/user';
-import { Body } from '../Body';
 import { AnimatedSpriteController } from '../controllers/AnimatedSpriteController';
 import { isUserSensorLabel } from '../controllers/ConntectedSensorController/utils';
 import { SpriteController } from '../controllers/SpriteController';
-import { useHealth } from '../HealthStorage/context';
-import { getBodyId } from '../HealthStorage/utils';
+import { makeDamageToHealthEntity } from '../../redux/health';
+import { getBodyId } from '../../utils/getBodyId';
+import { Body } from '../Body';
 import { BulletController, Directions } from './controller';
 
 const getDirectionRotation = (direction: Directions): number => {
@@ -67,7 +69,7 @@ export const Bullet = ({
   damagingBodyGroup = USER_BODY_GROUP,
   onDelete,
 }: Props) => {
-  const { setHealth } = useHealth();
+  const dispatch = useDispatch();
   const bodyLabelRef = useRef(uniqueId('bullet'));
   const [innerDirection, setInnerDirection] = useState(direction);
   const [innerTTL, setInnerTTL] = useState(ttl);
@@ -98,10 +100,10 @@ export const Bullet = ({
       const collidedUser =
         userBodyPair.bodyA.label === bodyLabelRef.current ? userBodyPair.bodyB : userBodyPair.bodyA;
 
-      setHealth((value) => (value ? value - DAMAGE_VALUE : value), getBodyId(collidedUser));
+      dispatch(makeDamageToHealthEntity({ id: getBodyId(collidedUser), amount: DAMAGE_VALUE }));
       onDelete?.();
     },
-    [onDelete, setHealth],
+    [onDelete],
   );
 
   const setCurrentDistance = useCallback(

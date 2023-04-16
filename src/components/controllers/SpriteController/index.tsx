@@ -5,13 +5,13 @@ import { ContainerContextProvider, useMakeContainer } from '../ViewController/co
 import { ISpriteProps, Sprite } from '../../Sprite';
 
 type Props = {
-  children?: React.ReactElement | React.ReactElement[];
+  children?: React.ReactNode | boolean;
 };
 
 export const SpriteController = memo(({ children, ...props }: ISpriteProps & Props) => {
   const { x, y, rotation } = useBodyParams();
 
-  const pivot = props.width && props.height ? { x: 0.5, y: 0.5 } : undefined;
+  const pivot = props.width && props.height && !props.pivot ? { x: 0.5, y: 0.5 } : props.pivot;
 
   const { ref, value } = useMakeContainer<PIXI_Sprite>();
 

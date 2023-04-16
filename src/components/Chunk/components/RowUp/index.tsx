@@ -22,17 +22,13 @@ export const RowUp = memo(
   ({ spritesheetUrl, x, y, tileSize, tilesHeight, width = ROW_WIDTH }: ChunkProps) => {
     const halfWidth = width / 2;
 
-    const textureModifier = useCallback(
-      (indexX: number, indexY: number, length: number) => {
-        if (indexY === 0 && indexX <= length - 1) {
-          return MIDDLE_PART_NAME;
-        }
+    const textureModifier = useCallback((indexX: number, indexY: number, length: number) => {
+      if (indexY === 0 && indexX <= length - 1) {
+        return MIDDLE_PART_NAME;
+      }
 
-
-        return DIRT_MIDDLE_PART_NAME;
-      },
-      [],
-    );
+      return DIRT_MIDDLE_PART_NAME;
+    }, []);
 
     return (
       <>
@@ -83,7 +79,7 @@ export const RowUp = memo(
         <Row
           tilesCount={width}
           startX={x + tileSize / 2 + halfWidth * tileSize}
-          startY={y - (tileSize / 2) + (tileSize * tilesHeight) / 2}
+          startY={y - tileSize / 2 + (tileSize * tilesHeight) / 2}
           tileSize={tileSize}
           spritesheet={spritesheetUrl}
           getTexture={getTexture}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { MOBILE_SIZE, PIXEL_FONT } from '../../../constants';
 import { Text, Container, useApp } from '@pixi/react';
-import { spritesheetUrl } from '../../Canvas';
+import { spritesheetUrl } from '../../../pages/game';
 import { HeartBar } from '../HeartBar';
 import { TrashCounter } from '../TrashCounter';
 import { Menu } from './components/Menu';

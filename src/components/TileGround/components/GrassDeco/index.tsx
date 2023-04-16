@@ -47,7 +47,15 @@ const Layers: Layer[] = [
     startIndex: 0,
     endIndex: 0,
     cooldown: 0,
-    sprites: [GRASS_DECORATION_7, GRASS_DECORATION_6, GRASS_DECORATION_5, GRASS_DECORATION_4, GRASS_DECORATION_3, GRASS_DECORATION_2, GRASS_DECORATION_1],
+    sprites: [
+      GRASS_DECORATION_7,
+      GRASS_DECORATION_6,
+      GRASS_DECORATION_5,
+      GRASS_DECORATION_4,
+      GRASS_DECORATION_3,
+      GRASS_DECORATION_2,
+      GRASS_DECORATION_1,
+    ],
     percentages: [95, 90, 90, 90, 80, 70, 60, 50, 35, 10, 5, 2],
   },
 ];
@@ -59,7 +67,11 @@ type SpriteParams = {
   key: string;
 };
 
-type ReducerAccType = { percentages: Layer['percentages']; sprites: SpriteParams[]; lastAdditionAgo: number };
+type ReducerAccType = {
+  percentages: Layer['percentages'];
+  sprites: SpriteParams[];
+  lastAdditionAgo: number;
+};
 
 const getLayer = (layer: Layer, width: number, step: number, y: number) =>
   new Array(width / step).fill(0).reduce(
@@ -103,17 +115,17 @@ const getLayer = (layer: Layer, width: number, step: number, y: number) =>
 const getTexuresInLayers = (width: number, y: number, step = 5): SpriteParams[][] =>
   Layers.map((item) => getLayer(item, width, step, y));
 
+const getGrassFloorLevel = (width: number, y: number, step = 3): SpriteParams[] =>
+  new Array(width / step).fill(0).map((_, index) => {
+    const rand = getRandomValue(0, MAX_PERCENT);
 
-const getGrassFloorLevel = (width: number, y: number, step = 3): SpriteParams[] => new Array(width / step).fill(0).map((_, index) => {
-  const rand = getRandomValue(0, MAX_PERCENT);
-
-  return ({
-    x: index * step,
-    y,
-    textureUrl: rand > MAX_PERCENT / 2 ? GRASS_FLOOR : GRASS_FLOOR_2,
-    key: `${index}`,
-  })
-});
+    return {
+      x: index * step,
+      y,
+      textureUrl: rand > MAX_PERCENT / 2 ? GRASS_FLOOR : GRASS_FLOOR_2,
+      key: `${index}`,
+    };
+  });
 
 type Props = {
   x: number;
@@ -137,7 +149,10 @@ const scale = { x: 4, y: 4 };
  * 3. Слой низкой травы и цветов
  */
 export const GrassDeco = memo(({ x, y, width, step, spritesheetUrl }: Props) => {
-  const textures = useMemo(() => [...getTexuresInLayers(width, y, step), getGrassFloorLevel(width, y, step)], [step, width, y]);
+  const textures = useMemo(
+    () => [...getTexuresInLayers(width, y, step), getGrassFloorLevel(width, y, step)],
+    [step, width, y],
+  );
 
   return (
     <>

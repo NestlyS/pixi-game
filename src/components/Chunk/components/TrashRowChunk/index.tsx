@@ -11,16 +11,13 @@ export const ROW_WIDTH = 8;
 
 export const TrashRowChunk = memo(
   ({ spritesheetUrl, x, y, tileSize, tilesHeight, width = ROW_WIDTH }: ChunkProps) => {
-    const textureModifier = useCallback(
-      (indexX: number, indexY: number, length: number) => {
-        if (indexY === 0 && indexX <= length - 1) {
-          return MIDDLE_PART_NAME;
-        }
+    const textureModifier = useCallback((indexX: number, indexY: number, length: number) => {
+      if (indexY === 0 && indexX <= length - 1) {
+        return MIDDLE_PART_NAME;
+      }
 
-        return DIRT_MIDDLE_PART_NAME;
-      },
-      [],
-    );
+      return DIRT_MIDDLE_PART_NAME;
+    }, []);
 
     return (
       <>
