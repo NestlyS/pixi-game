@@ -11,11 +11,11 @@ import { Assets } from '@pixi/assets';
 import React, { forwardRef, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { AnimationContextProvider, AnimationState } from './context';
-import { selectSettingsPauseState } from '../../redux/settings/selectors';
+import { selectPageGamePauseState } from '../../redux/gamePage/selectors';
 
 export type IAnimatedSprite = {
   spritesheet: string;
-  children?: React.ReactElement | React.ReactElement[];
+  children?: React.ReactNode;
   x?: number;
   y?: number;
   anchor?: IPointData;
@@ -63,7 +63,7 @@ export const AnimatedSprite = memo(
       const [isLooped, setIsLooped] = useState<boolean>(true);
       const [filters, setFilters] = useState<Filter[]>([]);
       const app = useApp();
-      const isPaused = useSelector(selectSettingsPauseState);
+      const isPaused = useSelector(selectPageGamePauseState);
 
       // load
       useEffect(() => {

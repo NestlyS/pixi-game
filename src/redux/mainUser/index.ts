@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { TrashTypes } from '../../components/TrashStorage/typings';
+import { TrashTypes } from './typings';
 import { Directions } from '../../components/Bullet/controller';
 
 type MainUserState = {
@@ -9,6 +9,7 @@ type MainUserState = {
   specialCooldown: number;
   attackCooldown: number;
   trashCount: Record<TrashTypes, number>;
+  isStopped: boolean;
 };
 
 const initialState: MainUserState = {
@@ -22,6 +23,7 @@ const initialState: MainUserState = {
     bottle: 0,
     chips: 0,
   },
+  isStopped: false,
 };
 
 const mainUserSlice = createSlice({
@@ -47,9 +49,37 @@ const mainUserSlice = createSlice({
     setDirection: (state, action: PayloadAction<MainUserState['direction']>) => {
       state.direction = action.payload;
     },
+
+    incTrash: (state, action: PayloadAction<TrashTypes>) => {
+      state.trashCount[action.payload] += 1;
+    },
+
+    resetTrash: (state) => {
+      state.trashCount = Object.keys(state.trashCount).reduce((acc, key) => {
+        acc[key as TrashTypes] = 0;
+        return acc;
+      }, {} as Record<TrashTypes, number>);
+    },
+
+    stopPlayer: (state) => {
+      state.isStopped = true;
+    },
+
+    releasePlayer: (state) => {
+      state.isStopped = false;
+    },
   },
 });
 
 export const mainUserReducer = mainUserSlice.reducer;
-export const { setId, setMaxHp, setSpeciaCooldown, setAttackCooldown, setDirection } =
-  mainUserSlice.actions;
+export const {
+  setId,
+  setMaxHp,
+  setSpeciaCooldown,
+  setAttackCooldown,
+  setDirection,
+  incTrash,
+  resetTrash,
+  stopPlayer,
+  releasePlayer,
+} = mainUserSlice.actions;

@@ -8,16 +8,19 @@ import { Game } from './pages/game';
 import { World } from './components/World';
 import { Settings } from './components/ui/Settings';
 import { ReduxStage } from './components/ReduxStage';
-import { selectAppControllerPage } from './redux/appController/selectors';
-import { NORMAL_NOVEL_FONT, Pages } from './constants';
+import {
+  selectAppControllerHeight,
+  selectAppControllerPage,
+  selectAppControllerWidth,
+} from './redux/appController/selectors';
+import { DEFAULT_WORLD_HEIGHT, DEFAULT_WORLD_WIDTH, NORMAL_NOVEL_FONT, Pages } from './constants';
 import { Novel } from './pages/novel';
 
 import './App.css';
-import { setPage } from './redux/appController';
+import { setPage, setResolution } from './redux/appController';
+import { isNovelReaded } from './redux/novelPage/utils';
 
 const manifestUrl = 'assets-manifest.json';
-export let WORLD_WIDTH = 1600;
-export let WORLD_HEIGHT = 900;
 
 const getPage = (page: Pages) => {
   switch (page) {
@@ -32,6 +35,8 @@ const App = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [root, setRoot] = useState<HTMLElement | null>(null);
   const page = useSelector(selectAppControllerPage);
+  const width = useSelector(selectAppControllerWidth);
+  const height = useSelector(selectAppControllerHeight);
 
   const dispatch = useDispatch();
 
@@ -45,15 +50,18 @@ const App = () => {
       });
 
       await Assets.init({ manifest: manifestUrl });
+      await Assets.loadBundle('main');
       setIsLoaded(true);
     };
 
     cb();
 
     const root = document.querySelector('#root') as HTMLElement;
-    const scaleWidth = root.clientWidth < WORLD_WIDTH ? root.clientWidth / WORLD_WIDTH : 1;
-    WORLD_WIDTH = root.clientWidth;
-    WORLD_HEIGHT = WORLD_HEIGHT * scaleWidth;
+    const scaleWidth =
+      root.clientWidth < DEFAULT_WORLD_WIDTH ? root.clientWidth / DEFAULT_WORLD_WIDTH : 1;
+    dispatch(setResolution({ width: root.clientWidth, height: scaleWidth * DEFAULT_WORLD_HEIGHT }));
+
+    if (isNovelReaded()) dispatch(setPage(Pages.game));
 
     setRoot(root);
   }, []);
@@ -67,8 +75,8 @@ const App = () => {
   return (
     <div className="App">
       <ReduxStage
-        width={WORLD_WIDTH}
-        height={WORLD_HEIGHT}
+        width={width}
+        height={height}
         options={{ backgroundColor: 0xffffff, antialias: false }}
       >
         <Settings>

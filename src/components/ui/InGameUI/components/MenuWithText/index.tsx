@@ -1,19 +1,21 @@
 import React, { useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useScreenWidth } from '../../../../../utils/useScreenWidth';
 import { DisplayWindow } from '../../../DisplayWindow';
 import { MENU_BUTTON_NAME, UI_SPRITESHEET } from '../../../UI';
 import { SignalList, emitSignal } from '../../../../../utils/signaller/emitSignal';
 import {
+  revertAutorunState,
   revertCollisions,
   revertFPSCounter,
   revertFocusOnMainBody,
 } from '../../../../../redux/settings';
-import { useDispatch, useSelector } from 'react-redux';
-import { __IS_DEV__ } from '../../../../../constants';
 import {
+  selectSettingsAutorunState,
   selectSettingsCollisionsVisiblity,
   selectSettingsMainBodyFocus,
 } from '../../../../../redux/settings/selectors';
+import { __IS_DEV__ } from '../../../../../constants';
 
 const MENU_NAME = 'menu.png';
 
@@ -25,6 +27,7 @@ export const MenuWithText = ({ onExit }: Props) => {
   const screenWidth = useScreenWidth();
   const isFocusedOnMainBody = useSelector(selectSettingsMainBodyFocus);
   const isCollisionVisible = useSelector(selectSettingsCollisionsVisiblity);
+  const isAutorunEnabled = useSelector(selectSettingsAutorunState);
   const dispatch = useDispatch();
 
   const buttons = useMemo(() => {
@@ -44,6 +47,10 @@ export const MenuWithText = ({ onExit }: Props) => {
         text: 'Cчeтчик ФПС',
         onClick: () => dispatch(revertFPSCounter()),
       },
+      {
+        text: isAutorunEnabled ? 'Автобег включен' : 'Автобег выключен',
+        onClick: () => dispatch(revertAutorunState()),
+      },
       ...(__IS_DEV__
         ? [
             {
@@ -57,7 +64,7 @@ export const MenuWithText = ({ onExit }: Props) => {
           ]
         : []),
     ];
-  }, [isCollisionVisible, isFocusedOnMainBody]);
+  }, [onExit, isAutorunEnabled, isFocusedOnMainBody, isCollisionVisible, dispatch]);
 
   return (
     <DisplayWindow

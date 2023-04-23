@@ -19,6 +19,7 @@ export const MainUserController = ({ maxHealth }: Props) => {
   useEffect(() => {
     console.log('MAX HEALTH');
     dispatch(setMaxHp(maxHealth));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return null;

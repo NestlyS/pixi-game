@@ -5,12 +5,12 @@ type InitialState = {
   isNotFocusedOnMainBody?: boolean;
   isCollisionVisible?: boolean;
   isFPSCounterVisible: boolean;
-  isPaused: boolean;
+  isAutorunEnabled: boolean;
 };
 
 export const initialState: InitialState = {
-  isPaused: false,
   isFPSCounterVisible: true,
+  isAutorunEnabled: !__IS_DEV__,
   ...(__IS_DEV__ ? { isCollisionVisible: true, isNotFocusedOnMainBody: false } : {}),
 };
 
@@ -18,18 +18,6 @@ const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
-    revertPlay: (state) => {
-      state.isPaused = !state.isPaused;
-    },
-
-    setPause: (state) => {
-      state.isPaused = true;
-    },
-
-    setPlay: (state) => {
-      state.isPaused = false;
-    },
-
     revertCollisions: (state) => {
       if (!__IS_DEV__) return;
       state.isCollisionVisible = !state.isCollisionVisible;
@@ -65,6 +53,18 @@ const settingsSlice = createSlice({
       state.isFPSCounterVisible = !state.isFPSCounterVisible;
     },
 
+    setAutorunEnabled: (state) => {
+      state.isAutorunEnabled = true;
+    },
+
+    setAutorunDisabled: (state) => {
+      state.isAutorunEnabled = false;
+    },
+
+    revertAutorunState: (state) => {
+      state.isAutorunEnabled = !state.isAutorunEnabled;
+    },
+
     showFPSCounter: (state) => {
       if (!__IS_DEV__) return;
       state.isFPSCounterVisible = true;
@@ -79,9 +79,6 @@ const settingsSlice = createSlice({
 
 export const settingsReducer = settingsSlice.reducer;
 export const {
-  setPause,
-  setPlay,
-  revertPlay,
   showCollisions,
   hideCollisions,
   revertCollisions,
@@ -91,4 +88,7 @@ export const {
   setFocusOnMainBody,
   unsetFocusOnMainBody,
   revertFocusOnMainBody,
+  setAutorunEnabled,
+  setAutorunDisabled,
+  revertAutorunState,
 } = settingsSlice.actions;

@@ -8,6 +8,9 @@ import { isUserLabel } from '../controllers/ConntectedSensorController/utils';
 import { AnimationList, useAnimationController } from '../controllers/AnimationController/context';
 import { makeHealToHealthEntity } from '../../redux/health';
 import { getBodyId } from '../../utils/getBodyId';
+import { playSound } from '../../utils/soundPlayer';
+
+const HEAL_SOUND = 'evaHealSnd';
 
 export const HealerTouchController = () => {
   const { body } = useBody();
@@ -24,9 +27,10 @@ export const HealerTouchController = () => {
         dispatch(makeHealToHealthEntity({ amount: 1, id: getBodyId(secondBody) }));
         setHealed(true);
         requestAnimation({ name: AnimationList.Heal });
+        playSound(HEAL_SOUND);
       }
     },
-    [body, requestAnimation],
+    [body.id, dispatch, requestAnimation],
   );
 
   if (isHealed) return null;

@@ -1,41 +1,40 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import { _ReactPixi, Text } from '@pixi/react';
 import { useControlKey } from '../../../utils/useControlKey';
 import { SKIP_KEY_CODE } from '../../../constants';
 
-const textChars = (text: string) => text.split('').concat([...Array(10)].map(() => ''));
-
 type Props = {
   text: string;
+  restText: string;
   interval: number;
+  onNextChar: () => void;
+  onSkip: () => void;
 } & _ReactPixi.IText;
 
-export const LazyText = ({ text, interval = 0, ...textProps }: Props) => {
-  const [state, setState] = useState('');
-  const restTextRef = useRef(textChars(text));
-
+export const LazyText = ({
+  text,
+  restText,
+  interval = 0,
+  onNextChar,
+  onSkip,
+  ...textProps
+}: Props) => {
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout | null = null;
+
     const update = () => {
-      if (restTextRef.current.length === 0) return;
-      setState((text) => text + restTextRef.current.shift());
-      setTimeout(update, interval);
+      if (!restText.length) return;
+      onNextChar();
+      timeoutId = setTimeout(update, interval);
     };
 
-    const i = setTimeout(update, interval);
-    return () => clearTimeout(i);
-  }, [interval, text]);
+    timeoutId = setTimeout(update, interval);
+    return () => {
+      timeoutId && clearTimeout(timeoutId);
+    };
+  }, [interval, restText]);
 
-  const cb = useCallback(() => {
-    if (restTextRef.current.length === 0) return;
+  useControlKey(SKIP_KEY_CODE, onSkip);
 
-    setState((text) => {
-      const newText = text + restTextRef.current.join('');
-      restTextRef.current = [];
-      return newText;
-    });
-  }, []);
-
-  useControlKey(SKIP_KEY_CODE, cb);
-
-  return <Text text={state} {...textProps} />;
+  return <Text text={text} {...textProps} />;
 };

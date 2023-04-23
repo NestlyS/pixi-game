@@ -20,7 +20,7 @@ const test = '/monsters/monster.json';
 const animationMap = {
   [AnimationList.Idle]: { name: 'stand', speed: 0.07, loop: true, priority: 1 },
   [AnimationList.Run]: { name: 'run', speed: 0.07, loop: true, priority: 2 },
-  [AnimationList.Attack]: { name: 'attack', speed: 0.17, loop: false, priority: 3 },
+  [AnimationList.Attack]: { name: 'attack', speed: 0.15, loop: false, priority: 3 },
   [AnimationList.Hurt]: { name: 'hurt', speed: 0.03, loop: false, priority: 4 },
   [AnimationList.Die]: { name: 'die', speed: DEATH_SPEED, loop: true, priority: 5 },
   [AnimationList.Fall]: null,
@@ -53,7 +53,7 @@ export const Monster = ({ x, y, onDeath }: Props) => {
         bodyGroup={[DAMAGABLE_BODY_GROUP, DAMAGING_BODY_GROUP]}
       >
         <GroundTouchController>
-          <HealthController initialHealth={MONSTER_HEALTH} />
+          <HealthController initialHealth={MONSTER_HEALTH} maxHealth={MONSTER_HEALTH} />
           <DeathListener />
           <AnimatedSpriteController
             width={190}

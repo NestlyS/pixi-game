@@ -1,11 +1,16 @@
 import React from 'react';
+import { Text, Container } from '@pixi/react';
+import { useSelector } from 'react-redux';
+
 import { MOBILE_SIZE, PIXEL_FONT } from '../../../constants';
-import { Text, Container, useApp } from '@pixi/react';
 import { spritesheetUrl } from '../../../pages/game';
 import { HeartBar } from '../HeartBar';
 import { TrashCounter } from '../TrashCounter';
 import { Menu } from './components/Menu';
 import { Controls } from '../Controls';
+import { DistanceShower } from './components/DistanceShower';
+
+import { selectAppControllerWidth } from '../../../redux/appController/selectors';
 
 const TEXTURE_URL = 'heart.png';
 const DARK_TEXTURE_URL = 'heart-empty.png';
@@ -15,8 +20,7 @@ const HEART_HEIGHT = 55;
 const TRASH_SIZE = 50;
 
 export const InGameUI = () => {
-  const app = useApp();
-  const { width } = app.screen;
+  const width = useSelector(selectAppControllerWidth);
   const heartWidth = width <= MOBILE_SIZE ? HEART_WIDTH / 1.7 : HEART_WIDTH;
   const heartHeight = width <= MOBILE_SIZE ? HEART_HEIGHT / 1.7 : HEART_HEIGHT;
   const trashSize = width <= MOBILE_SIZE ? TRASH_SIZE / 1.7 : TRASH_SIZE;
@@ -43,6 +47,7 @@ export const InGameUI = () => {
         spritesheetUrl={spritesheetUrl}
         pad={10}
       />
+      <DistanceShower x={width - 150} y={30} />
       <Menu />
       <Controls />
     </Container>

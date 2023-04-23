@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import {
   BOTTLE_TEXTURE,
@@ -8,10 +8,9 @@ import {
   PIXEL_FONT_WHITE,
   PIXEL_FONT_YELLOW,
 } from '../../../constants';
-import { useTrash } from '../../TrashStorage/context';
-import { TrashTypes } from '../../TrashStorage/typings';
-import { selectMainUserId } from '../../../redux/mainUser/selectors';
+import { selectMainUserId, selectMainUserTrash } from '../../../redux/mainUser/selectors';
 import { TrashCount } from './TrashCount';
+import { TrashTypes } from '../../../redux/mainUser/typings';
 
 const TEXTURE_URLS = [BOTTLE_TEXTURE, CHIPS_TEXTURE, PAPER_TEXTURE];
 const TRASH_TYPES: TrashTypes[] = ['bottle', 'chips', 'paper'];
@@ -27,41 +26,8 @@ type Props = {
 };
 
 export const TrashCounter = ({ x, y, width, height, pad, spritesheetUrl }: Props) => {
-  const { onChange, clearOnChange, get } = useTrash();
+  const trash = useSelector(selectMainUserTrash);
   const id = useSelector(selectMainUserId);
-  const [counters, setCounters] = useState(
-    TRASH_TYPES.reduce((acc, type) => {
-      acc[type] = 0;
-      return acc;
-    }, {} as Record<TrashTypes, number>),
-  );
-
-  useEffect(() => {
-    if (!id) return;
-
-    setCounters(
-      TRASH_TYPES.reduce((acc, type) => {
-        acc[type] = get(id, type) ?? 0;
-        return acc;
-      }, {} as Record<TrashTypes, number>),
-    );
-  }, [get, id]);
-
-  useEffect(() => {
-    if (!id) return;
-
-    const cb = (type: TrashTypes, value: number) => {
-      setCounters((_counters) => {
-        const newCounters = { ..._counters };
-        newCounters[type] = value;
-        return newCounters;
-      });
-    };
-
-    TRASH_TYPES.forEach((type) => onChange(id, type, cb));
-
-    return () => TRASH_TYPES.forEach((type) => clearOnChange(id, type, cb));
-  }, [clearOnChange, id, onChange]);
 
   if (!id) return null;
 
@@ -77,7 +43,7 @@ export const TrashCounter = ({ x, y, width, height, pad, spritesheetUrl }: Props
           spritesheetUrl={spritesheetUrl}
           textureUrl={textureUrl}
           fontStyle={FONTS[index]}
-          count={counters[TRASH_TYPES[index]]}
+          count={trash[TRASH_TYPES[index]]}
         />
       ))}
     </>

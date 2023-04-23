@@ -1,10 +1,17 @@
-import React, { useCallback, useMemo } from 'react';
-import { Container, Text, useApp } from '@pixi/react';
+import React, { useCallback } from 'react';
+import { Container, Text } from '@pixi/react';
 import { PIXEL_FONT, PIXEL_FONT_RED, PIXEL_FONT_YELLOW } from '../../../constants';
 import { ButtonWithText } from '../ButtonWithText';
 import { SignalList, emitSignal } from '../../../utils/signaller/emitSignal';
 import { TrashCounter } from '../TrashCounter';
 import { spritesheetUrl as _spritesheetUrl } from '../../../pages/game';
+import { useSelector } from 'react-redux';
+import {
+  selectAppControllerHeight,
+  selectAppControllerWidth,
+} from '../../../redux/appController/selectors';
+import { selectMainUserTrash, selectMainUserTrashSum } from '../../../redux/mainUser/selectors';
+import { addCollectedTrash } from '../../../redux/gamePage/utils';
 
 type Props = {
   spritesheetUrl: string;
@@ -12,17 +19,17 @@ type Props = {
 };
 
 export const GameOverScreen = ({ spritesheetUrl, menuButtonName }: Props) => {
-  const app = useApp();
-  const width = useMemo(() => {
-    return app.screen.width;
-  }, [app.screen.width]);
-  const height = useMemo(() => {
-    return app.screen.height;
-  }, [app.screen.height]);
+  const width = useSelector(selectAppControllerWidth);
+  const height = useSelector(selectAppControllerHeight);
+  const trashSum = useSelector(selectMainUserTrashSum);
+  const trash = useSelector(selectMainUserTrash);
+  console.log(trash);
 
   const onClick = useCallback(() => {
+    console.log(trashSum);
+    addCollectedTrash(trashSum);
     emitSignal(SignalList.Reset);
-  }, []);
+  }, [trashSum]);
 
   return (
     <Container>

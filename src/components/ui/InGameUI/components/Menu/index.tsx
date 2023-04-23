@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setPause, setPlay } from '../../../../../redux/settings';
 import { MenuWithText } from '../MenuWithText';
 import { MenuButton } from '../MenuButton';
+import { setPause, setPlay } from '../../../../../redux/gamePage';
 
 export const Menu = () => {
   const [isVisible, setVisible] = useState(false);
@@ -14,7 +14,7 @@ export const Menu = () => {
       if (state) dispatch(setPlay());
       return !state;
     });
-  }, [setPause]);
+  }, [dispatch]);
 
   useEffect(() => {
     const cb = (event: KeyboardEvent) => {

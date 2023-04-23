@@ -3,14 +3,17 @@ import React, { useCallback, useRef, useState } from 'react';
 import { USER_BODY_GROUP } from '../../../bodyGroups/user';
 import { Body } from '../../Body';
 import { AnimatedSpriteController } from '../../controllers/AnimatedSpriteController';
-import { useTrash } from '../../TrashStorage/context';
-import { TrashTypes } from '../../TrashStorage/typings';
 import { TrashBodyController } from './controller';
 import { WHITE_OUTLINE_FILTER } from '../../../constants';
+import { playSound } from '../../../utils/soundPlayer';
+import { useDispatch } from 'react-redux';
+import { TrashTypes } from '../../../redux/mainUser/typings';
+import { incTrash } from '../../../redux/mainUser';
 
 const TRASH_WIDTH = 40;
 const TRASH_HEIGHT = 40;
 const ANIMATION_AMPLITUDE = 5;
+const COLLECT_SOUND = 'trashPickUpSnd';
 
 const TRASH_PARAMS: Matter.IChamferableBodyDefinition = {
   isSensor: true,
@@ -29,11 +32,10 @@ type Props = {
 export const Trash = ({ x, y, animationName, spritesheetUrl, type, onDelete }: Props) => {
   const trashLabelRef = useRef(uniqueId('trash'));
   const [isTouched, setTouch] = useState(false);
-  const { set } = useTrash();
+  const dispatch = useDispatch();
 
   const onCollision = useCallback(
     (e: Matter.IEventCollision<Matter.Engine>) => {
-      console.log('COLLIDED PAIR', [...e.pairs]);
       if (isTouched) return;
 
       const collidedPair = e.pairs.find((pair) =>
@@ -44,16 +46,11 @@ export const Trash = ({ x, y, animationName, spritesheetUrl, type, onDelete }: P
 
       if (!collidedPair) return;
 
-      const collidedUser =
-        collidedPair.bodyA.label === trashLabelRef.current
-          ? collidedPair.bodyB
-          : collidedPair.bodyA;
-
-      console.log('TRASHING', collidedUser);
-      set(collidedUser.label, type, (prev) => prev + 1);
+      dispatch(incTrash(type));
       setTouch(true);
+      playSound(COLLECT_SOUND);
     },
-    [isTouched, set, type],
+    [dispatch, isTouched, type],
   );
 
   return (

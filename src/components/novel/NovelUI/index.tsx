@@ -1,59 +1,106 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import { Text } from '@pixi/react';
 
-import { NovelCharacter } from '../NovelElement';
+import { NovelCharacter } from '../NovelCharacter';
 import { useScreenWidth } from '../../../utils/useScreenWidth';
 import { useScreenHeight } from '../../../utils/useScreenHeight';
 import { Sprite } from '../../Sprite';
 import { NovelTextBlock } from '../NovelTextBlock';
-import { NORMAL_NOVEL_FONT } from '../../../constants';
-
-type DialogElement<T = string> = {
-  active: T;
-  state: string;
-  text: string;
-};
-
-export type ScriptType<T = string> = {
-  leftPerson: T;
-  rightPerson: T;
-  background: string;
-  dialog: DialogElement<T>[];
-};
+import { NORMAL_NOVEL_FONT, Pages, SKIP_KEY_CODE } from '../../../constants';
+import { ScriptType } from '../../../redux/novelPage/typings';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  selectNovelControllerActive,
+  selectNovelControllerDialogPage,
+  selectNovelControllerPage,
+  selectNovelControllerRestText,
+  selectNovelControllerState,
+  selectNovelControllerText,
+} from '../../../redux/novelPage/selectors';
+import { goToTheNextDialog, goToTheNextNovelPage, initDialog } from '../../../redux/novelPage';
+import { setPage } from '../../../redux/appController';
+import { setNovelReaded } from '../../../redux/novelPage/utils';
 
 type Props = {
   spritesheet: string;
-  script: ScriptType;
+  script: ScriptType[];
+};
+
+const CODE_TO_NAME_MAP = {
+  mary: 'Мери',
+  eva: 'Ева',
 };
 
 const EVA_IDLE = 'eva_smile';
 const MERI_IDLE = 'mary_idle';
 const BACKGROUND_SPRITESHEET_URL = './sprites/backround.json';
-const BACKGROUND_TEXTURE = 'backgroung2.png';
 
 const SKIP_TEXTURE = 'Пропустить';
 const JOKE_TEXT =
-  'ВЫ БЫЛИ ВЗЛОМАНЫ. СОГЛАСНО ЗАКОНУ 228 УК РФ ВЫ ОБЯЗАНЫ ОТКРЫТЬ ДВЕРЬ И ЖДАТЬ ПРИХОДА СОТРУДНИКОВ ИЛИ ЖЕ НЕОБХОДИМО ПЕРЕЙТИ ПО ССЫЛКЕ ЧТОБЫ СТАНЦЕВАТЬ ДЖИГУ';
+  'ВЫ ПОЛУЧИЛИ ДОСТУП К СЕКРЕТНОЙ ИНФОРМАЦИИ ФОНДА. СОГЛАСНО ЗАКОНУ [ДАННЫЕ УДАЛЕНЫ] ВЫ ОБЯЗАНЫ ОТКРЫТЬ ДВЕРЬ И ЖДАТЬ ПРИХОДА СОТРУДНИКОВ МОГ-68 ДЛЯ ДАЛЬНЕЙШЕЙ ОБРАБОТКИ АМНЕЗИАКАМИ';
 
 export const NovelUI = React.memo(({ spritesheet, script }: Props) => {
   const width = useScreenWidth();
   const height = useScreenHeight();
-  const [phase] = useState(0);
+  const page = useSelector(selectNovelControllerPage);
+  const dialogPage = useSelector(selectNovelControllerDialogPage);
+  const text = useSelector(selectNovelControllerText);
+  const restText = useSelector(selectNovelControllerRestText);
+  const active = useSelector(selectNovelControllerActive);
+  const state = useSelector(selectNovelControllerState);
+  const dispatch = useDispatch();
 
-  console.log(script);
+  const restTextRef = useRef(restText);
+  restTextRef.current = restText;
+
+  const pageRef = useRef(page);
+  pageRef.current = page;
 
   const onSkip = useCallback(() => alert(new Array(20).fill(JOKE_TEXT).join('')), []);
 
-  const firstCharTexture =
-    script.dialog[phase].active === 'eva'
-      ? `${script.leftPerson}_${script.dialog[phase].state}`
-      : EVA_IDLE;
-  const secondCharTexture =
-    script.dialog[phase].active === 'mary'
-      ? `${script.rightPerson}_${script.dialog[phase].state}`
-      : MERI_IDLE;
-  const text = script.dialog[phase].text;
-  const name = script.dialog[phase].active === 'eva' ? 'Ева' : 'Мери';
+  const leftPerson = script[dialogPage].leftPerson;
+  const rightPerson = script[dialogPage].rightPerson;
+  const background = script[dialogPage].background;
+
+  const isLeftActive = leftPerson === active;
+  const isRightActive = rightPerson === active;
+
+  const firstCharTexture = isLeftActive ? `${leftPerson}_${state}` : EVA_IDLE;
+  const secondCharTexture = isRightActive ? `${rightPerson}_${state}` : MERI_IDLE;
+  const name = Object.keys(CODE_TO_NAME_MAP).includes(active)
+    ? CODE_TO_NAME_MAP[active as keyof typeof CODE_TO_NAME_MAP]
+    : '';
+
+  useEffect(() => {
+    const cb = (event: KeyboardEvent) => {
+      if (event.code !== SKIP_KEY_CODE) return;
+      if (restTextRef.current.length) return;
+
+      if (
+        script[dialogPage].dialog.length - 1 === pageRef.current &&
+        script.length - 1 === dialogPage
+      ) {
+        dispatch(setPage(Pages.game));
+        setNovelReaded();
+        return;
+      }
+
+      if (script[dialogPage].dialog.length - 1 === pageRef.current) {
+        dispatch(goToTheNextDialog());
+        return;
+      }
+
+      dispatch(goToTheNextNovelPage());
+    };
+
+    window.addEventListener('keydown', cb);
+
+    return () => window.removeEventListener('keydown', cb);
+  }, [script, dialogPage, dispatch]);
+
+  useLayoutEffect(() => {
+    dispatch(initDialog());
+  }, [page, dialogPage, dispatch]);
 
   return (
     <>
@@ -63,24 +110,30 @@ export const NovelUI = React.memo(({ spritesheet, script }: Props) => {
         height={height}
         width={width}
         spritesheet={BACKGROUND_SPRITESHEET_URL}
-        textureUrl={BACKGROUND_TEXTURE}
+        textureUrl={background}
         zIndex={0}
         pixelised
       />
-      <NovelCharacter
-        spritesheet={spritesheet}
-        textureName={firstCharTexture}
-        x={-(width / 5)}
-        y={0}
-      />
-      <NovelCharacter
-        reverted
-        spritesheet={spritesheet}
-        textureName={secondCharTexture}
-        x={width * 1.4}
-        y={0}
-      />
-      <NovelTextBlock x={width / 4} y={height / 1.5} name={name} text={text} />
+      {leftPerson && (
+        <NovelCharacter
+          spritesheet={spritesheet}
+          textureName={firstCharTexture}
+          x={-(width / 5)}
+          y={0}
+          isActive={isLeftActive}
+        />
+      )}
+      {rightPerson && (
+        <NovelCharacter
+          reverted
+          spritesheet={spritesheet}
+          textureName={secondCharTexture}
+          x={width * 1.4}
+          y={0}
+          isActive={isRightActive}
+        />
+      )}
+      <NovelTextBlock x={width / 4} y={height / 1.5} name={name} text={text} restText={restText} />
       <Text
         x={(width * 16) / 20}
         y={(height * 19) / 20}

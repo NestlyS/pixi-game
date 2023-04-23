@@ -4,10 +4,12 @@ import { useGlobalViewportShaking } from '../GlobalViewport/hooks';
 import { getRandowmTrashComponents } from '../trashes/utils';
 import { Monster, Props as MonsterProps } from '.';
 import { ONE_CIRCLE_IN_RAD } from '../../constants';
+import { playSound } from '../../utils/soundPlayer';
 
 const TRASH_AMOUNT = 3;
 const SHIFT_MULTIPLIER = 50;
 const TRASH_ANIMATION_STEP = 0.2;
+const DEATH_SOUND = 'monsterDeathSnd';
 
 export const MonsterWithTrash = ({ x, y }: MonsterProps) => {
   const [isKilled, setKilled] = useState(false);
@@ -21,6 +23,7 @@ export const MonsterWithTrash = ({ x, y }: MonsterProps) => {
     (body?: Body) => {
       if (body) trashPositionRef.current = body.position;
 
+      playSound(DEATH_SOUND);
       setKilled(true);
       shakeViewport();
       const cb = () =>

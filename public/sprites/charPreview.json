@@ -1,0 +1,39 @@
+{
+  "frames": {
+    "eva_idle.png": {
+      "frame": {
+        "x": 1,
+        "y": 1,
+        "w": 76,
+        "h": 116
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 38,
+        "y": 18,
+        "w": 76,
+        "h": 116
+      },
+      "sourceSize": {
+        "w": 150,
+        "h": 150
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  },
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.7",
+    "image": "charPreview.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 78,
+      "h": 118
+    },
+    "scale": 1
+  }
+}

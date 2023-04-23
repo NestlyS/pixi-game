@@ -4,7 +4,7 @@ import { useTick } from '@pixi/react';
 import { Body, Engine, Events, Render } from 'matter-js';
 import { EngineContext } from '../../utils/useEngine';
 import { UNGRAVITY_BODY_GROUP } from '../../bodyGroups/ungravity';
-import { selectSettingsPauseState } from '../../redux/settings/selectors';
+import { selectPageGamePauseState } from '../../redux/gamePage/selectors';
 
 type Props = {
   children: React.ReactElement | React.ReactElement[];
@@ -12,7 +12,7 @@ type Props = {
 
 export const World: React.FC<Props> = ({ children }) => {
   const [engine] = useState(() => Engine.create());
-  const isPaused = useSelector(selectSettingsPauseState);
+  const isPaused = useSelector(selectPageGamePauseState);
   console.log('PAUSED', isPaused);
   useTick((delta) => {
     if (!isPaused) Engine.update(engine, delta * (1000 / 60));

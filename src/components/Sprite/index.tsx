@@ -15,6 +15,7 @@ export type ISpriteProps = {
   onClick?: () => void;
   onHover?: () => void;
   onHoverOut?: () => void;
+  onHoverOutOutside?: () => void;
 } & (
   | {
       textureUrl: string;

@@ -8,6 +8,13 @@ export const selectMainUserMaxHp = (state: IAppState) => selectMainUser(state).m
 
 export const selectMainUserDirection = (state: IAppState) => selectMainUser(state).direction;
 
+export const selectMainUserStoppedState = (state: IAppState) => selectMainUser(state).isStopped;
+
+export const selectMainUserTrash = (state: IAppState) => selectMainUser(state).trashCount;
+
+export const selectMainUserTrashSum = (state: IAppState) =>
+  Object.values(selectMainUserTrash(state)).reduce((acc, item) => acc + item, 0);
+
 export const selectMainUserSpecialCooldown = (state: IAppState) =>
   selectMainUser(state).specialCooldown;
 

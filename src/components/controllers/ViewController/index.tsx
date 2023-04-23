@@ -1,14 +1,20 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useApp } from '@pixi/react';
 import { useSelector } from 'react-redux';
+
 import { useGlobalViewport } from '../../GlobalViewport/context';
 import { useContainer } from './context';
-import { WORLD_HEIGHT } from '../../../App';
 import { useCatchSignal, SignalList } from '../../../utils/signaller/emitSignal';
 import { selectSettingsMainBodyFocus } from '../../../redux/settings/selectors';
+import {
+  selectAppControllerHeight,
+  selectAppControllerWidthScale,
+} from '../../../redux/appController/selectors';
 
 export const ViewController = () => {
   const { globalViewport } = useGlobalViewport();
+  const height = useSelector(selectAppControllerHeight);
+  const scaleWidth = useSelector(selectAppControllerWidthScale);
   const isNotFocusedOnMainBody = useSelector(selectSettingsMainBodyFocus);
   const container = useContainer();
 
@@ -36,13 +42,13 @@ export const ViewController = () => {
     }
 
     if (!isFocused.current && !isNotFocusedOnMainBody) {
-      globalViewport.pivot = { x: 0, y: -WORLD_HEIGHT / 6.5 };
+      globalViewport.pivot = { x: scaleWidth * 200, y: -height / 8 };
       globalViewport.snapZoom({ height: 500 });
       globalViewport.follow(container, { speed: 500 });
 
       isFocused.current = true;
     }
-  }, [globalViewport, isNotFocusedOnMainBody, app.stage, container]);
+  }, [globalViewport, isNotFocusedOnMainBody, app.stage, container, scaleWidth, height]);
 
   return null;
 };

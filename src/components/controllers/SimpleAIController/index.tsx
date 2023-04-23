@@ -12,6 +12,9 @@ import { Directions } from '../../Bullet/controller';
 import { AnimationList, useAnimationController } from '../AnimationController/context';
 import { ConnectedSensorController } from '../ConntectedSensorController';
 import { useDeath } from '../DeathController/context';
+import { playSound } from '../../../utils/soundPlayer';
+import { useSelector } from 'react-redux';
+import { selectPageGameSpeedMultCalculated } from '../../../redux/gamePage/selectors';
 
 const COLLISION_SENSORS = [MONSTER_LABEL, AI_SENSOR_LABEL];
 const BULLET_WIDTH = 40;
@@ -19,8 +22,11 @@ const BULLET_HEIGHT = 40;
 const BULLET_SPEED = 7;
 const BULLET_TTL = 1000;
 const ATTACK_COOLDOWN = 2500;
+const ATTACK_TIMEOUT_AFTER_ANIMATION_START = 300;
 
 const DEATH_BOOST = 11;
+const ATTACK_BOOST = 6;
+const ATTACK_SOUND = 'monsterAttackSnd';
 
 type BulletProps = {
   id: number | string;
@@ -39,22 +45,23 @@ type Props = {
 export const SimpleAIController = ({ children, spritesheetUrl, animationName }: Props) => {
   const { body, onCollision, clearCollision } = useBody();
   const { requestAnimation, releaseAnimation } = useAnimationController();
+  const deathBoost = useSelector(selectPageGameSpeedMultCalculated(DEATH_BOOST));
   const isDead = useDeath();
 
   const isAttackRef = useRef(false);
   const [bullets, setBullets] = useState<BulletProps[]>([]);
   const isCooldownRef = useRef<null | (() => void)>(null);
   const direction = useRef<1 | -1>(1);
-  const distanseRef = useRef(0);
+  const distanceRef = useRef(0);
   const deltaRef = useRef(0);
   const isRunning = useRef(false);
 
   useEffect(() => {
     if (isDead && body) {
-      applyForce(body, DEATH_BOOST, -DEATH_BOOST);
+      applyForce(body, deathBoost, -deathBoost / 2);
       requestAnimation({ name: AnimationList.Die });
     }
-  }, [body, isDead, requestAnimation]);
+  }, [body, isDead, deathBoost, requestAnimation]);
 
   useEffect(() => {
     if (!body || !onCollision || !clearCollision) return;
@@ -88,7 +95,7 @@ export const SimpleAIController = ({ children, spritesheetUrl, animationName }: 
 
     deltaRef.current = 0;
 
-    if (Math.abs(body.velocity.x) > EPS * 50 || distanseRef.current < 50) {
+    if (Math.abs(body.velocity.x) > EPS * 50 || distanceRef.current < 50) {
       applyForce(body, 3 * direction.current, body.velocity.y);
     }
 
@@ -115,23 +122,27 @@ export const SimpleAIController = ({ children, spritesheetUrl, animationName }: 
         return;
 
       const lastDirection = direction.current;
+      playSound(ATTACK_SOUND);
+      setTimeout(() => {
+        applyForce(body, ATTACK_BOOST, -ATTACK_BOOST / 2);
+
+        const id = uniqueId();
+        const cb = () => setBullets((bullets) => bullets.filter((bullet) => bullet.id !== id));
+        const bullet = {
+          id,
+          x: body.position.x,
+          y: (body.bounds.min.y + body.position.y) / 2,
+          direction: lastDirection < 0 ? Directions.Left : Directions.Right,
+          cb,
+        };
+        setBullets((bullets) => [...bullets, bullet]);
+      }, ATTACK_TIMEOUT_AFTER_ANIMATION_START);
 
       requestAnimation({
         name: AnimationList.Attack,
         onFinish: () => {
-          releaseAnimation(AnimationList.Attack);
           isAttackRef.current = false;
-
-          const id = uniqueId();
-          const cb = () => setBullets((bullets) => bullets.filter((bullet) => bullet.id !== id));
-          const bullet = {
-            id,
-            x: body.position.x,
-            y: body.position.y,
-            direction: lastDirection < 0 ? Directions.Left : Directions.Right,
-            cb,
-          };
-          setBullets((bullets) => [...bullets, bullet]);
+          releaseAnimation(AnimationList.Attack);
         },
       });
 

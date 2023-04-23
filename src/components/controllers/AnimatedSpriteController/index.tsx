@@ -7,7 +7,7 @@ import { useTick } from '@pixi/react';
 import { EPS } from '../../../constants';
 
 type Props = {
-  children?: React.ReactElement | React.ReactElement[];
+  children?: React.ReactNode;
   ignoreRotation?: boolean;
 } & Omit<Omit<IAnimatedSprite, 'x'>, 'y'>;
 

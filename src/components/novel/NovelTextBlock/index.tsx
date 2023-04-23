@@ -1,22 +1,26 @@
 import { Container, Graphics, Text } from '@pixi/react';
 import { ColorGradientFilter } from 'pixi-filters';
-import { Graphics as PIXI_Graphics, TextStyle } from 'pixi.js';
-import React, { useCallback, useMemo } from 'react';
+import { Graphics as PIXI_Graphics } from 'pixi.js';
+import React, { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import {
-  BIG_NOVEL_FONT,
-  MAIN_FONT_NAME,
-  SHADOW_FILTER,
-  UI_OUTLINE_COLOR,
-  UI_OUTLINE_FILTER,
-} from '../../../constants';
-import { useScreenWidth } from '../../../utils/useScreenWidth';
-import { useScreenHeight } from '../../../utils/useScreenHeight';
+import { BIG_NOVEL_FONT, COLORS, SHADOW_FILTER, UI_OUTLINE_FILTER } from '../../../constants';
 import { LazyText } from '../LazyText';
+import {
+  selectAppControllerHeightScale,
+  selectAppControllerWidthScale,
+} from '../../../redux/appController/selectors';
+import { moveOneCharFromRestToVisibleText, skipAllRestText } from '../../../redux/novelPage';
+import { useFont } from '../../../utils/useFont';
 
 const BLOCK_RADIUS = 25;
 const PRIMARY_COLOR = 0xffe0bc;
 const SECONDARY_COLOR = 0xffc4b3;
+
+const NOVEL_INTERVAL = 50;
+
+const BLOCK_WIDTH = 800;
+const BLOCK_HEIGHT = 250;
 
 const TEXT_PADDING = 30;
 
@@ -35,13 +39,16 @@ type Props = {
   y: number;
   name: string;
   text: string;
+  restText: string;
 };
 
-export const NovelTextBlock = React.memo(({ x, y, name, text }: Props) => {
-  const width = useScreenWidth();
-  const height = useScreenHeight();
-  const calculatedWidth = width / 2;
-  const calculatedHeight = height / 3.5;
+export const NovelTextBlock = React.memo(({ x, y, name, text, restText }: Props) => {
+  const widthScale = useSelector(selectAppControllerWidthScale);
+  const heightScale = useSelector(selectAppControllerHeightScale);
+  const dispatch = useDispatch();
+
+  const calculatedWidth = BLOCK_WIDTH / widthScale;
+  const calculatedHeight = BLOCK_HEIGHT / heightScale;
 
   const mainBlockDraw = useCallback(
     (draw: PIXI_Graphics) =>
@@ -50,23 +57,24 @@ export const NovelTextBlock = React.memo(({ x, y, name, text }: Props) => {
         .beginFill(PRIMARY_COLOR, 1)
         .drawRoundedRect(0, 0, calculatedWidth, calculatedHeight, BLOCK_RADIUS)
         .endFill(),
-    [x, y, calculatedHeight, calculatedWidth],
+    [calculatedWidth, calculatedHeight],
   );
 
-  const NOVEL_FONT = useMemo(
-    () =>
-      new TextStyle({
-        fontFamily: MAIN_FONT_NAME,
-        align: 'left',
-        fill: [UI_OUTLINE_COLOR],
-        stroke: '#ffffff',
-        strokeThickness: 5,
-        letterSpacing: 5,
-        wordWrap: true,
-        wordWrapWidth: calculatedWidth - TEXT_PADDING,
-        fontSize: 17,
-      }),
-    [],
+  const NOVEL_FONT = useFont({
+    fill: [COLORS.UIOutline],
+    stroke: COLORS.White,
+    align: 'left',
+    strokeThickness: 5 / widthScale,
+    letterSpacing: 5,
+    wordWrap: true,
+    wordWrapWidth: calculatedWidth - TEXT_PADDING,
+    fontSize: 22 / widthScale,
+  });
+
+  const onNextChar = useCallback(() => dispatch(moveOneCharFromRestToVisibleText()), [dispatch]);
+  const onSkip = useCallback(
+    () => restText.length && dispatch(skipAllRestText()),
+    [dispatch, restText.length],
   );
 
   return (
@@ -76,7 +84,16 @@ export const NovelTextBlock = React.memo(({ x, y, name, text }: Props) => {
         filters={[COLOR_GRADIENT_FILTER, UI_OUTLINE_FILTER, SHADOW_FILTER]}
       />
       <Text x={-30} y={-30} text={name} style={BIG_NOVEL_FONT} />
-      <LazyText interval={100} x={TEXT_PADDING} y={20} text={text} style={NOVEL_FONT} />
+      <LazyText
+        interval={NOVEL_INTERVAL}
+        x={TEXT_PADDING}
+        y={20}
+        text={text}
+        restText={restText}
+        onNextChar={onNextChar}
+        onSkip={onSkip}
+        style={NOVEL_FONT}
+      />
     </Container>
   );
 });

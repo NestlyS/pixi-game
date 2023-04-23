@@ -1,0 +1,16 @@
+{
+  "bundles": {
+    "game-screen": {
+      "evaAttackSnd": "sounds/eva_attack.wav",
+      "evaDeathSnd": "sounds/eva_death.wav",
+      "evaHealSnd": "sounds/eva_heal.wav",
+      "evaJumpSnd": "sounds/eva_jump.wav",
+      "evaHurtSnd": "sounds/eva_hurt.wav",
+      "evaSlidingSnd": "sounds/eva_sliding.wav",
+      "monsterAttackSnd": "sounds/monster_attack.wav",
+      "monsterDeathSnd": "sounds/monster_death.wav",
+      "trashPickUpSnd": "sounds/pickup_trash.wav",
+      "game": "sounds/game.mp3"
+    }
+  }
+}

@@ -1,26 +1,31 @@
 import uniqueId from 'lodash.uniqueid';
 import { useRef } from 'react';
+import { useSelector } from 'react-redux';
+
 import { Body } from '../Body';
 import { AnimatedSpriteController } from '../controllers/AnimatedSpriteController';
 import { AnimationController } from '../controllers/AnimationController';
 import { AnimationList } from '../controllers/AnimationController/context';
 import { DamageTouchController } from '../controllers/DamageTouchController';
 import { GroundTouchController } from '../controllers/GroundTouchController';
-import { JumpController } from '../controllers/JumpController';
-import { MoveController } from '../controllers/MoveController';
-import { HealthController } from '../controllers/HealthController';
+import { JumpController } from '../controllers/mainUserControllers/JumpController';
+import { MoveController } from '../controllers/mainUserControllers/MoveController';
 import { ViewController } from '../controllers/ViewController';
-import { SlideController } from '../controllers/SlideController';
-import { AttackController } from '../controllers/AttackController';
+import { SlideController } from '../controllers/mainUserControllers/SlideController';
+import { AttackController } from '../controllers/mainUserControllers/AttackController';
 import { USER_BODY_GROUP } from '../../bodyGroups/user';
 import { MainUserController } from '../MainUserStorage/controller';
 import { BLACK_OUTLINE_FILTER, SHADOW_FILTER, USER_LABEL } from '../../constants';
 import { FallController } from '../controllers/FallController';
-import { ResetUserController } from '../controllers/ResetUserController';
+import { ResetUserController } from '../controllers/mainUserControllers/ResetUserController';
 import { DeathListener } from '../controllers/DeathController/listener';
-import { MainUserDeathWrapper } from '../controllers/MainUserDeathWrapper';
-import { HealController } from '../controllers/HealController';
-import { MainUserSpriteDirectionController } from '../controllers/MainUserSpriteDirectionController';
+import { MainUserDeathWrapper } from '../controllers/mainUserControllers/MainUserDeathWrapper';
+import { HealController } from '../controllers/mainUserControllers/HealController';
+import { MainUserSpriteDirectionController } from '../controllers/mainUserControllers/MainUserSpriteDirectionController';
+import { selectSettingsAutorunState } from '../../redux/settings/selectors';
+import { AutomoveController } from '../controllers/mainUserControllers/AutomoveController';
+import { MainUserHealthController } from '../controllers/mainUserControllers/MainUserHealthController';
+import { selectPageGameInitedState } from '../../redux/gamePage/selectors';
 
 const test = '/eva/eva.json';
 const animationMap = {
@@ -55,6 +60,8 @@ type Props = {
 
 export const ControllableBody = ({ x, y }: Props) => {
   const userLabelRef = useRef(uniqueId(USER_LABEL));
+  const isAutorunEnabled = useSelector(selectSettingsAutorunState);
+  const isInited = useSelector(selectPageGameInitedState);
 
   return (
     <Body
@@ -78,26 +85,30 @@ export const ControllableBody = ({ x, y }: Props) => {
           zIndex={100}
           filters={[SHADOW_FILTER]}
         >
+          <ViewController />
           <AnimationController animationParams={animationMap}>
-            <MainUserSpriteDirectionController />
-            <MainUserDeathWrapper>
-              <MoveController />
-              <JumpController />
-              <FallController />
-              <HealController cooldown={HEAL_COOLDOWN_VALUE} />
-              <HealthController
-                initialHealth={MAX_HEALTH}
-                maxHealth={MAX_HEALTH}
-                cooldown={INVICIBILITY_PERIOD}
-              />
-              <DeathListener />
-              <ResetUserController x={x} y={y} />
-              <AttackController width={70} height={100} cooldown={USER_COOLDOWN}>
-                <ViewController />
-                <DamageTouchController />
-                <SlideController />
-              </AttackController>
-            </MainUserDeathWrapper>
+            {isInited && (
+              <>
+                <MainUserSpriteDirectionController />
+                <MainUserDeathWrapper>
+                  {isAutorunEnabled ? <AutomoveController /> : <MoveController />}
+                  <JumpController />
+                  <FallController />
+                  <HealController cooldown={HEAL_COOLDOWN_VALUE} />
+                  <MainUserHealthController
+                    initialHealth={MAX_HEALTH}
+                    maxHealth={MAX_HEALTH}
+                    cooldown={INVICIBILITY_PERIOD}
+                  />
+                  <DeathListener />
+                  <ResetUserController x={x} y={y} />
+                  <AttackController width={70} height={100} cooldown={USER_COOLDOWN}>
+                    <DamageTouchController />
+                    <SlideController />
+                  </AttackController>
+                </MainUserDeathWrapper>
+              </>
+            )}
           </AnimationController>
         </AnimatedSpriteController>
       </GroundTouchController>

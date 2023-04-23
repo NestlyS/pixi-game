@@ -32,8 +32,6 @@ export const HeartBar = ({
 
   if (currentHealth === null || currentHealth === undefined) return null;
 
-  console.log(maxHp, currentHealth, maxHp - currentHealth);
-
   return (
     <Container zIndex={10}>
       {new Array(maxHp)

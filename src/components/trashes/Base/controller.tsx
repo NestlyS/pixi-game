@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Body, Vector } from 'matter-js';
 import { useRef } from 'react';
 import { useBody } from '../../Body/context';
-import { selectSettingsPauseState } from '../../../redux/settings/selectors';
+import { selectPageGamePauseState } from '../../../redux/gamePage/selectors';
 
 type Props = {
   amplitude: number;
@@ -17,7 +17,7 @@ export const TrashBodyController = ({ amplitude, isTouched, onDelete }: Props) =
   const directionRef = useRef<-1 | 1 | -10>(1);
   const bodyAmplitudeRef = useRef<number>(0);
   const deltaRef = useRef(0);
-  const isPaused = useSelector(selectSettingsPauseState);
+  const isPaused = useSelector(selectPageGamePauseState);
 
   useTick((delta) => {
     if (!body) return;

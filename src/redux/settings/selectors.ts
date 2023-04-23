@@ -8,7 +8,8 @@ export const selectSettingsFPSCounterVisiblity = (state: IAppState) =>
 export const selectSettingsCollisionsVisiblity = (state: IAppState) =>
   selectSettings(state).isCollisionVisible;
 
+export const selectSettingsAutorunState = (state: IAppState) =>
+  selectSettings(state).isAutorunEnabled;
+
 export const selectSettingsMainBodyFocus = (state: IAppState) =>
   selectSettings(state).isNotFocusedOnMainBody;
-
-export const selectSettingsPauseState = (state: IAppState) => selectSettings(state).isPaused;
