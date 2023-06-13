@@ -113,7 +113,7 @@ export const TutorialStartPlatform = ({ y, rightEdgeX }: Props) => {
           zIndex={5}
         />
         <ControllableBody
-          x={200} //rightEdgeX - ROWS_WIDTH * TILE_SIZE - ROWS_WIDTH * TILE_SIZE * 4}
+          x={rightEdgeX - ROWS_WIDTH * TILE_SIZE - ROWS_WIDTH * TILE_SIZE * 4}
           y={y - 200}
         />
       </Container>
