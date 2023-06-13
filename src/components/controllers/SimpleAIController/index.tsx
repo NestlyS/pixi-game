@@ -58,8 +58,6 @@ export const SimpleAIController = ({
   const deathBoost = useSelector(selectPageGameSpeedMultCalculated(DEATH_BOOST));
   const isDead = useDeath();
 
-  console.log(body, body.position.x, body.position.y, { ...body.force }, body.speed);
-
   const isAttackRef = useRef(false);
   const [bullets, setBullets] = useState<BulletProps[]>([]);
   const isCooldownRef = useRef<null | (() => void)>(null);
@@ -133,8 +131,6 @@ export const SimpleAIController = ({
       const lastDirection = direction.current;
       playSound(Sounds.MonsterAttack);
       setTimeout(() => {
-        applyForce(body, ATTACK_BOOST, -ATTACK_BOOST / 2);
-
         const id = uniqueId();
         const cb = () => setBullets((bullets) => bullets.filter((bullet) => bullet.id !== id));
         const bullet = {

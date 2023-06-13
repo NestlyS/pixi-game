@@ -13,7 +13,7 @@ import {
   selectPageGameCurrentPage,
   selectPageGameIsMilenMet,
 } from '../../redux/gamePage/selectors';
-import { initMilenMet } from '../../redux/gamePage/utils';
+import { initMilenMet, syncGameFromLS } from '../../redux/gamePage/utils';
 import { Pages } from '../../redux/gamePage/typings';
 import { setGamePage, setNovel, setPause } from '../../redux/gamePage';
 import { Dialogs } from '../../redux/novelPage/typings';
@@ -31,8 +31,9 @@ export const HealerTouchController = () => {
       cb.current();
       cb.current = null;
       initMilenMet();
+      syncGameFromLS(dispatch);
     }
-  }, [page]);
+  }, [dispatch, page]);
 
   const onTouch = useCallback(
     (e: CleanEventType) => {

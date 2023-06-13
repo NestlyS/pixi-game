@@ -12,7 +12,7 @@ import { releasePlayer, setSpeciaCooldown, stopPlayer } from '../../../../redux/
 import { makeHealToHealthEntity } from '../../../../redux/health';
 import { useBody } from '../../../Body/context';
 import { getBodyId } from '../../../../utils/getBodyId';
-import { SoundTypes, Sounds, playSound } from '../../../../utils/soundController';
+import { Sounds, playSound } from '../../../../utils/soundController';
 import { resetSpeedMult } from '../../../../redux/gamePage';
 
 type Props = {
@@ -36,10 +36,7 @@ export const HealController = ({ cooldown }: Props) => {
     if (isHurted || healCooldown || !isTouching.current) return;
     requestAnimation({
       name: AnimationList.Heal,
-      // isLoop показывает, была ли прервана анимация другой анимацией
-      onFinish: (name, isLoop) => {
-        console.log('HEAL', name, isLoop);
-
+      onFinish: () => {
         releaseAnimation(AnimationList.Heal);
         dispatch(releasePlayer());
       },
@@ -47,7 +44,7 @@ export const HealController = ({ cooldown }: Props) => {
     dispatch(setSpeciaCooldown(cooldown));
     dispatch(resetSpeedMult());
     dispatch(stopPlayer());
-    playSound(Sounds.Heal, SoundTypes.Sound);
+    playSound(Sounds.Heal);
     setTimeout(() => dispatch(setSpeciaCooldown(0)), cooldown);
     dispatch(makeHealToHealthEntity({ id: getBodyId(body), amount: 1 }));
   }, [body, cooldown, dispatch, healCooldown, isHurted, releaseAnimation, requestAnimation]);

@@ -112,8 +112,6 @@ export const initSoundBundle = (bundleName: string) => {
 
   const newSoundMap = Object.entries(screenSoundBundle).reduce(
     (acc, [key, obj]) => {
-      console.log(Sounds, key, key in Sounds);
-
       if (!isSoundNameIsInSoundsEnum(key)) {
         throw Error(`${key} звука не существует`);
       }
@@ -158,8 +156,6 @@ export const initSoundBundle = (bundleName: string) => {
 };
 
 export const syncSoundSettings = (isMusicOn: boolean, isSoundOn: boolean) => {
-  const prevMusicState = soundEnabledMap[SoundTypes.Music];
   soundEnabledMap[SoundTypes.Music] = isMusicOn;
-  console.log('SYNC', prevMusicState);
   soundEnabledMap[SoundTypes.Sound] = isSoundOn;
 };

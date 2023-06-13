@@ -27,7 +27,6 @@ export const Button = ({
   const [isHovered, setHover] = useState(false);
 
   const _onHover = useCallback(() => {
-    console.log('HOVER');
     onHover?.();
     setHover(true);
   }, [onHover]);

@@ -8,13 +8,11 @@ export const useCooldown = (cooldown: number) => {
     if (!isCooldown) return;
 
     const id = setTimeout(() => {
-      console.log('HELLO?');
       setCooldown(false);
       isCooldownRef.current = false;
     }, cooldown);
     return () => {
       clearTimeout(id);
-      console.log('WTF HELLO?');
     };
   }, [cooldown, isCooldown]);
 
@@ -22,7 +20,6 @@ export const useCooldown = (cooldown: number) => {
   const startCooldown = useCallback(() => {
     setCooldown(true);
     isCooldownRef.current = true;
-    console.log('FUCK??');
   }, []);
 
   return { isCooldown: isCooldownRef.current, onCooldownEnd, startCooldown };

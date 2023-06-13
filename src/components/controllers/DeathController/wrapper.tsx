@@ -23,7 +23,6 @@ export const DeathWrapper = ({ cooldown = 0, onDeath, children }: Props) => {
 
     callbacksRef.current.forEach((cb) => cb());
     const deadCallback = () => {
-      console.log('KILL ENDED', cooldown);
       setVisibility(false);
       onDeath?.(isDeadBody);
     };
@@ -32,7 +31,6 @@ export const DeathWrapper = ({ cooldown = 0, onDeath, children }: Props) => {
   }, [cooldown, isDeadBody, onDeath]);
 
   const kill = useCallback<KillDispatcher>((body) => {
-    console.log('KILL INITIED', callbacksRef.current);
     setDeadBody(body);
   }, []);
 

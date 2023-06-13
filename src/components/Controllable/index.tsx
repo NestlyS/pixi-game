@@ -48,7 +48,6 @@ const animationMap = {
     speed: 0.1,
     loop: false,
     priority: 9,
-    filters: [Filters.BLACK_OUTLINE_FILTER],
   },
 };
 

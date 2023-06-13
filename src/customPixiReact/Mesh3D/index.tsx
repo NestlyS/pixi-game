@@ -17,7 +17,6 @@ type Props = {
 
 export const Sphere = PixiComponent('Mesh3D', {
   create: ({ material, geometry }: Props) => {
-    console.log('created', 'Sphere');
     return getMeshInstance(MESH_TYPE.Sphere, geometry, material);
   },
   applyProps: (instance, oldProps, newProps) => {
@@ -38,7 +37,6 @@ export const Sphere = PixiComponent('Mesh3D', {
 
 export const Cube = PixiComponent('Cube', {
   create: ({ material, geometry }: Props) => {
-    console.log('created', 'Cube');
     return getMeshInstance(MESH_TYPE.Cube, geometry, material);
   },
   applyProps: (instance, oldProps, newProps) => {

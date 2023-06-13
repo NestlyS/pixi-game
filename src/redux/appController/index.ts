@@ -44,13 +44,6 @@ const appControllerSlice = createSlice({
 
       state.scale = windowHeightScale > windowWidthScale ? windowWidthScale : windowHeightScale;
 
-      console.log(
-        window.innerHeight,
-        window.innerHeight / windowHeightScale,
-        window.innerWidth,
-        windowHeightScale,
-      );
-
       state.width = DEFAULT_WORLD_WIDTH * state.scale;
       state.height = DEFAULT_WORLD_HEIGHT * state.scale;
     },

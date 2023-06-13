@@ -26,7 +26,6 @@ export const getSavedSettings = () => {
 };
 
 export const getPageToShowAfterNovel = () => {
-  console.log('isReaded', getIsNovelReaded());
   if (!getIsNovelReaded()) {
     return Pages.novel;
   }

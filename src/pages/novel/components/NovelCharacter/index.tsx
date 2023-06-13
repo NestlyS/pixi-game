@@ -18,7 +18,7 @@ const NAME_TO_FACE_COORDS_MAP: Record<CharNames, { x: number; y: number }> = {
     y: 0.165,
   },
   [CharNames.Gnida]: {
-    x: 0.025,
+    x: 0.024,
     y: 0.07,
   },
   [CharNames.Mary]: {

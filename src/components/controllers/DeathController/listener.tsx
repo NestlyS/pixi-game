@@ -11,7 +11,6 @@ export const DeathListener = () => {
   const currentHealth = useSelector(selectHealthValueById(getBodyId(body)));
 
   useEffect(() => {
-    console.log('HEALTH', currentHealth);
     if (currentHealth !== null && currentHealth <= 0) {
       kill(body);
     }

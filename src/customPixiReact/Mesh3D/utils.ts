@@ -43,7 +43,6 @@ export const updateMeshProps = ({
   rotationY: number;
   rotationZ: number;
 }) => {
-  console.log(instance);
   instance.position.set(x, y, z);
   instance.rotationQuaternion.setEulerAngles(rotationX, rotationY, rotationZ);
 

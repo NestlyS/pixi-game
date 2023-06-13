@@ -27,15 +27,6 @@ export const Grass = ({
     [isSingleGrass, textureModifier],
   );
 
-  console.log(
-    props.x,
-    props.y,
-    props.tileSize,
-    props.tilesWidth,
-    props.tileSize * props.tilesWidth,
-    props.tileSize * props.tilesWidth + props.x,
-  );
-
   return (
     <>
       <TileGround {...props} getTexture={getTexture} />

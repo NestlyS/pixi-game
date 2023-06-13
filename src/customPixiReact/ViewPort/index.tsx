@@ -30,7 +30,6 @@ const PixiComponentViewport = PixiComponent('Viewport', {
         viewport[plugin]({});
         return;
       }
-      console.log(plugin);
 
       viewport[plugin]();
     });

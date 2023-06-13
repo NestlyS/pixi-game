@@ -30,12 +30,10 @@ export const ScreenTransitionWithTextUI = ({
   const [animationCompleted, setAnimationCompleteState] = useState(!isActive);
 
   if (isActive === true && animationCompleted === true) {
-    console.log('COCK');
     setAnimationCompleteState(false);
   }
 
   const onTextClick = useCallback(() => {
-    console.log('CLICK 1');
     onNextPage();
   }, [onNextPage]);
 

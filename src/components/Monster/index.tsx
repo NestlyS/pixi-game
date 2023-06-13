@@ -44,7 +44,6 @@ export type Props = {
 
 export const Monster = ({ x, y, onDeath, isMovingDisabled, isShootingDisabled }: Props) => {
   const monsterLabelRef = useRef(uniqueId(MONSTER_LABEL));
-  console.log('monster', x, y);
 
   return (
     <DeathWrapper cooldown={DEATH_TIME} onDeath={onDeath}>

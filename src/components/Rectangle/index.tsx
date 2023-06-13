@@ -24,7 +24,6 @@ export const Rectangle = memo(
 
     const draw = useCallback(
       (g: PIXI_Grapics) => {
-        console.log('draw');
         g.clear();
         g.lineStyle(lineWidth, color);
         g.drawRect(lineWidth, lineWidth, width - 2 * lineWidth, height - 2 * lineWidth);
@@ -41,6 +40,8 @@ export const Rectangle = memo(
             x={x}
             y={y}
             rotation={rotation}
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             geometry={originalRef.current}
             pivot={{ x: width / 2, y: height / 2 }}
           />

@@ -35,7 +35,6 @@ const novelPageSlice = createSlice({
 
     goToDialog(state, action: PayloadAction<Dialogs>) {
       if (!state.script) return;
-      console.log(action);
       state.currentDialog = action.payload;
       state.page = initialState.page;
 

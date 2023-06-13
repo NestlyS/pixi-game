@@ -15,7 +15,6 @@ import {
   selectAppControllerWidth,
 } from '../../../../../../redux/appController/selectors';
 import {
-  selectMainUserTrash,
   selectMainUserTrashSum,
 } from '../../../../../../redux/mainUser/selectors';
 import { addCollectedTrash } from '../../../../../../redux/gamePage/utils';
@@ -29,11 +28,8 @@ export const GameOverScreen = ({ spritesheetUrl, menuButtonName }: Props) => {
   const width = useSelector(selectAppControllerWidth);
   const height = useSelector(selectAppControllerHeight);
   const trashSum = useSelector(selectMainUserTrashSum);
-  const trash = useSelector(selectMainUserTrash);
-  console.log(trash);
 
   const onClick = useCallback(() => {
-    console.log(trashSum);
     addCollectedTrash(trashSum);
     emitSignal(SignalList.Reset);
   }, [trashSum]);
