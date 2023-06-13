@@ -11,7 +11,7 @@ import {
   selectAppControllerPage,
   selectAppControllerWidth,
 } from '../redux/appController/selectors';
-import { NORMAL_NOVEL_FONT, Pages } from '../constants';
+import { NORMAL_NOVEL_FONT, Pages, __IS_DEV__ } from '../constants';
 import { Novel } from '../pages/novel';
 import { setPage } from '../redux/appController';
 import { HintBox } from '../components/ui/HintBox';
@@ -49,14 +49,14 @@ export const PixiReact = React.memo(() => {
         <World>{getPage(page)}</World>
         <HintBox />
       </Settings>
-      <Text
+      {__IS_DEV__ && <Text
         text={page[0]}
         x={20}
         y={20}
         style={NORMAL_NOVEL_FONT}
         interactive
         onpointerdown={handlePageChange}
-      />
+      />}
     </ReduxStage>
   );
 });
