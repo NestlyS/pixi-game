@@ -5,8 +5,8 @@ import {
   BOTTLE_TEXTURE,
   CHIPS_TEXTURE,
   COLORS,
+  Filters,
   PAPER_TEXTURE,
-  WHITE_OUTLINE_FILTER,
 } from '../../../../../constants';
 import { useMemo } from 'react';
 import { getCollectedTrash } from '../../../../../redux/gamePage/utils';
@@ -19,13 +19,15 @@ type Props = {
   spritesheetUrl: string;
 };
 
+const filters = [Filters.SHADOW_FILTER, Filters.WHITE_OUTLINE_FILTER];
+
 const CENTER_ANCHOR = {
   x: 0.5,
   y: 0.5,
 };
 
 export const TrashPreview = ({ x, y, width, height, spritesheetUrl }: Props) => {
-  // Заменить на useSelector
+  // TODO Заменить на useSelector
   const value = useMemo(getCollectedTrash, []);
 
   const fontStyle = useFont({
@@ -47,7 +49,7 @@ export const TrashPreview = ({ x, y, width, height, spritesheetUrl }: Props) => 
         width={width}
         rotation={0.5}
         anchor={CENTER_ANCHOR}
-        filters={[WHITE_OUTLINE_FILTER]}
+        filters={filters}
       />
 
       <Sprite
@@ -60,7 +62,7 @@ export const TrashPreview = ({ x, y, width, height, spritesheetUrl }: Props) => 
         width={width}
         rotation={-0.5}
         anchor={CENTER_ANCHOR}
-        filters={[WHITE_OUTLINE_FILTER]}
+        filters={filters}
       />
 
       <Sprite
@@ -72,7 +74,7 @@ export const TrashPreview = ({ x, y, width, height, spritesheetUrl }: Props) => 
         height={height}
         width={width}
         anchor={CENTER_ANCHOR}
-        filters={[WHITE_OUTLINE_FILTER]}
+        filters={filters}
       />
 
       <Text x={width * 1.5} y={-height / 2} text={value ?? '0'} style={fontStyle} />

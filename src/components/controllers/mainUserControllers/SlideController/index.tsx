@@ -1,6 +1,7 @@
 import { Body } from 'matter-js';
 import { Container } from 'pixi.js';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { useControlKey } from '../../../../utils/useControlKey';
 import { useBody } from '../../../Body/context';
@@ -10,34 +11,17 @@ import { useAttackingAnimation } from '../AttackController/context';
 import { useGroundTouch } from '../../GroundTouchController/context';
 import { useContainer } from '../../ViewController/context';
 import { SLIDE_KEY_CODE, SLIDE_KEY_CODE_EXTRA } from '../../../../constants';
-import { playSound } from '../../../../utils/soundPlayer';
+import { SoundTypes, Sounds, playSound } from '../../../../utils/soundController';
+import { selectMainUserHurtedState } from '../../../../redux/mainUser/selectors';
+import { moveSpriteCenter, returnSpriteCenter } from './utils';
 
 export const SLIDING_FRICTION = 0.001;
-const SLIDE_SOUND = 'evaSlidingSnd';
 
-/**
- * Из-за того, что спрайт не может корректно определить свое расположение относительно пола,
- *  мы ему с этим помогаем, сдвигая на самую узкую часть объекта.
- * Когда требуется вернуться в обратное положение, мы сдвигаем объект опираясь на уже записанное значение о
- *  его положении. Это может помочь избежать ситуаций, когда спрайт уедет прочь после нескольких итераций сдвиганий
- * Мне вообще не нравится это решение, но пока что оно самое очевидное.
- */
-const { moveSpriteCenter, returnSpriteCenter } = (() => {
-  let prevValue = { x: 0, y: 0 };
+type Props = {
+  cooldown: number;
+};
 
-  return {
-    moveSpriteCenter: (container: Container, offset: number) => {
-      prevValue = { x: container.pivot.x, y: container.pivot.y };
-
-      container.pivot.set(prevValue.x, offset);
-    },
-    returnSpriteCenter: (container: Container) => {
-      container.pivot.set(prevValue.x, prevValue.y);
-    },
-  };
-})();
-
-export const SlideController = () => {
+export const SlideController = ({ cooldown }: Props) => {
   const { body } = useBody();
   const isAttack = useAttackingAnimation();
   const isGroundTouchedRef = useRef(false);
@@ -48,12 +32,27 @@ export const SlideController = () => {
   const { requestAnimation, releaseAnimation } = useAnimationController();
 
   const container = useContainer<Container>();
+  const isHurted = useSelector(selectMainUserHurtedState);
   useGroundTouch(onChange);
 
   const [isSliding, setSliding] = useState(false);
   const slidingRef = useRef(false);
 
-  const isUnsladed = isAttack;
+  const isUnsladed = isAttack || isHurted;
+
+  const unpressCb = useCallback(() => {
+    if (!body || !container?.children || !slidingRef.current) return;
+    slidingRef.current = false;
+    setSliding(false);
+    const bodyWidth = body.bounds.max.x - body.bounds.min.x;
+    const bodyNewY = body.bounds.max.y - bodyWidth / 2;
+
+    returnSpriteCenter(container);
+    Body.setAngle(body, 0);
+    Body.setPosition(body, { x: body.position.x, y: bodyNewY });
+    Body.setInertia(body, Infinity);
+    body.friction = BODY_FRICTION;
+  }, [body, container]);
 
   const SCb = useCallback(() => {
     if (
@@ -74,31 +73,18 @@ export const SlideController = () => {
     Body.setPosition(body, { x: body.position.x, y: bodyNewY });
     Body.setInertia(body, Infinity);
     body.friction = SLIDING_FRICTION;
-    playSound(SLIDE_SOUND);
+    playSound(Sounds.Slide, SoundTypes.Sound);
 
     setSliding(true);
-  }, [body, container, isUnsladed]);
+    setTimeout(() => unpressCb(), cooldown);
+  }, [body, container, cooldown, isUnsladed, unpressCb]);
 
-  const unpressCb = useCallback(() => {
-    if (!body || !container?.children || !slidingRef.current) return;
-    slidingRef.current = false;
-    setSliding(false);
-    const bodyWidth = body.bounds.max.x - body.bounds.min.x;
-    const bodyNewY = body.bounds.max.y - bodyWidth / 2;
-
-    returnSpriteCenter(container);
-    Body.setAngle(body, 0);
-    Body.setPosition(body, { x: body.position.x, y: bodyNewY });
-    Body.setInertia(body, Infinity);
-    body.friction = BODY_FRICTION;
-  }, [body, container]);
-
-  useControlKey(SLIDE_KEY_CODE, SCb, unpressCb);
-  useControlKey(SLIDE_KEY_CODE_EXTRA, SCb, unpressCb);
+  useControlKey(SLIDE_KEY_CODE, SCb);
+  useControlKey(SLIDE_KEY_CODE_EXTRA, SCb);
 
   useEffect(() => {
-    if (isUnsladed && slidingRef.current) unpressCb();
-  }, [isUnsladed, unpressCb]);
+    if ((isUnsladed || isHurted) && slidingRef.current) unpressCb();
+  }, [isHurted, isUnsladed, unpressCb]);
 
   useEffect(() => {
     if (isSliding) {

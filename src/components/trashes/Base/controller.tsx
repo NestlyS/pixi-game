@@ -4,6 +4,7 @@ import { Body, Vector } from 'matter-js';
 import { useRef } from 'react';
 import { useBody } from '../../Body/context';
 import { selectPageGamePauseState } from '../../../redux/gamePage/selectors';
+import { useSlowerTick } from '../../../utils/useSlowedTick';
 
 type Props = {
   amplitude: number;
@@ -11,22 +12,17 @@ type Props = {
   onDelete?: () => void;
 };
 
+const DELTA = 2;
+
 export const TrashBodyController = ({ amplitude, isTouched, onDelete }: Props) => {
   const { body } = useBody();
   const bodyStartPosRef = useRef<Vector | null>(null);
   const directionRef = useRef<-1 | 1 | -10>(1);
   const bodyAmplitudeRef = useRef<number>(0);
-  const deltaRef = useRef(0);
   const isPaused = useSelector(selectPageGamePauseState);
 
-  useTick((delta) => {
-    if (!body) return;
-
-    deltaRef.current += delta;
-
-    if (isPaused || (!isTouched && deltaRef.current < 3)) return;
-
-    deltaRef.current = 0;
+  useSlowerTick(() => {
+    if (!body || isPaused) return;
 
     if (bodyStartPosRef.current === null) bodyStartPosRef.current = { ...body.position };
 
@@ -42,7 +38,7 @@ export const TrashBodyController = ({ amplitude, isTouched, onDelete }: Props) =
     Body.setAngle(body, body.angle + 0.03 * directionRef.current);
 
     bodyAmplitudeRef.current += 1;
-  });
+  }, DELTA);
 
   return null;
 };

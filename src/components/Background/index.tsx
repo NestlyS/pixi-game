@@ -10,24 +10,20 @@ import {
   selectAppControllerHeight,
 } from '../../redux/appController/selectors';
 import { selectPageGamePauseState } from '../../redux/gamePage/selectors';
+import { useSlowerTick } from '../../utils/useSlowedTick';
 
 const DELTA = 5;
 
 export const Background = () => {
   const [x, setX] = useState(0);
-  const deltaRef = useRef(0);
   const isPaused = useSelector(selectPageGamePauseState);
   const width = useSelector(selectAppControllerWidth);
   const height = useSelector(selectAppControllerHeight);
   const viewport = useGlobalViewport();
   const prevX = useRef(0);
 
-  useTick((delta) => {
-    deltaRef.current += delta;
-
-    if (isPaused || deltaRef.current < DELTA || !viewport.globalViewport?.x) return;
-
-    deltaRef.current = 0;
+  useSlowerTick(() => {
+    if (isPaused || !viewport.globalViewport?.x) return;
 
     const raw = viewport.globalViewport.x - prevX.current;
 
@@ -39,7 +35,7 @@ export const Background = () => {
     if (x <= -width || x >= width) return setX(0);
 
     setX((state) => state + transition);
-  });
+  }, DELTA);
 
   return (
     <>

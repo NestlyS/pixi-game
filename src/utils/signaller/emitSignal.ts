@@ -5,6 +5,7 @@ export enum SignalList {
   GameOver = 'game-over',
   KeyDown = 'keydown',
   KeyUp = 'keyup',
+  lazyBoxSkip = 'lazyBoxSkip',
 }
 
 export const emitSignal = (signalName: SignalList) => {

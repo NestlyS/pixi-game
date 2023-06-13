@@ -5,6 +5,7 @@ import { AnimatedSprite, IAnimatedSprite } from '../../AnimatedSprite';
 import { ContainerContextProvider, useMakeContainer } from '../ViewController/context';
 import { useTick } from '@pixi/react';
 import { EPS } from '../../../constants';
+import { useMounted } from '../../../utils/useMounted';
 
 type Props = {
   children?: React.ReactNode;
@@ -15,6 +16,8 @@ export const AnimatedSpriteController = memo(({ children, ignoreRotation, ...pro
   const { x, y, rotation } = useBodyParams();
 
   const { body } = useBody();
+
+  const isMounted = useMounted();
 
   const pivot = props.width && props.height ? { x: 0.5, y: 0.55 } : undefined;
   const [scaleX, setScaleX] = useState<1 | -1>(1);
@@ -54,7 +57,7 @@ export const AnimatedSpriteController = memo(({ children, ignoreRotation, ...pro
       anchor={pivot}
       {...props}
     >
-      <ContainerContextProvider value={value}>{children}</ContainerContextProvider>
+      {isMounted && <ContainerContextProvider value={value}>{children}</ContainerContextProvider>}
     </AnimatedSprite>
   );
 });

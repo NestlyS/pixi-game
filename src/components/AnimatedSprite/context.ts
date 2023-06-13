@@ -1,9 +1,13 @@
 import { Filter } from 'pixi.js';
 import { createContext, useContext } from 'react';
+import { Filters } from '../../constants';
 
 export interface AnimationState<T = string> {
-  setAnimation: (props: { name: T; loop?: boolean; speed?: number; _filters?: Filter[] }) => void;
-  onComplete: (cb: (currentAnimationName: string | null) => void, once?: boolean) => void;
+  setAnimation: (props: { name: T; loop?: boolean; speed?: number; _filters?: Filters[] }) => void;
+  onComplete: (
+    cb: (currentAnimationName: string | null, isLoop: boolean) => void,
+    once?: boolean,
+  ) => void;
   clearOnComplete: (cb: (currentAnimationName: string | null) => void) => void;
   animations: T[];
 }

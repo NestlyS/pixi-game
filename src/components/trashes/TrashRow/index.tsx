@@ -11,9 +11,10 @@ type Props = {
   width: number;
   type: ExtendedTrashTypes;
   renderKey?: number | string | null;
+  isUncollectable?: boolean;
 };
 
-export const TrashRow = ({ width, type, x, y, tileSize, renderKey }: Props) => {
+export const TrashRow = ({ width, type, x, y, tileSize, renderKey, isUncollectable }: Props) => {
   const filler = useMemo<(typeof Chips | typeof Bottle | typeof Paper)[]>(
     () => getRandowmTrashComponents(width, type),
     [type, width],
@@ -22,7 +23,12 @@ export const TrashRow = ({ width, type, x, y, tileSize, renderKey }: Props) => {
   return (
     <>
       {filler.map((Component, _x) => (
-        <Component key={`${_x}_${renderKey}`} x={x + _x * tileSize} y={y} />
+        <Component
+          key={`${_x}_${renderKey}`}
+          x={x + _x * tileSize}
+          y={y}
+          isUncollectable={isUncollectable}
+        />
       ))}
     </>
   );

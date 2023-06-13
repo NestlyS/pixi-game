@@ -1,14 +1,12 @@
 import { memo, useCallback } from 'react';
 
 import { HealthController } from '../../HealthController';
-import { playSound } from '../../../../utils/soundPlayer';
+import { SoundTypes, Sounds, playSound } from '../../../../utils/soundController';
 import { useGlobalViewportShaking } from '../../../GlobalViewport/hooks';
 import { useAnimationController, AnimationList } from '../../AnimationController/context';
 import { useDispatch } from 'react-redux';
 import { resetSpeedMult } from '../../../../redux/gamePage';
-import { releasePlayer, stopPlayer } from '../../../../redux/mainUser';
-
-const HURT_SOUND = 'evaHurtSnd';
+import { setHurted, unsetHurted } from '../../../../redux/mainUser';
 
 type Props = {
   initialHealth: number;
@@ -24,14 +22,14 @@ export const MainUserHealthController = memo(({ initialHealth, maxHealth, cooldo
   const onDamage = useCallback(
     (cooldown?: number) => {
       shakeViewport();
-      playSound(HURT_SOUND);
+      playSound(Sounds.Hurt, SoundTypes.Sound);
       dispatch(resetSpeedMult());
-      dispatch(stopPlayer());
+      dispatch(setHurted());
       requestAnimation({ name: AnimationList.Hurt });
       if (cooldown)
         setTimeout(() => {
           releaseAnimation(AnimationList.Hurt);
-          dispatch(releasePlayer());
+          dispatch(unsetHurted());
         }, cooldown);
     },
     [dispatch, releaseAnimation, requestAnimation, shakeViewport],
@@ -39,7 +37,7 @@ export const MainUserHealthController = memo(({ initialHealth, maxHealth, cooldo
 
   const onDamageEnd = useCallback(() => {
     releaseAnimation(AnimationList.Hurt);
-    dispatch(releasePlayer());
+    dispatch(unsetHurted());
   }, [dispatch, releaseAnimation]);
 
   return (

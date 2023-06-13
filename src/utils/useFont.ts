@@ -11,7 +11,7 @@ type Props = {
 export const useFont = ({
   fontFamily = MAIN_FONT_NAME,
   fill = [COLORS.Black],
-  stroke = COLORS.Black,
+  stroke,
   strokeThickness = COMMON_STROKE_THICKNESS,
   ...props
 }: Props) => {

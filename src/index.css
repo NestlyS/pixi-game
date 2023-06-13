@@ -1,22 +1,21 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  overflow: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 @font-face {
   font-family: 'Press Start 2P';
   src: url('/public/PressStart2P-Regular.woff2') format('woff2'),
-      url('/public/PressStart2P-Regular.woff') format('woff'),
-      url('/public/PressStart2P-Regular.ttf') format('true type');
+    url('/public/PressStart2P-Regular.woff') format('woff'),
+    url('/public/PressStart2P-Regular.ttf') format('true type');
   font-weight: normal;
   font-style: normal;
   font-display: swap;

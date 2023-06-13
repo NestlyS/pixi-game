@@ -7,7 +7,7 @@ import {
   selectAppControllerWidth,
   selectAppControllerHeight,
 } from '../../../../../redux/appController/selectors';
-import { initGame, setPage } from '../../../../../redux/gamePage';
+import { initGame, setGamePage } from '../../../../../redux/gamePage';
 import { Pages } from '../../../../../redux/gamePage/typings';
 
 const SMALL_FONT_SIZE = 10;
@@ -21,7 +21,7 @@ export const PlayButton = () => {
 
   const onPlay = useCallback(() => {
     dispatch(initGame());
-    dispatch(setPage(Pages.Main));
+    dispatch(setGamePage(Pages.Main));
   }, [dispatch]);
 
   const buttonWidth = width * 0.3;

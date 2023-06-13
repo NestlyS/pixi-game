@@ -1,53 +1,82 @@
 import { Container, Text, useTick } from '@pixi/react';
-import { TextStyle } from '@pixi/text';
 import React, { useEffect, useRef, useState } from 'react';
-import { useScreenWidth } from '../../../utils/useScreenWidth';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectSettingsFPSCounterVisiblity } from '../../../redux/settings/selectors';
+import { useFont } from '../../../utils/useFont';
+import { COLORS } from '../../../constants';
+import { selectAppControllerWidth } from '../../../redux/appController/selectors';
+import { setDefaultGraphicMode, setLowGraphicMode } from '../../../redux/appController';
 
-const TEXT_STYLE_POSITIVE = new TextStyle({
-  fontFamily: 'Press Start 2P',
-  fill: ['#41bc66'],
-  align: 'left',
-  stroke: '#223',
-  strokeThickness: 5,
-});
-
-const TEXT_STYLE_NEGATIVE = new TextStyle({
-  fontFamily: 'Press Start 2P',
-  fill: ['#bb2222'],
-  stroke: '#223',
-  strokeThickness: 5,
-});
+const FPS_TO_SWITCH_TO_LOW_MODE = 40;
+const FAIL_AMOUNT_TO_SWITCH = 5;
 
 type Props = {
-  children?: React.ReactElement;
+  children?: React.ReactNode;
 };
 
 export const Settings = ({ children }: Props) => {
   const [fps, setFps] = useState(0);
   const frameCounter = useRef(0);
-  const screenWidth = useScreenWidth();
+  const screenWidth = useSelector(selectAppControllerWidth);
+  const dispatch = useDispatch();
+  // Счетчик количества провалов графики
+  const [lowFPSCounter, setLowFPSCount] = useState(0);
 
   const isFPSCounterVisible = useSelector(selectSettingsFPSCounterVisiblity);
 
   useEffect(() => {
     const id = setInterval(() => {
       setFps(frameCounter.current);
+
+      if (frameCounter.current < FPS_TO_SWITCH_TO_LOW_MODE) {
+        setLowFPSCount((val) => (val >= FAIL_AMOUNT_TO_SWITCH ? val : val + 1));
+      }
+
+      if (frameCounter.current >= FPS_TO_SWITCH_TO_LOW_MODE) {
+        setLowFPSCount((val) => (val <= -FAIL_AMOUNT_TO_SWITCH ? val : val - 1));
+      }
+
       frameCounter.current = 0;
     }, 1000);
 
     return () => clearInterval(id);
   }, []);
 
+  useEffect(() => {
+    // Нет смысла проверять FPS, если экран не виден
+    if (window.document.visibilityState === 'hidden') return;
+
+    if (lowFPSCounter >= FAIL_AMOUNT_TO_SWITCH) {
+      dispatch(setLowGraphicMode());
+    }
+
+    if (lowFPSCounter <= -FAIL_AMOUNT_TO_SWITCH) {
+      dispatch(setDefaultGraphicMode());
+    }
+  }, [dispatch, lowFPSCounter]);
+
   useTick(() => {
     frameCounter.current += 1;
+  });
+
+  const TEXT_STYLE_POSITIVE = useFont({
+    fill: [COLORS.TextPositiveFill],
+    stroke: COLORS.Black,
+    strokeThickness: 5,
+    align: 'left',
+  });
+
+  const TEXT_STYLE_NEGATIVE = useFont({
+    fill: [COLORS.TextNegativeFill],
+    stroke: COLORS.Black,
+    strokeThickness: 5,
+    align: 'left',
   });
 
   return (
     <>
       {children}
-      <Container x={screenWidth - 200} width={500} zIndex={100}>
+      <Container x={screenWidth * 0.8} width={500} zIndex={100}>
         {isFPSCounterVisible && (
           <Text text={`${fps}`} style={fps > 30 ? TEXT_STYLE_POSITIVE : TEXT_STYLE_NEGATIVE} />
         )}

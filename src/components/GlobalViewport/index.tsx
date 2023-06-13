@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Viewport as PixiViewport } from 'pixi-viewport';
+import { useSelector } from 'react-redux';
 import Viewport from '../../customPixiReact/ViewPort';
 import { GlobalViewportContextProvider } from './context';
-import { useGlobalViewportControls } from './hooks';
 import { selectSettingsMainBodyFocus } from '../../redux/settings/selectors';
+import { GlobalViewportControls } from './components/GlobalViewportControls';
 
 type Props = {
   width: number;
@@ -16,9 +16,7 @@ type Props = {
 export const GlobalViewport = ({ width, height, children, outsideViewport }: Props) => {
   const viewportRef = useRef<PixiViewport>(null);
   const [isMounted, setIsMounted] = useState(false);
-  const isFocusedOnMainBody = useSelector(selectSettingsMainBodyFocus);
-
-  useGlobalViewportControls(viewportRef.current, isFocusedOnMainBody);
+  const isNotFocusedOnMainBody = useSelector(selectSettingsMainBodyFocus);
 
   useEffect(() => setIsMounted(true), []);
 
@@ -32,6 +30,7 @@ export const GlobalViewport = ({ width, height, children, outsideViewport }: Pro
   return (
     <GlobalViewportContextProvider value={value}>
       {outsideViewport}
+      {isNotFocusedOnMainBody && <GlobalViewportControls viewport={viewportRef.current} />}
       <Viewport ref={viewportRef} width={width} height={height}>
         {children}
       </Viewport>

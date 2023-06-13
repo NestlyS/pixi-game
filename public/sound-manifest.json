@@ -1,16 +1,147 @@
 {
   "bundles": {
     "game-screen": {
-      "evaAttackSnd": "sounds/eva_attack.wav",
-      "evaDeathSnd": "sounds/eva_death.wav",
-      "evaHealSnd": "sounds/eva_heal.wav",
-      "evaJumpSnd": "sounds/eva_jump.wav",
-      "evaHurtSnd": "sounds/eva_hurt.wav",
-      "evaSlidingSnd": "sounds/eva_sliding.wav",
-      "monsterAttackSnd": "sounds/monster_attack.wav",
-      "monsterDeathSnd": "sounds/monster_death.wav",
-      "trashPickUpSnd": "sounds/pickup_trash.wav",
-      "game": "sounds/game.mp3"
+      "evaAttackSnd": {
+        "src": "sounds/eva_attack.mp3",
+        "type": "sound"
+      },
+      "evaDeathSnd": {
+        "src": "sounds/eva_death.mp3",
+        "type": "sound"
+      },
+      "evaHealSnd": {
+        "src": "sounds/eva_heal.mp3",
+        "type": "sound"
+      },
+      "evaJumpSnd": {
+        "src": "sounds/eva_jump.mp3",
+        "type": "sound"
+      },
+      "evaHurtSnd": {
+        "src": "sounds/eva_hurt.mp3",
+        "type": "sound"
+      },
+      "evaSlidingSnd": {
+        "src": "sounds/eva_sliding.mp3",
+        "type": "sound"
+      },
+      "monsterAttackSnd": {
+        "src": "sounds/monster_attack.mp3",
+        "type": "sound"
+      },
+      "monsterDeathSnd": {
+        "src": "sounds/monster_death.mp3",
+        "type": "sound"
+      },
+      "trashPickUpSnd": {
+        "src": "sounds/pickup_trash.mp3",
+        "type": "sound"
+      },
+      "game": {
+        "src": "sounds/game.mp3",
+        "type": "music"
+      },
+
+      "germanTalkingMid": {
+        "src": "sounds/gnida_talking_mid.mp3",
+        "type": "sound",
+        "volume": 0.6
+      },
+      "germanTalkingHigh": {
+        "src": "sounds/gnida_talking_high.mp3",
+        "type": "sound",
+        "volume": 0.6
+      },
+
+      "milenTalkingLow": {
+        "src": "sounds/milen_talking_low.mp3",
+        "type": "sound",
+        "volume": 0.6
+      },
+      "milenTalkingMid": {
+        "src": "sounds/milen_talking_mid.mp3",
+        "type": "sound",
+        "volume": 0.6
+      },
+      "milenTalkingHigh": {
+        "src": "sounds/milen_talking_high.mp3",
+        "type": "sound",
+        "volume": 0.6
+      }
+    },
+    "novel-screen": {
+      "talkingLow": {
+        "src": "sounds/talking_low.mp3",
+        "type": "sound",
+        "volume": 0.5
+      },
+      "talkingMid": {
+        "src": "sounds/talking_mid.mp3",
+        "type": "sound",
+        "volume": 0.5
+      },
+      "talkingHigh": {
+        "src": "sounds/talking_high.mp3",
+        "type": "sound",
+        "volume": 0.5
+      },
+
+      "maryTalkingLow": {
+        "src": "sounds/mary_talking_low.mp3",
+        "type": "sound",
+        "volume": 0.6
+      },
+      "maryTalkingMid": {
+        "src": "sounds/mary_talking_mid.mp3",
+        "type": "sound",
+        "volume": 0.6
+      },
+      "maryTalkingHigh": {
+        "src": "sounds/mary_talking_high.mp3",
+        "type": "sound",
+        "volume": 0.6
+      },
+
+      "ernestTalkingLow": {
+        "src": "sounds/ernest_talking_low.mp3",
+        "type": "sound",
+        "volume": 0.6
+      },
+      "ernestTalkingMid": {
+        "src": "sounds/ernest_talking_mid.mp3",
+        "type": "sound",
+        "volume": 0.6
+      },
+      "ernestTalkingHigh": {
+        "src": "sounds/ernest_talking_high.mp3",
+        "type": "sound",
+        "volume": 0.6
+      },
+
+      "dialog-calm": {
+        "src": "sounds/dialog-calm.mp3",
+        "type": "music",
+        "volume": 0.7
+      },
+      "dialog-nerv": {
+        "src": "sounds/dialog-nervous.mp3",
+        "type": "music",
+        "volume": 0.7
+      }
+    },
+    "start-screen": {
+      "lightEffect": {
+        "src": "sounds/start_screen_effect_light.mp3",
+        "type": "sound"
+      },
+      "hardEffect": {
+        "src": "sounds/start_screen_effect_hard.mp3",
+        "type": "sound"
+      },
+      "trashPickUpSnd": {
+        "src": "sounds/pickup_trash.mp3",
+        "type": "sound"
+      }
     }
   }
 }

@@ -8,13 +8,13 @@ import { useCatchSignal, SignalList } from '../../../utils/signaller/emitSignal'
 import { selectSettingsMainBodyFocus } from '../../../redux/settings/selectors';
 import {
   selectAppControllerHeight,
-  selectAppControllerWidthScale,
+  selectAppControllerWidth,
 } from '../../../redux/appController/selectors';
 
 export const ViewController = () => {
   const { globalViewport } = useGlobalViewport();
   const height = useSelector(selectAppControllerHeight);
-  const scaleWidth = useSelector(selectAppControllerWidthScale);
+  const width = useSelector(selectAppControllerWidth);
   const isNotFocusedOnMainBody = useSelector(selectSettingsMainBodyFocus);
   const container = useContainer();
 
@@ -42,13 +42,13 @@ export const ViewController = () => {
     }
 
     if (!isFocused.current && !isNotFocusedOnMainBody) {
-      globalViewport.pivot = { x: scaleWidth * 200, y: -height / 8 };
-      globalViewport.snapZoom({ height: 500 });
+      globalViewport.pivot = { x: 200, y: -100 };
+      globalViewport.snapZoom({ height: 500, time: 1 });
       globalViewport.follow(container, { speed: 500 });
 
       isFocused.current = true;
     }
-  }, [globalViewport, isNotFocusedOnMainBody, app.stage, container, scaleWidth, height]);
+  }, [globalViewport, isNotFocusedOnMainBody, app.stage, container, width, height]);
 
   return null;
 };

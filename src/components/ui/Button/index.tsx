@@ -1,42 +1,33 @@
-import { Container, DisplayObject, Filter, MaskData } from 'pixi.js';
-import { Sprite } from '../../Sprite';
-import { useCallback, useMemo, useState } from 'react';
-import { COLOR_OVERLAY_FILTER_DARKER } from '../../../constants';
+import { useCallback, useState } from 'react';
+import { Filters } from '../../../constants';
+import { Container } from '@pixi/react';
+import { useLowGraphic } from '../../../utils/useLowGraphic';
+import {
+  BackgroundTypes,
+  ButtonBackground,
+  Props as BackgroundProps,
+} from './components/ButtonBackground';
 
 export type Props = {
   x: number;
   y: number;
-  width: number;
-  height: number;
-  spritesheetUrl: string;
-  textureUrl: string;
-  pixelised?: boolean;
-  onClick?: () => void;
-  onHover?: () => void;
-  onHoverOut?: () => void;
-  onHoverOutOutside?: () => void;
-  filters?: Filter[];
-  mask?: Container<DisplayObject> | MaskData | null;
-};
+  children?: React.ReactNode;
+} & Omit<BackgroundProps, 'type'>;
 
 export const Button = ({
   x,
   y,
-  width,
-  height,
-  spritesheetUrl,
-  textureUrl,
-  pixelised = false,
   onClick,
   onHover,
   onHoverOut,
   onHoverOutOutside,
-  filters,
-  mask = null,
+  children,
+  ...props
 }: Props) => {
   const [isHovered, setHover] = useState(false);
 
   const _onHover = useCallback(() => {
+    console.log('HOVER');
     onHover?.();
     setHover(true);
   }, [onHover]);
@@ -51,36 +42,19 @@ export const Button = ({
     setHover(false);
   }, [onHoverOutOutside]);
 
-  const _filters = useMemo(() => {
-    const preFilters = [];
-    if (isHovered) {
-      preFilters.push(COLOR_OVERLAY_FILTER_DARKER);
-    }
-    if (filters) {
-      preFilters.push(...filters);
-    }
-    if (!preFilters.length) {
-      return null;
-    }
-    return preFilters;
-  }, [isHovered, filters]);
+  const _filters = useLowGraphic(isHovered ? [Filters.COLOR_OVERLAY_FILTER_DARKER] : []);
 
   return (
-    <Sprite
-      x={x}
-      y={y}
-      onClick={onClick}
-      onHover={_onHover}
-      onHoverOut={_onHoverOut}
-      onHoverOutOutside={_onHoverOutOutside}
-      width={width}
-      height={height}
-      spritesheet={spritesheetUrl}
-      textureUrl={textureUrl}
-      pixelised={pixelised}
-      filters={_filters}
-      mask={mask}
-      interactive
-    />
+    <Container x={x} y={y} filters={_filters}>
+      <ButtonBackground
+        type={props.textureUrl ? BackgroundTypes.Sprite : BackgroundTypes.Graphic}
+        onHover={_onHover}
+        onClick={onClick}
+        onHoverOut={_onHoverOut}
+        onHoverOutOutside={_onHoverOutOutside}
+        {...props}
+      />
+      {children}
+    </Container>
   );
 };

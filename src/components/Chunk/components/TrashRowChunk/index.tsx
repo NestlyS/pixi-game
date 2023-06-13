@@ -6,11 +6,14 @@ import {
 import { Grass } from '../../../TileGround/components/Grass/Grass';
 import { TrashRow } from '../../../trashes/TrashRow';
 import { ChunkProps } from '../../typings';
+import { useTutorialContext } from '../../../../pages/game/components/TutorialStartPlatform/context';
+import { Container } from '@pixi/react';
 
 export const ROW_WIDTH = 8;
 
 export const TrashRowChunk = memo(
-  ({ spritesheetUrl, x, y, tileSize, tilesHeight, width = ROW_WIDTH }: ChunkProps) => {
+  ({ spritesheetUrl, x, y, tileSize, tilesHeight, width = ROW_WIDTH, zIndex }: ChunkProps) => {
+    const isTutorial = useTutorialContext();
     const textureModifier = useCallback((indexX: number, indexY: number, length: number) => {
       if (indexY === 0 && indexX <= length - 1) {
         return MIDDLE_PART_NAME;
@@ -20,7 +23,7 @@ export const TrashRowChunk = memo(
     }, []);
 
     return (
-      <>
+      <Container zIndex={zIndex}>
         <Grass
           textureModifier={textureModifier}
           spritesheetUrl={spritesheetUrl}
@@ -36,8 +39,9 @@ export const TrashRowChunk = memo(
           tileSize={tileSize}
           width={width - 2}
           type="random"
+          isUncollectable={isTutorial}
         />
-      </>
+      </Container>
     );
   },
 );

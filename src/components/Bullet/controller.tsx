@@ -1,7 +1,7 @@
-import { useTick } from '@pixi/react';
 import { Body } from 'matter-js';
 import { useEffect, useRef } from 'react';
 import { useBody } from '../Body/context';
+import { useSlowerTick } from '../../utils/useSlowedTick';
 
 export enum Directions {
   Up = 'up',
@@ -13,6 +13,8 @@ export enum Directions {
   Left = 'left',
   LeftUp = 'left-up',
 }
+
+const DELTA = 10;
 
 const getDirectionMultiplier = (direction: Directions): { x: number; y: number } => {
   switch (direction) {
@@ -43,7 +45,6 @@ type Props = {
 
 export const BulletController = ({ direction, speed, setCurrentDistance }: Props) => {
   const { body } = useBody();
-  const deltaRef = useRef(0);
   const distanceRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -54,12 +55,7 @@ export const BulletController = ({ direction, speed, setCurrentDistance }: Props
     };
   }, [body]);
 
-  useTick((delta) => {
-    deltaRef.current += delta;
-
-    if (deltaRef.current < 10) return;
-    deltaRef.current = 0;
-
+  useSlowerTick(() => {
     const distance = Math.sqrt(
       Math.pow(body.position.x - distanceRef.current.x, 2) -
         Math.pow(body.position.y - distanceRef.current.y, 2),
@@ -73,7 +69,7 @@ export const BulletController = ({ direction, speed, setCurrentDistance }: Props
     });
 
     setCurrentDistance(distance);
-  });
+  }, DELTA);
 
   return null;
 };

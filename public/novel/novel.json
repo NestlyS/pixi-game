@@ -1,56 +1,8 @@
 {
   "frames": {
-    "gnida_closedeyes.png": {
+    "gnida_pose_offer.png": {
       "frame": {
         "x": 1,
-        "y": 1,
-        "w": 65,
-        "h": 135
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 64,
-        "y": 10,
-        "w": 65,
-        "h": 135
-      },
-      "sourceSize": {
-        "w": 150,
-        "h": 150
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "gnida_idle.png": {
-      "frame": {
-        "x": 68,
-        "y": 1,
-        "w": 65,
-        "h": 135
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 64,
-        "y": 10,
-        "w": 65,
-        "h": 135
-      },
-      "sourceSize": {
-        "w": 150,
-        "h": 150
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "gnida_offer.png": {
-      "frame": {
-        "x": 135,
         "y": 1,
         "w": 79,
         "h": 135
@@ -58,7 +10,7 @@
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 64,
+        "x": 42,
         "y": 10,
         "w": 79,
         "h": 135
@@ -72,17 +24,17 @@
         "y": 0.5
       }
     },
-    "gnida_suprised.png": {
+    "gnida_pose_idle.png": {
       "frame": {
-        "x": 1,
-        "y": 138,
+        "x": 82,
+        "y": 1,
         "w": 65,
         "h": 135
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 64,
+        "x": 42,
         "y": 10,
         "w": 65,
         "h": 135
@@ -96,140 +48,20 @@
         "y": 0.5
       }
     },
-    "healer_chocolate.png": {
-      "frame": {
-        "x": 68,
-        "y": 138,
-        "w": 66,
-        "h": 131
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 84,
-        "y": 14,
-        "w": 66,
-        "h": 131
-      },
-      "sourceSize": {
-        "w": 150,
-        "h": 150
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "healer_talk.png": {
-      "frame": {
-        "x": 136,
-        "y": 138,
-        "w": 43,
-        "h": 131
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 84,
-        "y": 14,
-        "w": 43,
-        "h": 131
-      },
-      "sourceSize": {
-        "w": 150,
-        "h": 150
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "healer_flirt.png": {
-      "frame": {
-        "x": 216,
-        "y": 1,
-        "w": 43,
-        "h": 131
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 84,
-        "y": 14,
-        "w": 43,
-        "h": 131
-      },
-      "sourceSize": {
-        "w": 150,
-        "h": 150
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "healer_idle.png": {
-      "frame": {
-        "x": 216,
-        "y": 134,
-        "w": 43,
-        "h": 131
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 84,
-        "y": 14,
-        "w": 43,
-        "h": 131
-      },
-      "sourceSize": {
-        "w": 150,
-        "h": 150
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "healer_smile.png": {
-      "frame": {
-        "x": 261,
-        "y": 1,
-        "w": 43,
-        "h": 131
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 84,
-        "y": 14,
-        "w": 43,
-        "h": 131
-      },
-      "sourceSize": {
-        "w": 150,
-        "h": 150
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "mary_smile.png": {
+    "milen_pose_idle.png": {
       "frame": {
         "x": 1,
-        "y": 275,
-        "w": 56,
-        "h": 122
+        "y": 138,
+        "w": 43,
+        "h": 131
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 80,
-        "y": 24,
-        "w": 56,
-        "h": 122
+        "x": 46,
+        "y": 14,
+        "w": 43,
+        "h": 131
       },
       "sourceSize": {
         "w": 150,
@@ -240,20 +72,20 @@
         "y": 0.5
       }
     },
-    "mary_idle.png": {
+    "milen_pose_chocolate.png": {
       "frame": {
-        "x": 59,
-        "y": 275,
-        "w": 56,
-        "h": 122
+        "x": 46,
+        "y": 138,
+        "w": 66,
+        "h": 131
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 80,
-        "y": 24,
-        "w": 56,
-        "h": 122
+        "x": 46,
+        "y": 14,
+        "w": 66,
+        "h": 131
       },
       "sourceSize": {
         "w": 150,
@@ -264,20 +96,20 @@
         "y": 0.5
       }
     },
-    "mary_embarrassed.png": {
+    "ernest_pose_idle.png": {
       "frame": {
-        "x": 117,
-        "y": 271,
-        "w": 56,
-        "h": 122
+        "x": 149,
+        "y": 1,
+        "w": 60,
+        "h": 125
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 80,
-        "y": 24,
-        "w": 56,
-        "h": 122
+        "x": 44,
+        "y": 20,
+        "w": 60,
+        "h": 125
       },
       "sourceSize": {
         "w": 150,
@@ -288,20 +120,20 @@
         "y": 0.5
       }
     },
-    "mary_brokenhand_talk.png": {
+    "ernest_pose_weaponless.png": {
       "frame": {
-        "x": 175,
-        "y": 271,
-        "w": 56,
-        "h": 122
+        "x": 149,
+        "y": 128,
+        "w": 55,
+        "h": 125
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 80,
-        "y": 24,
-        "w": 56,
-        "h": 122
+        "x": 44,
+        "y": 20,
+        "w": 55,
+        "h": 125
       },
       "sourceSize": {
         "w": 150,
@@ -312,33 +144,9 @@
         "y": 0.5
       }
     },
-    "mary_brokenhand_closedeyes.png": {
+    "mary_pose_brokenhand.png": {
       "frame": {
-        "x": 233,
-        "y": 267,
-        "w": 56,
-        "h": 122
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 80,
-        "y": 24,
-        "w": 56,
-        "h": 122
-      },
-      "sourceSize": {
-        "w": 150,
-        "h": 150
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "mary_brokenhand.png": {
-      "frame": {
-        "x": 306,
+        "x": 211,
         "y": 1,
         "w": 56,
         "h": 122
@@ -346,7 +154,7 @@
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 80,
+        "x": 42,
         "y": 24,
         "w": 56,
         "h": 122
@@ -360,9 +168,9 @@
         "y": 0.5
       }
     },
-    "mary_talk.png": {
+    "mary_pose_hospital.png": {
       "frame": {
-        "x": 306,
+        "x": 211,
         "y": 125,
         "w": 56,
         "h": 122
@@ -370,7 +178,7 @@
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 80,
+        "x": 43,
         "y": 24,
         "w": 56,
         "h": 122
@@ -384,20 +192,20 @@
         "y": 0.5
       }
     },
-    "eva_discontent.png": {
+    "mary_pose_idle.png": {
       "frame": {
-        "x": 364,
+        "x": 269,
         "y": 1,
-        "w": 76,
-        "h": 116
+        "w": 56,
+        "h": 122
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 38,
-        "y": 18,
-        "w": 76,
-        "h": 116
+        "x": 42,
+        "y": 24,
+        "w": 56,
+        "h": 122
       },
       "sourceSize": {
         "w": 150,
@@ -408,58 +216,10 @@
         "y": 0.5
       }
     },
-    "eva_suprised.png": {
-      "frame": {
-        "x": 364,
-        "y": 119,
-        "w": 76,
-        "h": 116
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 38,
-        "y": 18,
-        "w": 76,
-        "h": 116
-      },
-      "sourceSize": {
-        "w": 150,
-        "h": 150
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "eva_smile.png": {
-      "frame": {
-        "x": 364,
-        "y": 237,
-        "w": 76,
-        "h": 116
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 38,
-        "y": 18,
-        "w": 76,
-        "h": 116
-      },
-      "sourceSize": {
-        "w": 150,
-        "h": 150
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "eva_shocked.png": {
+    "eva_pose_idle.png": {
       "frame": {
         "x": 1,
-        "y": 399,
+        "y": 271,
         "w": 76,
         "h": 116
       },
@@ -480,10 +240,10 @@
         "y": 0.5
       }
     },
-    "eva_sad.png": {
+    "eva_pose_angry.png": {
       "frame": {
         "x": 79,
-        "y": 399,
+        "y": 271,
         "w": 76,
         "h": 116
       },
@@ -504,20 +264,20 @@
         "y": 0.5
       }
     },
-    "eva_idle.png": {
+    "eva_pose_weaponless.png": {
       "frame": {
         "x": 157,
-        "y": 395,
-        "w": 76,
-        "h": 116
+        "y": 255,
+        "w": 66,
+        "h": 115
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 38,
-        "y": 18,
-        "w": 76,
-        "h": 116
+        "y": 19,
+        "w": 66,
+        "h": 115
       },
       "sourceSize": {
         "w": 150,
@@ -528,20 +288,20 @@
         "y": 0.5
       }
     },
-    "eva_doubt.png": {
+    "eva_pose_pajamas.png": {
       "frame": {
-        "x": 235,
-        "y": 391,
-        "w": 76,
-        "h": 116
+        "x": 225,
+        "y": 249,
+        "w": 66,
+        "h": 115
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 38,
-        "y": 18,
-        "w": 76,
-        "h": 116
+        "y": 19,
+        "w": 66,
+        "h": 115
       },
       "sourceSize": {
         "w": 150,
@@ -552,24 +312,768 @@
         "y": 0.5
       }
     },
-    "eva_angry.png": {
+    "gnida_face_talk.png": {
       "frame": {
-        "x": 313,
-        "y": 355,
-        "w": 76,
-        "h": 116
+        "x": 225,
+        "y": 366,
+        "w": 23,
+        "h": 18
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 38,
-        "y": 18,
-        "w": 76,
-        "h": 116
+        "x": 15,
+        "y": 17,
+        "w": 23,
+        "h": 18
       },
       "sourceSize": {
-        "w": 150,
-        "h": 150
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "gnida_face_idle.png": {
+      "frame": {
+        "x": 250,
+        "y": 366,
+        "w": 22,
+        "h": 18
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 15,
+        "y": 17,
+        "w": 22,
+        "h": 18
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "gnida_face_surprised.png": {
+      "frame": {
+        "x": 274,
+        "y": 366,
+        "w": 22,
+        "h": 19
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 15,
+        "y": 16,
+        "w": 22,
+        "h": 19
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "eva_face_angry.png": {
+      "frame": {
+        "x": 298,
+        "y": 125,
+        "w": 20,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 13,
+        "y": 12,
+        "w": 20,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "ernest_face_thinking.png": {
+      "frame": {
+        "x": 269,
+        "y": 125,
+        "w": 18,
+        "h": 20
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 18,
+        "y": 15,
+        "w": 18,
+        "h": 20
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "eva_face_idle.png": {
+      "frame": {
+        "x": 298,
+        "y": 144,
+        "w": 19,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 13,
+        "y": 12,
+        "w": 19,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "eva_face_doubt.png": {
+      "frame": {
+        "x": 298,
+        "y": 163,
+        "w": 19,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 13,
+        "y": 12,
+        "w": 19,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "eva_face_discont.png": {
+      "frame": {
+        "x": 269,
+        "y": 147,
+        "w": 19,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 13,
+        "y": 12,
+        "w": 19,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "ernest_face_discontent.png": {
+      "frame": {
+        "x": 157,
+        "y": 372,
+        "w": 19,
+        "h": 15
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 17,
+        "y": 19,
+        "w": 19,
+        "h": 15
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "eva_face_smile.png": {
+      "frame": {
+        "x": 298,
+        "y": 182,
+        "w": 19,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 13,
+        "y": 12,
+        "w": 19,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "eva_face_sad.png": {
+      "frame": {
+        "x": 178,
+        "y": 372,
+        "w": 19,
+        "h": 15
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 13,
+        "y": 12,
+        "w": 19,
+        "h": 15
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "eva_face_surprised.png": {
+      "frame": {
+        "x": 269,
+        "y": 166,
+        "w": 19,
+        "h": 18
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 13,
+        "y": 12,
+        "w": 19,
+        "h": 18
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "eva_face_talk.png": {
+      "frame": {
+        "x": 298,
+        "y": 201,
+        "w": 19,
+        "h": 16
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 13,
+        "y": 12,
+        "w": 19,
+        "h": 16
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "eva_face_uncomprehending.png": {
+      "frame": {
+        "x": 269,
+        "y": 186,
+        "w": 19,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 13,
+        "y": 12,
+        "w": 19,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "eva_face_shocked.png": {
+      "frame": {
+        "x": 298,
+        "y": 219,
+        "w": 19,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 13,
+        "y": 12,
+        "w": 19,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "ernest_face_talk.png": {
+      "frame": {
+        "x": 199,
+        "y": 372,
+        "w": 18,
+        "h": 15
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 18,
+        "y": 19,
+        "w": 18,
+        "h": 15
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "ernest_face_smile.png": {
+      "frame": {
+        "x": 269,
+        "y": 205,
+        "w": 18,
+        "h": 16
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 18,
+        "y": 18,
+        "w": 18,
+        "h": 16
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "ernest_face_idle.png": {
+      "frame": {
+        "x": 298,
+        "y": 238,
+        "w": 18,
+        "h": 15
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 18,
+        "y": 19,
+        "w": 18,
+        "h": 15
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "mary_face_sad_closedeyes.png": {
+      "frame": {
+        "x": 114,
+        "y": 255,
+        "w": 17,
+        "h": 8
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 16,
+        "y": 26,
+        "w": 17,
+        "h": 8
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "mary_face_shocked.png": {
+      "frame": {
+        "x": 133,
+        "y": 255,
+        "w": 17,
+        "h": 12
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 16,
+        "y": 23,
+        "w": 17,
+        "h": 12
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "mary_face_smile.png": {
+      "frame": {
+        "x": 269,
+        "y": 223,
+        "w": 17,
+        "h": 12
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 16,
+        "y": 22,
+        "w": 17,
+        "h": 12
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "mary_face_talk.png": {
+      "frame": {
+        "x": 298,
+        "y": 255,
+        "w": 17,
+        "h": 12
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 16,
+        "y": 22,
+        "w": 17,
+        "h": 12
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "mary_face_embarrassed.png": {
+      "frame": {
+        "x": 298,
+        "y": 269,
+        "w": 17,
+        "h": 11
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 16,
+        "y": 23,
+        "w": 17,
+        "h": 11
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "ernest_face_angry_talk.png": {
+      "frame": {
+        "x": 298,
+        "y": 282,
+        "w": 17,
+        "h": 15
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 18,
+        "y": 19,
+        "w": 17,
+        "h": 15
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "ernest_face_shocked.png": {
+      "frame": {
+        "x": 298,
+        "y": 299,
+        "w": 17,
+        "h": 16
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 18,
+        "y": 18,
+        "w": 17,
+        "h": 16
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "milen_face_flirt.png": {
+      "frame": {
+        "x": 298,
+        "y": 317,
+        "w": 17,
+        "h": 15
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 19,
+        "y": 16,
+        "w": 17,
+        "h": 15
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "milen_face_idle.png": {
+      "frame": {
+        "x": 298,
+        "y": 334,
+        "w": 17,
+        "h": 16
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 19,
+        "y": 15,
+        "w": 17,
+        "h": 16
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "milen_face_sad.png": {
+      "frame": {
+        "x": 298,
+        "y": 352,
+        "w": 17,
+        "h": 16
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 19,
+        "y": 15,
+        "w": 17,
+        "h": 16
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "milen_face_smile.png": {
+      "frame": {
+        "x": 298,
+        "y": 370,
+        "w": 17,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 19,
+        "y": 14,
+        "w": 17,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "milen_face_talk.png": {
+      "frame": {
+        "x": 114,
+        "y": 138,
+        "w": 17,
+        "h": 16
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 19,
+        "y": 15,
+        "w": 17,
+        "h": 16
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "mary_face_sad.png": {
+      "frame": {
+        "x": 114,
+        "y": 156,
+        "w": 17,
+        "h": 11
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 16,
+        "y": 23,
+        "w": 17,
+        "h": 11
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "mary_face_idle.png": {
+      "frame": {
+        "x": 114,
+        "y": 169,
+        "w": 17,
+        "h": 12
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 16,
+        "y": 22,
+        "w": 17,
+        "h": 12
+      },
+      "sourceSize": {
+        "w": 50,
+        "h": 50
       },
       "pivot": {
         "x": 0.5,
@@ -583,8 +1087,8 @@
     "image": "novel.png",
     "format": "RGBA8888",
     "size": {
-      "w": 441,
-      "h": 516
+      "w": 326,
+      "h": 388
     },
     "scale": 1
   }

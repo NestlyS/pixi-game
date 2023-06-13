@@ -20,3 +20,5 @@ export const selectMainUserSpecialCooldown = (state: IAppState) =>
 
 export const selectMainUserAttackCooldown = (state: IAppState) =>
   selectMainUser(state).attackCooldown;
+
+export const selectMainUserHurtedState = (state: IAppState) => selectMainUser(state).isHurted;

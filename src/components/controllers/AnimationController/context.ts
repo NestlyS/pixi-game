@@ -12,7 +12,10 @@ export enum AnimationList {
   Heal = 'heal',
 }
 
-export type RequestAnimationType = (props: { name: AnimationList; onFinish?: () => void }) => void;
+export type RequestAnimationType = (props: {
+  name: AnimationList;
+  onFinish?: (animationName: string | null, isLoop: boolean) => void;
+}) => void;
 
 export type ReleaseAnimationType = (name: AnimationList) => void;
 

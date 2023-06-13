@@ -9,6 +9,7 @@ import {
 } from '../../../TileGround/components/Grass/contants';
 import { Grass } from '../../../TileGround/components/Grass/Grass';
 import { ChunkProps } from '../../typings';
+import { useTutorialContext } from '../../../../pages/game/components/TutorialStartPlatform/context';
 
 export const AI_SENSOR_OPTIONS: Matter.IChamferableBodyDefinition = {
   isStatic: true,
@@ -19,7 +20,17 @@ export const AI_SENSOR_OPTIONS: Matter.IChamferableBodyDefinition = {
 export const MONSTERS_ROW_WIDTH = 10;
 
 export const MonstersRow = memo(
-  ({ spritesheetUrl, x, y, tileSize, tilesHeight, width = MONSTERS_ROW_WIDTH }: ChunkProps) => {
+  ({
+    spritesheetUrl,
+    x,
+    y,
+    tileSize,
+    tilesHeight,
+    width = MONSTERS_ROW_WIDTH,
+    zIndex,
+  }: ChunkProps) => {
+    const isTutorial = useTutorialContext();
+
     const textureModifier = useCallback((indexX: number, indexY: number, length: number) => {
       if (indexY === 0 && indexX <= length - 1) {
         return MIDDLE_PART_NAME;
@@ -29,7 +40,7 @@ export const MonstersRow = memo(
     }, []);
 
     return (
-      <Container sortableChildren>
+      <Container zIndex={zIndex}>
         <Body
           label={AI_SENSOR_LABEL}
           x={x}
@@ -58,6 +69,9 @@ export const MonstersRow = memo(
         <MonsterWithTrash
           x={x + width * tileSize * 0.7}
           y={y - ((tilesHeight + 1) * tileSize) / 2}
+          isUncollectable={isTutorial}
+          isMovingDisabled={isTutorial}
+          isShootingDisabled={isTutorial}
         />
       </Container>
     );

@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useScreenHeight } from '../../../../../utils/useScreenHeight';
 import { Sprite } from '../../../../Sprite';
-import { SHADOW_FILTER } from '../../../../../constants';
+import { Filters } from '../../../../../constants';
 
 const SPRITE_HEIGHT = 150;
 
@@ -11,6 +11,8 @@ type Props = {
   textureName: string;
   spritesheet: string;
 };
+
+const filters = [Filters.SHADOW_FILTER];
 
 export const CharacterPreview = React.memo(({ spritesheet, textureName, x, y }: Props) => {
   const height = useScreenHeight();
@@ -30,7 +32,7 @@ export const CharacterPreview = React.memo(({ spritesheet, textureName, x, y }: 
       scale={scale}
       textureUrl={`${textureName}.png`}
       spritesheet={spritesheet}
-      filters={[SHADOW_FILTER]}
+      filters={filters}
     />
   );
 });

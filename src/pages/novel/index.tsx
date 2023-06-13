@@ -1,47 +1,42 @@
-import { Assets } from 'pixi.js';
-import { useCallback, useLayoutEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { flushSync } from 'react-dom';
+import { useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { useGlobalCheck } from '../../utils/useControlKey';
 import { SignalList, useCatchSignal } from '../../utils/signaller/emitSignal';
-import { NovelUI } from '../../components/novel/NovelUI';
-import { ScriptType } from '../../redux/novelPage/typings';
-import { selectNovelControllerScript } from '../../redux/novelPage/selectors';
+import { Dialogs } from '../../redux/novelPage/typings';
 import { setScript } from '../../redux/novelPage';
-
-export const NOVEL_SPRITESHEET_URL = './novel/novel.json';
-export const NOVEL_SCRIPT_URL = './novel/script.json';
+import { setPage } from '../../redux/appController';
+import { useInitPageData } from '../../utils/initPageData';
+import { NovelPageUI } from './components/NovelPageUI';
+import { initNovelRead } from '../../redux/novelPage/utils';
+import { setGamePage } from '../../redux/gamePage';
+import { getPageToShowAfterNovel } from '../../redux/appController/utils';
+import { getGamePageToShowAfterNovel } from '../../redux/gamePage/utils';
+import { initNovelData } from './utils';
 
 export const Novel = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const script = useSelector(selectNovelControllerScript);
+  const [resetCounter, setReset] = useState(0);
   const dispatch = useDispatch();
 
-  useGlobalCheck();
-
-  useLayoutEffect(() => {
-    const cb = async () => {
-      await Assets.loadBundle('novel-screen');
-      console.log(Assets.cache.has(NOVEL_SCRIPT_URL));
-      const _script = Assets.cache.has(NOVEL_SCRIPT_URL)
-        ? Assets.cache.get<ScriptType[]>(NOVEL_SCRIPT_URL)
-        : await Assets.load<ScriptType[]>(NOVEL_SCRIPT_URL);
-
-      dispatch(setScript(_script));
-      setIsLoaded(true);
-    };
-
-    cb();
-  }, []);
-
   const cb = useCallback(() => {
-    flushSync(() => setIsLoaded(false));
-    setTimeout(() => setIsLoaded(true));
+    setReset((val) => val + 1);
   }, []);
+
+  const onAllScriptsEnd = useCallback(() => {
+    initNovelRead();
+    dispatch(setPage(getPageToShowAfterNovel()));
+    dispatch(setGamePage(getGamePageToShowAfterNovel()));
+  }, [dispatch]);
+
+  const init = useCallback(async () => {
+    dispatch(setScript(await initNovelData()));
+  }, [dispatch]);
+
   useCatchSignal(SignalList.Reset, cb);
+  useGlobalCheck();
+  const isLoaded = useInitPageData(init);
 
-  if (!isLoaded || !script) return null;
+  if (!isLoaded) return null;
 
-  return <NovelUI script={script} spritesheet={NOVEL_SPRITESHEET_URL} />;
+  return <NovelPageUI key={resetCounter} onEnd={onAllScriptsEnd} dialog={Dialogs.First} />;
 };

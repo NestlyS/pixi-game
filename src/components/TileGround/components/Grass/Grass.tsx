@@ -11,10 +11,16 @@ export type GrassProps = {
     height: number,
   ) => string | null;
   isSingleGrass?: boolean;
+  withDeco?: boolean;
   spritesheetUrl: string;
 } & Omit<Props, 'getTexture'>;
 
-export const Grass = ({ textureModifier, isSingleGrass = false, ...props }: GrassProps) => {
+export const Grass = ({
+  textureModifier,
+  isSingleGrass = false,
+  withDeco = true,
+  ...props
+}: GrassProps) => {
   const getTexture = useCallback(
     (indexX: number, indexY: number, length: number, height: number) =>
       getMainTexture(textureModifier)(indexX, indexY, length, height, isSingleGrass),
@@ -33,13 +39,15 @@ export const Grass = ({ textureModifier, isSingleGrass = false, ...props }: Gras
   return (
     <>
       <TileGround {...props} getTexture={getTexture} />
-      <GrassDeco
-        x={props.x + props.tileSize - (props.tilesWidth * props.tileSize) / 2}
-        y={props.y - (props.tilesHeight * props.tileSize) / 2}
-        width={props.tilesWidth * props.tileSize}
-        step={props.tileSize}
-        spritesheetUrl={props.spritesheetUrl}
-      />
+      {withDeco && (
+        <GrassDeco
+          x={props.x + props.tileSize - (props.tilesWidth * props.tileSize) / 2}
+          y={props.y - (props.tilesHeight * props.tileSize) / 2}
+          width={props.tilesWidth * props.tileSize}
+          step={props.tileSize}
+          spritesheetUrl={props.spritesheetUrl}
+        />
+      )}
     </>
   );
 };

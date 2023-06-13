@@ -4,14 +4,25 @@ import { useGlobalViewportShaking } from '../GlobalViewport/hooks';
 import { getRandowmTrashComponents } from '../trashes/utils';
 import { Monster, Props as MonsterProps } from '.';
 import { ONE_CIRCLE_IN_RAD } from '../../constants';
-import { playSound } from '../../utils/soundPlayer';
+import { Sounds, playSound } from '../../utils/soundController';
 
 const TRASH_AMOUNT = 3;
 const SHIFT_MULTIPLIER = 50;
 const TRASH_ANIMATION_STEP = 0.2;
-const DEATH_SOUND = 'monsterDeathSnd';
 
-export const MonsterWithTrash = ({ x, y }: MonsterProps) => {
+type Props = {
+  isUncollectable?: boolean;
+  isMovingDisabled?: boolean;
+  isShootingDisabled?: boolean;
+};
+
+export const MonsterWithTrash = ({
+  x,
+  y,
+  isUncollectable,
+  isMovingDisabled,
+  isShootingDisabled,
+}: MonsterProps & Props) => {
   const [isKilled, setKilled] = useState(false);
   const [trashAnimationState, setTrashAnimationStep] = useState(0);
 
@@ -23,7 +34,7 @@ export const MonsterWithTrash = ({ x, y }: MonsterProps) => {
     (body?: Body) => {
       if (body) trashPositionRef.current = body.position;
 
-      playSound(DEATH_SOUND);
+      playSound(Sounds.MonsterDeath);
       setKilled(true);
       shakeViewport();
       const cb = () =>
@@ -41,7 +52,15 @@ export const MonsterWithTrash = ({ x, y }: MonsterProps) => {
   );
 
   if (!isKilled) {
-    return <Monster x={x} y={y} onDeath={onDeath} />;
+    return (
+      <Monster
+        x={x}
+        y={y}
+        onDeath={onDeath}
+        isMovingDisabled={isMovingDisabled}
+        isShootingDisabled={isShootingDisabled}
+      />
+    );
   }
 
   return (
@@ -61,6 +80,7 @@ export const MonsterWithTrash = ({ x, y }: MonsterProps) => {
               SHIFT_MULTIPLIER *
               trashAnimationState
           }
+          isUncollectable={isUncollectable}
         />
       ))}
     </>

@@ -3,8 +3,10 @@ import { SCALE_MODES } from '@pixi/constants';
 import { Rectangle } from '@pixi/math';
 import { PixiRef, Sprite as ReactPixiSprite, useApp, _ReactPixi } from '@pixi/react';
 import { Assets, Resource, Texture, TextureSource } from 'pixi.js';
+import { useLowGraphic } from '../../utils/useLowGraphic';
+import { Filters } from '../../constants';
 
-export type ISpriteProps = {
+export type ISpriteProps = Omit<_ReactPixi.ISprite, 'filters'> & {
   frame?: {
     x: number;
     y: number;
@@ -16,19 +18,19 @@ export type ISpriteProps = {
   onHover?: () => void;
   onHoverOut?: () => void;
   onHoverOutOutside?: () => void;
+  filters?: Filters[] | Filters | null;
 } & (
-  | {
-      textureUrl: string;
-      spritesheet: string;
-      image: string;
-    }
-  | {
-      textureUrl: string;
-      spritesheet?: string;
-      image?: string;
-    }
-) &
-  _ReactPixi.ISprite;
+    | {
+        textureUrl: string;
+        spritesheet: string;
+        image: string;
+      }
+    | {
+        textureUrl: string;
+        spritesheet?: string;
+        image?: string;
+      }
+  );
 
 export const Sprite = memo(
   forwardRef<PixiRef<typeof ReactPixiSprite>, ISpriteProps>(
@@ -42,11 +44,14 @@ export const Sprite = memo(
         onClick = undefined,
         onHover = undefined,
         onHoverOut = undefined,
+        onHoverOutOutside = undefined,
+        filters,
         ...props
       }: ISpriteProps,
       ref,
     ) => {
       const [texture, setTexture] = useState<Texture | undefined>(undefined);
+      const innerFilters = useLowGraphic(filters ?? []);
       const app = useApp();
 
       useEffect(() => {
@@ -61,14 +66,8 @@ export const Sprite = memo(
         }
 
         const cb = async () => {
-          if (controller.signal.aborted) return;
+          if (controller.signal.aborted || !textureSource) return;
 
-          console.log(
-            'TEXTURE URL',
-            textureUrl,
-            Assets.cache.has(textureUrl),
-            spritesheet && Assets.cache.has(spritesheet),
-          );
           // Дополнительная проверка так как загрузка спрайта происходит асинхронно и все может поменяться
           const _texture = Assets.cache.has(textureUrl)
             ? Assets.cache.get<Texture<Resource>>(textureUrl)
@@ -99,9 +98,11 @@ export const Sprite = memo(
           pointertap={onClick}
           pointerdown={onHover}
           pointerup={onHoverOut}
+          pointerout={onHoverOutOutside}
           ref={ref}
           texture={texture}
           image={image}
+          filters={innerFilters.length ? innerFilters : null}
           {...props}
         />
       );

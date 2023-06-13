@@ -120,7 +120,7 @@
         "y": 0.5
       }
     },
-    "bushBerry.png": {
+    "bush.png": {
       "frame": {
         "x": 72,
         "y": 104,
@@ -144,7 +144,7 @@
         "y": 0.5
       }
     },
-    "bush.png": {
+    "bushBerry.png": {
       "frame": {
         "x": 72,
         "y": 135,
@@ -336,7 +336,7 @@
         "y": 0.5
       }
     },
-    "chips_(1).png": {
+    "chips_(3).png": {
       "frame": {
         "x": 172,
         "y": 148,
@@ -360,7 +360,7 @@
         "y": 0.5
       }
     },
-    "chips_(2).png": {
+    "chips_(1).png": {
       "frame": {
         "x": 151,
         "y": 34,
@@ -384,7 +384,7 @@
         "y": 0.5
       }
     },
-    "chips_(3).png": {
+    "chips_(2).png": {
       "frame": {
         "x": 151,
         "y": 52,
@@ -792,7 +792,7 @@
         "y": 0.5
       }
     },
-    "094.png": {
+    "095.png": {
       "frame": {
         "x": 144,
         "y": 184,
@@ -816,7 +816,7 @@
         "y": 0.5
       }
     },
-    "079.png": {
+    "094.png": {
       "frame": {
         "x": 162,
         "y": 190,
@@ -840,7 +840,7 @@
         "y": 0.5
       }
     },
-    "096.png": {
+    "079.png": {
       "frame": {
         "x": 1,
         "y": 187,
@@ -888,7 +888,7 @@
         "y": 0.5
       }
     },
-    "095.png": {
+    "ground-to-up.png": {
       "frame": {
         "x": 80,
         "y": 184,
@@ -936,7 +936,7 @@
         "y": 0.5
       }
     },
-    "boxSmall.png": {
+    "096.png": {
       "frame": {
         "x": 37,
         "y": 190,
@@ -960,7 +960,7 @@
         "y": 0.5
       }
     },
-    "041.png": {
+    "046.png": {
       "frame": {
         "x": 98,
         "y": 190,
@@ -984,7 +984,7 @@
         "y": 0.5
       }
     },
-    "046.png": {
+    "041.png": {
       "frame": {
         "x": 116,
         "y": 190,
@@ -1032,7 +1032,7 @@
         "y": 0.5
       }
     },
-    "076.png": {
+    "097.png": {
       "frame": {
         "x": 194,
         "y": 19,
@@ -1056,7 +1056,7 @@
         "y": 0.5
       }
     },
-    "097.png": {
+    "098.png": {
       "frame": {
         "x": 194,
         "y": 37,
@@ -1080,7 +1080,7 @@
         "y": 0.5
       }
     },
-    "098.png": {
+    "076.png": {
       "frame": {
         "x": 194,
         "y": 55,
@@ -1176,7 +1176,7 @@
         "y": 0.5
       }
     },
-    "081.png": {
+    "dirt1.png": {
       "frame": {
         "x": 197,
         "y": 127,
@@ -1200,7 +1200,7 @@
         "y": 0.5
       }
     },
-    "asphalt1.png": {
+    "ground-to-down.png": {
       "frame": {
         "x": 197,
         "y": 145,
@@ -1224,7 +1224,7 @@
         "y": 0.5
       }
     },
-    "asphalt2.png": {
+    "dirt3.png": {
       "frame": {
         "x": 198,
         "y": 163,
@@ -1248,7 +1248,7 @@
         "y": 0.5
       }
     },
-    "ground-to-down.png": {
+    "081.png": {
       "frame": {
         "x": 198,
         "y": 181,
@@ -1272,7 +1272,7 @@
         "y": 0.5
       }
     },
-    "043.png": {
+    "asphalt1.png": {
       "frame": {
         "x": 1,
         "y": 205,
@@ -1296,7 +1296,7 @@
         "y": 0.5
       }
     },
-    "042.png": {
+    "asphalt2.png": {
       "frame": {
         "x": 198,
         "y": 199,
@@ -1344,7 +1344,7 @@
         "y": 0.5
       }
     },
-    "ground-middle.png": {
+    "043.png": {
       "frame": {
         "x": 134,
         "y": 202,
@@ -1368,7 +1368,7 @@
         "y": 0.5
       }
     },
-    "grass-diag-down.png": {
+    "042.png": {
       "frame": {
         "x": 152,
         "y": 208,
@@ -1392,7 +1392,7 @@
         "y": 0.5
       }
     },
-    "grass-diag-up.png": {
+    "ground-middle.png": {
       "frame": {
         "x": 55,
         "y": 202,
@@ -1416,7 +1416,7 @@
         "y": 0.5
       }
     },
-    "grass-round-middle.png": {
+    "ground-end.png": {
       "frame": {
         "x": 73,
         "y": 202,
@@ -1440,7 +1440,7 @@
         "y": 0.5
       }
     },
-    "ground-end.png": {
+    "grass-diag-down.png": {
       "frame": {
         "x": 19,
         "y": 208,
@@ -1464,7 +1464,7 @@
         "y": 0.5
       }
     },
-    "ground-to-up.png": {
+    "grass-diag-up.png": {
       "frame": {
         "x": 37,
         "y": 208,
@@ -1488,11 +1488,11 @@
         "y": 0.5
       }
     },
-    "dirt-corner-right.png": {
+    "grass-round-middle.png": {
       "frame": {
         "x": 91,
         "y": 208,
-        "w": 15,
+        "w": 16,
         "h": 16
       },
       "rotated": false,
@@ -1500,11 +1500,11 @@
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 15,
+        "w": 16,
         "h": 16
       },
       "sourceSize": {
-        "w": 15,
+        "w": 16,
         "h": 16
       },
       "pivot": {
@@ -1512,11 +1512,11 @@
         "y": 0.5
       }
     },
-    "asphalt4.png": {
+    "boxSmall.png": {
       "frame": {
-        "x": 108,
+        "x": 109,
         "y": 208,
-        "w": 15,
+        "w": 16,
         "h": 16
       },
       "rotated": false,
@@ -1524,36 +1524,12 @@
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 15,
+        "w": 16,
         "h": 16
       },
       "sourceSize": {
-        "w": 15,
+        "w": 16,
         "h": 16
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "grass-pre-middle.png": {
-      "frame": {
-        "x": 212,
-        "y": 1,
-        "w": 16,
-        "h": 15
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 16,
-        "h": 15
-      },
-      "sourceSize": {
-        "w": 16,
-        "h": 15
       },
       "pivot": {
         "x": 0.5,
@@ -1563,7 +1539,7 @@
     "070.png": {
       "frame": {
         "x": 212,
-        "y": 18,
+        "y": 1,
         "w": 15,
         "h": 16
       },
@@ -1587,7 +1563,7 @@
     "asphalt6.png": {
       "frame": {
         "x": 212,
-        "y": 36,
+        "y": 19,
         "w": 15,
         "h": 16
       },
@@ -1611,7 +1587,7 @@
     "dirt-corner-left.png": {
       "frame": {
         "x": 212,
-        "y": 54,
+        "y": 37,
         "w": 15,
         "h": 16
       },
@@ -1632,11 +1608,35 @@
         "y": 0.5
       }
     },
-    "bottle_(3).png": {
+    "grass-pre-middle.png": {
+      "frame": {
+        "x": 212,
+        "y": 55,
+        "w": 16,
+        "h": 15
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 16,
+        "h": 15
+      },
+      "sourceSize": {
+        "w": 16,
+        "h": 15
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "dirt-corner-right.png": {
       "frame": {
         "x": 212,
         "y": 72,
-        "w": 14,
+        "w": 15,
         "h": 16
       },
       "rotated": false,
@@ -1644,11 +1644,11 @@
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 14,
+        "w": 15,
         "h": 16
       },
       "sourceSize": {
-        "w": 14,
+        "w": 15,
         "h": 16
       },
       "pivot": {
@@ -1656,11 +1656,11 @@
         "y": 0.5
       }
     },
-    "bottle_(1).png": {
+    "asphalt4.png": {
       "frame": {
         "x": 215,
         "y": 90,
-        "w": 14,
+        "w": 15,
         "h": 16
       },
       "rotated": false,
@@ -1668,11 +1668,11 @@
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 14,
+        "w": 15,
         "h": 16
       },
       "sourceSize": {
-        "w": 14,
+        "w": 15,
         "h": 16
       },
       "pivot": {
@@ -1680,7 +1680,7 @@
         "y": 0.5
       }
     },
-    "bottle_(2).png": {
+    "bottle_(5).png": {
       "frame": {
         "x": 215,
         "y": 108,
@@ -1704,7 +1704,7 @@
         "y": 0.5
       }
     },
-    "bottle_(5).png": {
+    "bottle_(1).png": {
       "frame": {
         "x": 215,
         "y": 126,
@@ -1728,7 +1728,7 @@
         "y": 0.5
       }
     },
-    "bottle_(6).png": {
+    "bottle_(2).png": {
       "frame": {
         "x": 215,
         "y": 144,
@@ -1752,10 +1752,58 @@
         "y": 0.5
       }
     },
-    "grass2.png": {
+    "bottle_(3).png": {
       "frame": {
         "x": 216,
         "y": 162,
+        "w": 14,
+        "h": 16
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 14,
+        "h": 16
+      },
+      "sourceSize": {
+        "w": 14,
+        "h": 16
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "bottle_(6).png": {
+      "frame": {
+        "x": 216,
+        "y": 180,
+        "w": 14,
+        "h": 16
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 14,
+        "h": 16
+      },
+      "sourceSize": {
+        "w": 14,
+        "h": 16
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "grass2.png": {
+      "frame": {
+        "x": 216,
+        "y": 198,
         "w": 16,
         "h": 12
       },
@@ -1776,10 +1824,10 @@
         "y": 0.5
       }
     },
-    "paper_(2).png": {
+    "paper_(1).png": {
       "frame": {
         "x": 216,
-        "y": 176,
+        "y": 212,
         "w": 15,
         "h": 12
       },
@@ -1801,54 +1849,6 @@
       }
     },
     "paper_(6).png": {
-      "frame": {
-        "x": 216,
-        "y": 190,
-        "w": 15,
-        "h": 12
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 15,
-        "h": 12
-      },
-      "sourceSize": {
-        "w": 15,
-        "h": 12
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "paper_(5).png": {
-      "frame": {
-        "x": 216,
-        "y": 204,
-        "w": 15,
-        "h": 12
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 15,
-        "h": 12
-      },
-      "sourceSize": {
-        "w": 15,
-        "h": 12
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "paper_(1).png": {
       "frame": {
         "x": 1,
         "y": 223,
@@ -1872,7 +1872,7 @@
         "y": 0.5
       }
     },
-    "paper_(3).png": {
+    "paper_(5).png": {
       "frame": {
         "x": 198,
         "y": 217,
@@ -1896,10 +1896,82 @@
         "y": 0.5
       }
     },
-    "flower.png": {
+    "paper_(2).png": {
       "frame": {
         "x": 215,
-        "y": 218,
+        "y": 226,
+        "w": 15,
+        "h": 12
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 15,
+        "h": 12
+      },
+      "sourceSize": {
+        "w": 15,
+        "h": 12
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "paper_(3).png": {
+      "frame": {
+        "x": 127,
+        "y": 220,
+        "w": 15,
+        "h": 12
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 15,
+        "h": 12
+      },
+      "sourceSize": {
+        "w": 15,
+        "h": 12
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "flower.png": {
+      "frame": {
+        "x": 170,
+        "y": 220,
+        "w": 16,
+        "h": 9
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 16,
+        "h": 9
+      },
+      "sourceSize": {
+        "w": 16,
+        "h": 9
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "dirt2.png": {
+      "frame": {
+        "x": 144,
+        "y": 226,
         "w": 16,
         "h": 9
       },
@@ -1922,8 +1994,8 @@
     },
     "grass.png": {
       "frame": {
-        "x": 215,
-        "y": 229,
+        "x": 55,
+        "y": 220,
         "w": 14,
         "h": 8
       },
@@ -1946,7 +2018,7 @@
     },
     "044.png": {
       "frame": {
-        "x": 125,
+        "x": 71,
         "y": 220,
         "w": 12,
         "h": 9
@@ -1970,8 +2042,8 @@
     },
     "flower2.png": {
       "frame": {
-        "x": 170,
-        "y": 220,
+        "x": 162,
+        "y": 231,
         "w": 13,
         "h": 7
       },
@@ -1994,8 +2066,8 @@
     },
     "grass_floor2.png": {
       "frame": {
-        "x": 139,
-        "y": 226,
+        "x": 177,
+        "y": 231,
         "w": 16,
         "h": 4
       },
@@ -2018,8 +2090,8 @@
     },
     "grass_floor.png": {
       "frame": {
-        "x": 157,
-        "y": 229,
+        "x": 195,
+        "y": 231,
         "w": 16,
         "h": 3
       },
@@ -2067,7 +2139,7 @@
     "bottle_(4).png": {
       "frame": {
         "x": 215,
-        "y": 90,
+        "y": 126,
         "w": 14,
         "h": 16
       },
@@ -2090,8 +2162,8 @@
     },
     "chips_(6).png": {
       "frame": {
-        "x": 151,
-        "y": 52,
+        "x": 172,
+        "y": 148,
         "w": 23,
         "h": 16
       },
@@ -2114,8 +2186,8 @@
     },
     "paper_(4).png": {
       "frame": {
-        "x": 1,
-        "y": 223,
+        "x": 216,
+        "y": 212,
         "w": 15,
         "h": 12
       },
@@ -2144,7 +2216,7 @@
     "format": "RGBA8888",
     "size": {
       "w": 233,
-      "h": 238
+      "h": 239
     },
     "scale": 1
   },

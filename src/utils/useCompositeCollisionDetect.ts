@@ -2,8 +2,9 @@ import { useTick } from '@pixi/react';
 import { Detector, Body, Collision } from 'matter-js';
 import { useEffect, useRef, useState } from 'react';
 import { BodyGroupMap } from '../bodyGroups/typings';
+import { useSlowerTick } from './useSlowedTick';
 
-export const UPDATE_PERIOD = 15;
+export const DELTA = 15;
 
 type Props = {
   body: Body | null;
@@ -36,12 +37,8 @@ export const useBodyToBodyGroupCollisionDetect = ({
     };
   }, [body, bodyGroup]);
 
-  useTick((delta) => {
-    deltaRef.current += delta;
-
-    if (deltaRef.current < UPDATE_PERIOD || !body) return;
-
-    deltaRef.current = 0;
+  useSlowerTick(() => {
+    if (!body) return;
 
     // Возможно для получения урона стоит переписать события под Event
     const bodyToCompositeCollisions = Detector.collisions(detectorRef.current).filter(
@@ -53,7 +50,7 @@ export const useBodyToBodyGroupCollisionDetect = ({
       collisionsRef.current = bodyToCompositeCollisions;
       setCollision(isColliding);
     }
-  });
+  }, DELTA);
 
   return [isCollided, collisionsRef.current];
 };

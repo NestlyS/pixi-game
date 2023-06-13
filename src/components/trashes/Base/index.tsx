@@ -4,8 +4,8 @@ import { USER_BODY_GROUP } from '../../../bodyGroups/user';
 import { Body } from '../../Body';
 import { AnimatedSpriteController } from '../../controllers/AnimatedSpriteController';
 import { TrashBodyController } from './controller';
-import { WHITE_OUTLINE_FILTER } from '../../../constants';
-import { playSound } from '../../../utils/soundPlayer';
+import { Filters } from '../../../constants';
+import { SoundTypes, Sounds, playSound } from '../../../utils/soundController';
 import { useDispatch } from 'react-redux';
 import { TrashTypes } from '../../../redux/mainUser/typings';
 import { incTrash } from '../../../redux/mainUser';
@@ -13,7 +13,7 @@ import { incTrash } from '../../../redux/mainUser';
 const TRASH_WIDTH = 40;
 const TRASH_HEIGHT = 40;
 const ANIMATION_AMPLITUDE = 5;
-const COLLECT_SOUND = 'trashPickUpSnd';
+const FILTERS = [Filters.WHITE_OUTLINE_FILTER];
 
 const TRASH_PARAMS: Matter.IChamferableBodyDefinition = {
   isSensor: true,
@@ -27,15 +27,25 @@ type Props = {
   spritesheetUrl: string;
   type: TrashTypes;
   onDelete?: () => void;
+  isUncollectable?: boolean;
 };
 
-export const Trash = ({ x, y, animationName, spritesheetUrl, type, onDelete }: Props) => {
+export const Trash = ({
+  x,
+  y,
+  animationName,
+  spritesheetUrl,
+  type,
+  onDelete,
+  isUncollectable,
+}: Props) => {
   const trashLabelRef = useRef(uniqueId('trash'));
   const [isTouched, setTouch] = useState(false);
   const dispatch = useDispatch();
 
   const onCollision = useCallback(
     (e: Matter.IEventCollision<Matter.Engine>) => {
+      if (isUncollectable) return;
       if (isTouched) return;
 
       const collidedPair = e.pairs.find((pair) =>
@@ -48,9 +58,9 @@ export const Trash = ({ x, y, animationName, spritesheetUrl, type, onDelete }: P
 
       dispatch(incTrash(type));
       setTouch(true);
-      playSound(COLLECT_SOUND);
+      playSound(Sounds.Collect);
     },
-    [dispatch, isTouched, type],
+    [dispatch, isTouched, isUncollectable, type],
   );
 
   return (
@@ -74,7 +84,7 @@ export const Trash = ({ x, y, animationName, spritesheetUrl, type, onDelete }: P
         width={TRASH_WIDTH}
         height={TRASH_HEIGHT}
         zIndex={100}
-        filters={[WHITE_OUTLINE_FILTER]}
+        filters={FILTERS}
       />
     </Body>
   );

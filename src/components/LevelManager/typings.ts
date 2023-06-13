@@ -4,6 +4,7 @@ import { MonstersRow } from '../Chunk/components/MonstersRow';
 import { Row } from '../Chunk/components/Row';
 import { RowDown } from '../Chunk/components/RowDown';
 import { RowUp } from '../Chunk/components/RowUp';
+import { SpikesRow } from '../Chunk/components/SpikesRow';
 import { TrashRowChunk } from '../Chunk/components/TrashRowChunk';
 
 export enum Chunks {
@@ -14,6 +15,7 @@ export enum Chunks {
   Up = 'up',
   Down = 'down',
   Healer = 'healer',
+  Spikes = 'spikes',
 }
 
 export const Components = {
@@ -24,6 +26,7 @@ export const Components = {
   [Chunks.Monsters]: MonstersRow,
   [Chunks.Crack]: Crack,
   [Chunks.Healer]: HealerChunk,
+  [Chunks.Spikes]: SpikesRow,
 };
 
 export type ChunkParams = {

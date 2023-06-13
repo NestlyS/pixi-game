@@ -1,5 +1,5 @@
+import { TrashTypes } from '../../redux/mainUser/typings';
 import { getRandomValue } from '../../utils/getRandomValue';
-import { TrashTypes } from '../TrashStorage/typings';
 import { Bottle } from './Bottle';
 import { Chips } from './Chips';
 import { Paper } from './Paper';

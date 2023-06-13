@@ -12,15 +12,17 @@ import { isSensorLabel } from '../../ConntectedSensorController/utils';
 import { initialState, AttackingContextProvider, AttackingAnimationProvider } from './context';
 import { ATTACK_KEY_CODE, ATTACK_KEY_CODE_EXTRA } from '../../../../constants';
 import { setAttackCooldown } from '../../../../redux/mainUser';
-import { selectMainUserAttackCooldown } from '../../../../redux/mainUser/selectors';
+import {
+  selectMainUserAttackCooldown,
+  selectMainUserHurtedState,
+} from '../../../../redux/mainUser/selectors';
 import { makeDamageToHealthEntity } from '../../../../redux/health';
 import { getBodyId } from '../../../../utils/getBodyId';
-import { playSound } from '../../../../utils/soundPlayer';
+import { SoundTypes, Sounds, playSound } from '../../../../utils/soundController';
 import { selectPageGamePauseState } from '../../../../redux/gamePage/selectors';
 
 const DAMAGE_VALUE = 1;
 const ATTACK_BOOST = -5;
-const ATTACK_SOUND = 'evaAttackSnd';
 
 type Props = {
   children: React.ReactNode;
@@ -32,6 +34,7 @@ type Props = {
 export const AttackController = ({ children, width, height, cooldown = 1000 }: Props) => {
   const { body } = useBody();
   const { releaseAnimation, requestAnimation } = useAnimationController();
+  const isHurted = useSelector(selectMainUserHurtedState);
   const [isAttacing, setAttacting] = useState(initialState);
   const attackColldown = useSelector(selectMainUserAttackCooldown);
   const isPaused = useSelector(selectPageGamePauseState);
@@ -56,7 +59,7 @@ export const AttackController = ({ children, width, height, cooldown = 1000 }: P
   );
 
   const mouseCb = useCallback(() => {
-    if (isPaused || attackColldown) return;
+    if (isHurted || isPaused || attackColldown) return;
 
     requestAnimation({
       name: AnimationList.Attack,
@@ -66,7 +69,7 @@ export const AttackController = ({ children, width, height, cooldown = 1000 }: P
       },
     });
 
-    playSound(ATTACK_SOUND);
+    playSound(Sounds.Attack);
     setAttacting(true);
     dispatch(setAttackCooldown(cooldown));
 
@@ -75,7 +78,16 @@ export const AttackController = ({ children, width, height, cooldown = 1000 }: P
     }, cooldown);
 
     applyForce(body, body.velocity.x, ATTACK_BOOST);
-  }, [isPaused, attackColldown, requestAnimation, dispatch, cooldown, body, releaseAnimation]);
+  }, [
+    isHurted,
+    isPaused,
+    attackColldown,
+    requestAnimation,
+    dispatch,
+    cooldown,
+    body,
+    releaseAnimation,
+  ]);
 
   useControlKey(ATTACK_KEY_CODE, mouseCb);
   useControlKey(ATTACK_KEY_CODE_EXTRA, mouseCb);

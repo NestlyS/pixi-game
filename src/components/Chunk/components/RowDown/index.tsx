@@ -10,6 +10,7 @@ import { ChunkProps } from '../../typings';
 import { Body } from '../../../Body';
 import { Sprite } from '../../../Sprite';
 import { Row } from '../../../TileGround/Row';
+import { Container } from '@pixi/react';
 
 export const ROW_WIDTH = 8;
 const getTexture = () => DIRT_MIDDLE_PART_NAME;
@@ -19,7 +20,7 @@ const TRAMPLIN_CONFIG = {
 };
 
 export const RowDown = memo(
-  ({ spritesheetUrl, x, y, tileSize, tilesHeight, width = ROW_WIDTH }: ChunkProps) => {
+  ({ spritesheetUrl, x, y, tileSize, tilesHeight, width = ROW_WIDTH, zIndex }: ChunkProps) => {
     const halfWidth = width / 2;
 
     const textureModifier = useCallback((indexX: number, indexY: number, length: number) => {
@@ -31,7 +32,7 @@ export const RowDown = memo(
     }, []);
 
     return (
-      <>
+      <Container zIndex={zIndex}>
         <Grass
           textureModifier={textureModifier}
           spritesheetUrl={spritesheetUrl}
@@ -85,7 +86,7 @@ export const RowDown = memo(
           spritesheet={spritesheetUrl}
           getTexture={getTexture}
         />
-      </>
+      </Container>
     );
   },
 );

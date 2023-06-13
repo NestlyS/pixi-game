@@ -7,9 +7,10 @@ const ANIMATION_NAME = 'chips';
 type Props = {
   x: number;
   y: number;
+  isUncollectable?: boolean;
 };
 
-export const Chips = memo(({ x, y }: Props) => {
+export const Chips = memo(({ x, y, isUncollectable }: Props) => {
   return (
     <Trash
       x={x}
@@ -17,6 +18,7 @@ export const Chips = memo(({ x, y }: Props) => {
       spritesheetUrl={SPRITESHEET_URL}
       animationName={ANIMATION_NAME}
       type="chips"
+      isUncollectable={isUncollectable}
     />
   );
 });

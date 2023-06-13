@@ -2,6 +2,9 @@ import { IAppState } from '..';
 
 export const selectSettings = (state: IAppState) => state.settings;
 
+export const selectIsStartScreenSkipped = (state: IAppState) =>
+  selectSettings(state).isSkipStartScreen;
+
 export const selectSettingsFPSCounterVisiblity = (state: IAppState) =>
   selectSettings(state).isFPSCounterVisible;
 

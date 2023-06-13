@@ -10,6 +10,15 @@
       ]
     },
     {
+      "name": "start-screen",
+      "assets": [
+        {
+          "name": "start-screen",
+          "srcs": "/sprites/start_screen.json"
+        }
+      ]
+    },
+    {
       "name": "game-screen",
       "assets": [
         {
@@ -48,6 +57,10 @@
         {
           "name": "script",
           "srcs": "/novel/script.json"
+        },
+        {
+          "name": "scriptNew",
+          "srcs": "/novel/script_new.json"
         },
         {
           "name": "menuAtlas",

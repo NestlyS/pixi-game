@@ -11,9 +11,10 @@ import { DAMAGING_BODY_GROUP } from '../../bodyGroups/damaging';
 import { DeathWrapper } from '../controllers/DeathController/wrapper';
 import { DeathListener } from '../controllers/DeathController/listener';
 import { useRef } from 'react';
-import { MONSTER_LABEL, SHADOW_FILTER } from '../../constants';
+import { Filters, MONSTER_LABEL } from '../../constants';
 import { AnimationList } from '../controllers/AnimationController/context';
 
+const AFTER_ATTACK_COOLDOWN = 1000;
 const DEATH_SPEED = 0.07;
 const DEATH_TIME = 60 / DEATH_SPEED;
 const test = '/monsters/monster.json';
@@ -28,6 +29,7 @@ const animationMap = {
   [AnimationList.Slide]: null,
 };
 
+const FILTERS = [Filters.SHADOW_FILTER];
 export const BODY_FRICTION = 0.01;
 const MONSTER_HEALTH = 1;
 const MAIN_BODY_OPTIONS = { inertia: Infinity, friction: BODY_FRICTION, weight: 300 };
@@ -36,10 +38,13 @@ export type Props = {
   x: number;
   y: number;
   onDeath?: (body?: Matter_Body) => void;
+  isMovingDisabled?: boolean;
+  isShootingDisabled?: boolean;
 };
 
-export const Monster = ({ x, y, onDeath }: Props) => {
+export const Monster = ({ x, y, onDeath, isMovingDisabled, isShootingDisabled }: Props) => {
   const monsterLabelRef = useRef(uniqueId(MONSTER_LABEL));
+  console.log('monster', x, y);
 
   return (
     <DeathWrapper cooldown={DEATH_TIME} onDeath={onDeath}>
@@ -62,10 +67,16 @@ export const Monster = ({ x, y, onDeath }: Props) => {
             animationSpeed={0.07}
             setDefault
             zIndex={100}
-            filters={[SHADOW_FILTER]}
+            filters={FILTERS}
           >
             <AnimationController animationParams={animationMap}>
-              <SimpleAIController spritesheetUrl={test} animationName="bullet" />
+              <SimpleAIController
+                afterAttackCooldown={AFTER_ATTACK_COOLDOWN}
+                spritesheetUrl={test}
+                animationName="bullet"
+                isMovingDisabled={isMovingDisabled}
+                isShootingDisabled={isShootingDisabled}
+              />
             </AnimationController>
           </AnimatedSpriteController>
         </GroundTouchController>

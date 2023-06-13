@@ -36,7 +36,12 @@ export const TrashCounter = ({ x, y, width, height, pad, spritesheetUrl }: Props
       {TEXTURE_URLS.map((textureUrl, index) => (
         <TrashCount
           key={index}
-          x={x + (width * 2 + pad * 2) * index}
+          x={
+            x +
+            (width * 2 +
+              ((index === 0 ? 0 : trash[TRASH_TYPES[index - 1]].toFixed(0).length) + 4) * pad) *
+              index
+          }
           y={y}
           width={width}
           height={height}

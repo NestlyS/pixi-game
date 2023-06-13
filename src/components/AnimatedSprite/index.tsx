@@ -5,13 +5,14 @@ import {
   IPointData,
   SCALE_MODES,
   Spritesheet,
-  Filter,
 } from 'pixi.js';
 import { Assets } from '@pixi/assets';
 import React, { forwardRef, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { AnimationContextProvider, AnimationState } from './context';
 import { selectPageGamePauseState } from '../../redux/gamePage/selectors';
+import { Filters } from '../../constants';
+import { useLowGraphic } from '../../utils/useLowGraphic';
 
 export type IAnimatedSprite = {
   spritesheet: string;
@@ -27,7 +28,7 @@ export type IAnimatedSprite = {
   scale?: IPointData;
   animationSpeed?: number;
   zIndex?: number;
-  filters?: Filter[];
+  filters?: Filters[];
   onComplete?: (currentAnimationName: string | null) => void;
 };
 
@@ -58,11 +59,12 @@ export const AnimatedSprite = memo(
       const [animationMap, setAnimationMap] = useState<Record<string, Texture[]>>({});
       const [animationSpeed, setAnimationSpeed] = useState<number>(initialAnimationSpeed);
       const onCompleteListenersRef = useRef<
-        [(currentAnimationName: string | null) => void, boolean][]
+        [(currentAnimationName: string | null, isLoop: boolean) => void, boolean][]
       >([]);
       const [isLooped, setIsLooped] = useState<boolean>(true);
-      const [filters, setFilters] = useState<Filter[]>([]);
+      const [filters, setFilters] = useState<Filters[]>([]);
       const app = useApp();
+      const innerFilters = useLowGraphic([...filters, ...(initialFilters ?? [])]);
       const isPaused = useSelector(selectPageGamePauseState);
 
       // load
@@ -118,7 +120,7 @@ export const AnimatedSprite = memo(
       }, [app, initialAnimation, setDefault, spritesheet]);
 
       const onComplete_ = useCallback(
-        (cb: (currentAnimationName: string | null) => void, once = false) =>
+        (cb: (currentAnimationName: string | null, isLoop: boolean) => void, once = false) =>
           onCompleteListenersRef.current.push([cb, once]),
         [],
       );
@@ -127,10 +129,18 @@ export const AnimatedSprite = memo(
           onCompleteListenersRef.current.filter(([_cb]) => cb !== _cb),
         [],
       );
+      const innerOnLoopComplete = useCallback(() => {
+        onComplete?.(currentAnimationNameRef.current);
+        onCompleteListenersRef.current = onCompleteListenersRef.current.filter(([cb, once]) => {
+          cb(currentAnimationNameRef.current, true);
+          return !once;
+        });
+      }, [onComplete]);
+
       const innerOnComplete = useCallback(() => {
         onComplete?.(currentAnimationNameRef.current);
         onCompleteListenersRef.current = onCompleteListenersRef.current.filter(([cb, once]) => {
-          cb(currentAnimationNameRef.current);
+          cb(currentAnimationNameRef.current, false);
           return !once;
         });
       }, [onComplete]);
@@ -145,7 +155,7 @@ export const AnimatedSprite = memo(
           name: string;
           loop?: boolean | undefined;
           speed?: number | undefined;
-          _filters?: Filter[] | undefined;
+          _filters?: Filters[] | undefined;
         }) => {
           setCurrentAnimation(animationMap[name]);
           currentAnimationNameRef.current = name;
@@ -192,10 +202,10 @@ export const AnimatedSprite = memo(
           <ReactPIXIAnimatedSprite
             x={x}
             y={y}
-            onLoop={innerOnComplete}
+            onLoop={innerOnLoopComplete}
             onComplete={innerOnComplete}
             animationSpeed={animationSpeed}
-            isPlaying={true}
+            isPlaying={!isPaused}
             rotation={rotation}
             textures={currentAnimation}
             anchor={anchor}
@@ -204,7 +214,7 @@ export const AnimatedSprite = memo(
             height={height}
             loop={isLooped}
             zIndex={zIndex}
-            filters={[...(initialFilters ?? []), ...filters]}
+            filters={innerFilters}
             {...(scale ? { scale } : {})}
           />
           <AnimationContextProvider value={value}>{children}</AnimationContextProvider>

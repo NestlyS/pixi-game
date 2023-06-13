@@ -15,7 +15,7 @@ import { SlideController } from '../controllers/mainUserControllers/SlideControl
 import { AttackController } from '../controllers/mainUserControllers/AttackController';
 import { USER_BODY_GROUP } from '../../bodyGroups/user';
 import { MainUserController } from '../MainUserStorage/controller';
-import { BLACK_OUTLINE_FILTER, SHADOW_FILTER, USER_LABEL } from '../../constants';
+import { Filters, USER_LABEL } from '../../constants';
 import { FallController } from '../controllers/FallController';
 import { ResetUserController } from '../controllers/mainUserControllers/ResetUserController';
 import { DeathListener } from '../controllers/DeathController/listener';
@@ -25,7 +25,13 @@ import { MainUserSpriteDirectionController } from '../controllers/mainUserContro
 import { selectSettingsAutorunState } from '../../redux/settings/selectors';
 import { AutomoveController } from '../controllers/mainUserControllers/AutomoveController';
 import { MainUserHealthController } from '../controllers/mainUserControllers/MainUserHealthController';
-import { selectPageGameInitedState } from '../../redux/gamePage/selectors';
+import {
+  selectPageGameInitedState,
+  selectPageGameSpeedMultCalculated,
+} from '../../redux/gamePage/selectors';
+import { Container } from '@pixi/react';
+
+const initialRunAnimationSpeed = 0.07;
 
 const test = '/eva/eva.json';
 const animationMap = {
@@ -33,25 +39,27 @@ const animationMap = {
   [AnimationList.Run]: { name: 'run', speed: 0.07, loop: true, priority: 2 },
   [AnimationList.Slide]: { name: 'sliding', speed: 0.07, loop: true, priority: 3 },
   [AnimationList.Fall]: { name: 'fall', speed: 0.07, loop: true, priority: 4 },
-  [AnimationList.Heal]: { name: 'heal', speed: 0.15, loop: false, priority: 5 },
-  [AnimationList.Jump]: { name: 'jump', speed: 0.09, loop: false, priority: 6 },
-  [AnimationList.Attack]: { name: 'attack', speed: 0.15, loop: false, priority: 7 },
-  [AnimationList.Hurt]: { name: 'hurt', speed: 0.05, loop: true, priority: 8 },
+  [AnimationList.Jump]: { name: 'jump', speed: 0.09, loop: false, priority: 5 },
+  [AnimationList.Attack]: { name: 'attack', speed: 0.15, loop: false, priority: 6 },
+  [AnimationList.Heal]: { name: 'heal', speed: 0.15, loop: false, priority: 7 },
+  [AnimationList.Hurt]: { name: 'hurt', speed: 0.12, loop: true, priority: 8 },
   [AnimationList.Die]: {
     name: 'death',
     speed: 0.1,
     loop: false,
     priority: 9,
-    filters: [BLACK_OUTLINE_FILTER],
+    filters: [Filters.BLACK_OUTLINE_FILTER],
   },
 };
 
 const MAX_HEALTH = 3;
 export const USER_COOLDOWN = 700;
 export const BODY_FRICTION = 0.05;
-const HEAL_COOLDOWN_VALUE = 30 * 1000;
+export const HEAL_COOLDOWN_VALUE = 60 * 1000;
+const SLIDE_COOLDOWN_VALUE = 600;
 const MAIN_BODY_OPTIONS = { inertia: Infinity, friction: BODY_FRICTION, weight: 300 };
 const INVICIBILITY_PERIOD = 2000;
+const FILTERS = [Filters.SHADOW_FILTER];
 
 type Props = {
   x: number;
@@ -62,6 +70,9 @@ export const ControllableBody = ({ x, y }: Props) => {
   const userLabelRef = useRef(uniqueId(USER_LABEL));
   const isAutorunEnabled = useSelector(selectSettingsAutorunState);
   const isInited = useSelector(selectPageGameInitedState);
+  const runSpeed = useSelector(selectPageGameSpeedMultCalculated(initialRunAnimationSpeed * 2));
+
+  animationMap.run.speed = runSpeed;
 
   return (
     <Body
@@ -83,12 +94,12 @@ export const ControllableBody = ({ x, y }: Props) => {
           animationSpeed={0.07}
           setDefault
           zIndex={100}
-          filters={[SHADOW_FILTER]}
+          filters={FILTERS}
         >
           <ViewController />
           <AnimationController animationParams={animationMap}>
             {isInited && (
-              <>
+              <Container>
                 <MainUserSpriteDirectionController />
                 <MainUserDeathWrapper>
                   {isAutorunEnabled ? <AutomoveController /> : <MoveController />}
@@ -103,11 +114,11 @@ export const ControllableBody = ({ x, y }: Props) => {
                   <DeathListener />
                   <ResetUserController x={x} y={y} />
                   <AttackController width={70} height={100} cooldown={USER_COOLDOWN}>
-                    <DamageTouchController />
-                    <SlideController />
+                    <DamageTouchController pushToSide="left" />
+                    <SlideController cooldown={SLIDE_COOLDOWN_VALUE} />
                   </AttackController>
                 </MainUserDeathWrapper>
-              </>
+              </Container>
             )}
           </AnimationController>
         </AnimatedSpriteController>

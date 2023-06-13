@@ -2,7 +2,7 @@ import { Container } from '@pixi/react';
 import { useSelector } from 'react-redux';
 import { Sprite } from '../../Sprite';
 import { selectMainUserId, selectMainUserMaxHp } from '../../../redux/mainUser/selectors';
-import { COLOR_OVERLAY_FILTER_STEP_1 } from '../../../constants';
+import { Filters } from '../../../constants';
 import { selectHealthValueById } from '../../../redux/health/selectors';
 
 type Props = {
@@ -15,6 +15,8 @@ type Props = {
   textureUrl: string;
   darkTextureUrl: string;
 };
+
+const FILTERS = [Filters.COLOR_OVERLAY_FILTER_STEP_1];
 
 export const HeartBar = ({
   x,
@@ -46,7 +48,7 @@ export const HeartBar = ({
             textureUrl={textureUrl}
             height={height}
             width={width}
-            filters={index + 1 > currentHealth ? [COLOR_OVERLAY_FILTER_STEP_1] : []}
+            filters={index + 1 > currentHealth ? FILTERS : []}
           />,
           index + 1 > currentHealth && (
             <Sprite

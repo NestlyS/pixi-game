@@ -5,38 +5,38 @@ import { VERTICAL_SHAKING_ANIMATION } from './constants';
 import { useGlobalViewport } from './context';
 import { animateViewport } from './utils';
 
-export const useGlobalViewportControls = (viewport: Viewport | null, extraCondition?: boolean) => {
+export const useGlobalViewportControls = (viewport: Viewport | null) => {
   const DCb = useCallback(() => {
-    if (!viewport || extraCondition) {
+    if (!viewport) {
       return;
     }
 
     viewport.animate({ time: 300, position: { x: 300 + viewport.center.x, y: viewport.center.y } });
-  }, [extraCondition, viewport]);
+  }, [viewport]);
 
   const ACb = useCallback(() => {
-    if (!viewport || extraCondition) {
+    if (!viewport) {
       return;
     }
 
     viewport.animate({ time: 300, position: { x: viewport.center.x - 300, y: viewport.center.y } });
-  }, [extraCondition, viewport]);
+  }, [viewport]);
 
   const SCb = useCallback(() => {
-    if (!viewport || extraCondition) {
+    if (!viewport) {
       return;
     }
 
     viewport.animate({ time: 300, position: { x: viewport.center.x, y: viewport.center.y + 300 } });
-  }, [extraCondition, viewport]);
+  }, [viewport]);
 
   const WCb = useCallback(() => {
-    if (!viewport || extraCondition) {
+    if (!viewport) {
       return;
     }
 
     viewport.animate({ time: 300, position: { x: viewport.center.x, y: viewport.center.y - 300 } });
-  }, [extraCondition, viewport]);
+  }, [viewport]);
 
   useControlKey('ArrowRight', DCb);
   useControlKey('ArrowLeft', ACb);

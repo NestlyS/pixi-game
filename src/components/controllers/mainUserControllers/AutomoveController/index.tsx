@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useTick } from '@pixi/react';
 
 import { useBody } from '../../../Body/context';
 import { applyForce } from '../../../Body/utils';
@@ -11,29 +10,28 @@ import {
   selectPageGamePauseState,
   selectPageGameSpeedMultCalculated,
 } from '../../../../redux/gamePage/selectors';
-import { selectMainUserStoppedState } from '../../../../redux/mainUser/selectors';
+import {
+  selectMainUserHurtedState,
+  selectMainUserStoppedState,
+} from '../../../../redux/mainUser/selectors';
+import { useSlowerTick } from '../../../../utils/useSlowedTick';
 
 const HORIZONTAL_SPEED = 5;
 const MAX_SPEED = 15;
+const DELTA = 5;
 
 export const AutomoveController = () => {
   const { body } = useBody();
   const { releaseAnimation, requestAnimation } = useAnimationController();
   const horizontalSpeed = useSelector(selectPageGameSpeedMultCalculated(HORIZONTAL_SPEED));
   const isPaused = useSelector(selectPageGamePauseState);
+  const isHurted = useSelector(selectMainUserHurtedState);
   const isStopped = useSelector(selectMainUserStoppedState);
   const dispatch = useDispatch();
   const isRequested = useRef(false);
-  const deltaRef = useRef(0);
 
-  useTick((delta) => {
-    if (isPaused || isStopped) return;
-
-    deltaRef.current += delta;
-
-    if (deltaRef.current > 5) return;
-
-    deltaRef.current = 0;
+  useSlowerTick(() => {
+    if (isPaused || isHurted || isStopped) return;
 
     if (body.velocity.x < MAX_SPEED) applyForce(body, horizontalSpeed, body.velocity.y);
 
@@ -46,7 +44,7 @@ export const AutomoveController = () => {
     if (body.velocity.x < HORIZONTAL_SPEED && isRequested.current) {
       releaseAnimation(AnimationList.Run);
     }
-  });
+  }, DELTA);
 
   return null;
 };

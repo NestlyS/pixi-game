@@ -1,16 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { __IS_DEV__ } from '../../constants';
+import { getIsSkipStartScreen } from './utils';
 
 type InitialState = {
   isNotFocusedOnMainBody?: boolean;
   isCollisionVisible?: boolean;
   isFPSCounterVisible: boolean;
   isAutorunEnabled: boolean;
+  isSkipStartScreen: boolean;
 };
 
 export const initialState: InitialState = {
   isFPSCounterVisible: true,
-  isAutorunEnabled: !__IS_DEV__,
+  isAutorunEnabled: true,
+  isSkipStartScreen: false,
   ...(__IS_DEV__ ? { isCollisionVisible: true, isNotFocusedOnMainBody: false } : {}),
 };
 
@@ -18,6 +21,10 @@ const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
+    initSettingsState: (state) => {
+      state.isSkipStartScreen = getIsSkipStartScreen();
+    },
+
     revertCollisions: (state) => {
       if (!__IS_DEV__) return;
       state.isCollisionVisible = !state.isCollisionVisible;
@@ -79,6 +86,7 @@ const settingsSlice = createSlice({
 
 export const settingsReducer = settingsSlice.reducer;
 export const {
+  initSettingsState,
   showCollisions,
   hideCollisions,
   revertCollisions,

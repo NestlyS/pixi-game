@@ -8,6 +8,7 @@ import { healthReducer } from './health';
 import { appControllerReducer } from './appController';
 import { novelPageReducer } from './novelPage';
 import { gamePageReducer } from './gamePage';
+import { textBlockReducer } from './textBlockController';
 
 export const store = configureStore({
   reducer: combineReducers({
@@ -17,6 +18,7 @@ export const store = configureStore({
     appController: appControllerReducer,
     novel: novelPageReducer,
     game: gamePageReducer,
+    textBlock: textBlockReducer,
   }),
   devTools: __IS_DEV__,
 });

@@ -1,0 +1,517 @@
+{
+  "dialog1": [
+    {
+      "actionType": "screenTransition",
+      "text": "Государство Лавландия. Прекрасное, прогрессивное государство, несколько десятилетий терроризируемое одной проблемой...",
+      "sound": "dialog-calm"
+    },
+    {
+      "actionType": "screenTransition",
+      "text": "...проблемой загрязнения окружающей среды..."
+    },
+    {
+      "actionType": "screenTransition",
+      "text": "..и она настолько разрослась, что природа решила дать отпор безразличию людей..."
+    },
+    {
+      "actionType": "screenTransition",
+      "text": "...оживив отходы."
+    },
+    {
+      "left": {
+        "name": "eva",
+        "state": "smile",
+        "pose": "weaponless"
+      },
+      "right": {
+        "name": "mary",
+        "pose": "idle",
+        "state": "idle"
+      },
+      "background": "backgroung2.png",
+      "active": null,
+      "text": "Нынешнее время."
+    },
+    {
+      "background": "backgroung2.png",
+      "active": "eva",
+      "text": "Я так счастлива, что летние каникулы уже наступили! Мери, разве ты не счастлива?"
+    },
+    {
+      "active": "mary",
+      "right": {
+        "state": "idle"
+      },
+      "text": "Наверное, счастлива."
+    },
+    {
+      "active": "mary",
+      "text": "Кстати, Ева, я всё хотела тебе предложить..."
+    },
+    {
+      "active": "mary",
+      "right": {
+        "state": "smile"
+      },
+      "text": "Что думаешь насчёт того, чтобы присоединиться на мою вечеринку около десяти вечера? Там будет один мой друг, вы бы могли поладить."
+    },
+    {
+      "active": "eva",
+      "left": {
+        "state": "surprised"
+      },
+      "text": "Вечеринку?.. Разве ты не знаешь про комендантский час?"
+    },
+    {
+      "active": "mary",
+      "text": "Да знаю я про эту скучную чушь. Но кому какое дело до правил, когда мусорники - это лишь выдумки?"
+    },
+    {
+      "active": "eva",
+      "left": {
+        "state": "discont"
+      },
+      "text": "Это не выдумки!"
+    },
+    {
+      "active": "mary",
+      "right": {
+        "state": "talk"
+      },
+      "text": "«вздох»"
+    },
+    {
+      "active": "mary",
+      "right": {
+        "state": "idle"
+      },
+      "text": "Неважно. Может, ты хоть раз не будешь верить в эту чепуху и поживёшь для себя?"
+    },
+    {
+      "active": "eva",
+      "text": "Я не хочу жить в больнице после таких импульсивных решений."
+    },
+    {
+      "active": "mary",
+      "text": "Ладно. Дело твоё."
+    },
+    {
+      "actionType": "screenTransition",
+      "text": "После долгой дороги подруги дошли до дома Евы..."
+    },
+    {
+      "left": {
+        "name": "eva",
+        "state": "idle"
+      },
+      "right": {
+        "name": "mary"
+      },
+      "background": "backgroung1.png",
+      "sound": "dialog-nerv",
+      "active": "eva",
+      "text": "Ладушки, я тогда пойду! Спасибо, что проводила меня!"
+    },
+    {
+      "active": "mary",
+      "text": "Не за что."
+    },
+    {
+      "active": "eva",
+      "left": {
+        "state": "doubt"
+      },
+      "text": "И... Эм, Мери, будь аккуратней со своим другом на этой вечеринке, пожалуйста."
+    },
+    {
+      "active": "mary",
+      "text": "Обязательно. До скорой."
+    },
+    {
+      "actionType": "screenTransition",
+      "text": "Утро. Спальня Евы."
+    },
+    {
+      "right": null,
+      "background": "backgroung5.png",
+      "sound": "dialog-calm",
+      "left": {
+        "name": "eva",
+        "state": "idle",
+        "pose": "pajamas"
+      },
+      "active": "eva",
+      "text": "Хе-хе! Солнце, привет! Будильник, которого нет, тоже привет!"
+    },
+    {
+      "active": null,
+      "text": "Звук уведомления."
+    },
+    {
+      "active": "eva",
+      "left": {
+        "state": "surprised"
+      },
+      "text": "М, сообщение? Так рано... От Мери?"
+    },
+    {
+      "active": "eva",
+      "left": {
+        "state": "shocked"
+      },
+      "effect": "shaking",
+      "text": "Что?!"
+    },
+    {
+      "actionType": "screenTransition",
+      "text": "Больница. Ева врывается в палату №6, где находится Мери, сшибая какого-то паренька с прохода.",
+      "sound": "dialog-nerv"
+    },
+    {
+      "active": "eva",
+      "left": {
+        "name": "eva",
+        "pose": "weaponless",
+        "state": "shocked"
+      },
+      "right": {
+        "name": "ernest",
+        "state": "shocked",
+        "pose": "weaponless"
+      },
+      "background": "backgroung4.png",
+      "text": "Боже мой, Мери!"
+    },
+    {
+      "active": "ernest",
+      "right": {
+        "state": "angry_talk"
+      },
+      "text": "Эй!"
+    },
+    {
+      "active": "eva",
+      "left": {
+        "state": "sad"
+      },
+      "text": "Мери..."
+    },
+    {
+      "active": "eva",
+      "left": {
+        "state": "shocked"
+      },
+      "text": "!!!"
+    },
+    {
+      "active": "mary",
+      "right": {
+        "name": "mary",
+        "state": "sad_closedeyes",
+        "pose": "hospital"
+      },
+      "text": "Как иронично..."
+    },
+    {
+      "active": "mary",
+      "right": {
+        "state": "sad"
+      },
+      "text": "...а ведь только вчера я говорила, что мусорников не существует."
+    },
+    {
+      "active": "ernest",
+      "right": {
+        "name": "ernest",
+        "state": "discontent",
+        "pose": "weaponless"
+      },
+      "text": "Я знал, что они существуют! Но если бы я только не медлил..."
+    },
+    {
+      "active": "mary",
+      "right": {
+        "name": "mary",
+        "state": "sad",
+        "pose": "hospital"
+      },
+      "text": "Ладно тебе, Эр."
+    },
+    {
+      "active": "mary",
+      "right": {
+        "state": "sad_closedeyes"
+      },
+      "text": "По правде говоря, мне больше жаль наш шалаш. Придётся его неделю отстраивать..."
+    },
+    {
+      "active": "eva",
+      "left": {
+        "state": "angry"
+      },
+      "text": "..."
+    },
+    {
+      "active": null,
+      "text": "Ева из ниоткуда достаёт лопатку для сбора мусора."
+    },
+    {
+      "active": "eva",
+      "left": {
+        "pose": "angry",
+        "state": "angry"
+      },
+      "text": "Мери, пожалуйста, расскажи, где находился этот ваш шалаш. И как выглядел тот монстр."
+    },
+    {
+      "active": "ernest",
+      "right": {
+        "name": "ernest",
+        "state": "shocked",
+        "pose": "weaponless"
+      },
+      "effect": "shaking",
+      "text": "Откуда у неё..."
+    },
+    {
+      "active": null,
+      "right": {
+        "name": "mary",
+        "state": "sad_closedeyes",
+        "pose": "hospital"
+      },
+      "text": "Мери, не открывая глаз, рассказывает Еве информацию о месте происшествия и о монстре."
+    },
+    {
+      "active": "eva",
+      "text": "Ясно."
+    },
+    {
+      "active": null,
+      "text": "Ева срывается с места и выбегает из палаты, опять толкая Эрнеста."
+    },
+    {
+      "active": "ernest",
+      "right": {
+        "name": "ernest",
+        "state": "thinking",
+        "pose": "weaponless"
+      },
+      "text": "Гм..."
+    },
+    {
+      "active": "mary",
+      "right": {
+        "name": "mary",
+        "state": "shocked",
+        "pose": "hospital"
+      },
+      "text": "Ева, стой!"
+    },
+    {
+      "active": "mary",
+      "text": "Эр, останови её! Она же пострадает!"
+    },
+    {
+      "active": "ernest",
+      "right": {
+        "name": "ernest",
+        "state": "angry_talk",
+        "pose": "weaponless"
+      },
+      "text": "У меня самого нога еле ходит после вчерашнего!"
+    },
+    {
+      "active": "ernest",
+      "right": {
+        "state": "thinking"
+      },
+      "state": "thinking",
+      "text": "Постой, она ведь в парк направляется, да?.. У меня есть идея."
+    },
+    {
+      "actionType": "screenTransition",
+      "text": ""
+    },
+    {
+      "right": null,
+      "background": "backgroung3.png",
+      "left": {
+        "name": "eva",
+        "state": "angry",
+        "pose": "angry"
+      },
+      "active": "eva",
+      "text": "Я отомщу за Мэри!!!"
+    }
+  ],
+  "gnidaTalk": [
+    {
+      "left": {
+        "name": "eva",
+        "state": "idle",
+        "pose": "idle"
+      },
+      "right": {
+        "name": "gnida-unknown",
+        "state": "talk",
+        "pose": "idle"
+      },
+      "active": "gnida-unknown",
+      "sound": "game",
+      "text": "Девица! Прошу, уделите мне секунду вашего внимания."
+    },
+    {
+      "active": "eva",
+      "left": {
+        "state": "doubt"
+      },
+      "text": "А? Кто вы?.."
+    },
+    {
+      "right": {
+        "name": "gnida",
+        "state": "idle",
+        "pose": "idle"
+      },
+      "active": "gnida",
+      "text": "Я, Герман, тот, кто озолотит тебя! Не переживай, всё проходит в рамках закона."
+    },
+    {
+      "right": {
+        "pose": "offer"
+      },
+      "active": "gnida",
+      "text": "Для того, чтобы легитивно заниматься истреблением мусорников, тебе необходима лицензия."
+    },
+    {
+      "active": "eva",
+      "left": {
+        "state": "shocked"
+      },
+      "text": "Стоп, то есть я незаконно занимаюсь этим?!"
+    },
+    {
+      "active": "gnida",
+      "right": {
+        "state": "surprised"
+      },
+      "text": "Тише ты!"
+    },
+    {
+      "active": "gnida",
+      "text": "Я с превеликим удовольствием готов помочь тебе в этом нелегком деле, но на условии, что ты будешь собирать мусор для меня."
+    },
+    {
+      "active": "gnida",
+      "text": "Экополиция и не вздумает тронуть тебя с ней, а вместе с этим и природу подчистишь. Ты в абсолютном плюсе."
+    },
+    {
+      "active": "eva",
+      "left": {
+        "state": "smile"
+      },
+      "text": "Хорошо! Спасибо вам большое!"
+    },
+    {
+      "active": null,
+      "right": {
+        "pose": "idle"
+      },
+      "text": "Ева взяла лицензию. На ней написано \n 'Сиртефекат на возможность очистки акружающей среды. Теперь вы - хилер'"
+    },
+    {
+      "active": "gnida",
+      "state": "idle",
+      "text": "И кстати... Эта лицензия зачарована, так что она поможет тебе в сборе. Бывай."
+    }
+  ],
+  "milenTalk": [
+    {
+      "left": {
+        "name": "eva",
+        "state": "idle",
+        "pose": "idle"
+      },
+      "right": {
+        "name": "milen-unknown",
+        "state": "smile",
+        "pose": "idle"
+      },
+      "active": "milen-unknown",
+      "sound": "game",
+      "text": "Ева! Е-Ева!"
+    },
+    {
+      "left": {
+        "state": "surprised"
+      },
+      "active": "eva",
+      "text": "Что? Откуда ты знаешь моё имя?"
+    },
+    {
+      "right": {
+        "state": "talk"
+      },
+      "active": "milen-unknown",
+      "text": "Мне о тебе рассказал мой друг - Эрнест!"
+    },
+    {
+      "left": {
+        "state": "uncomprehending"
+      },
+      "active": "eva",
+      "text": "Вот как... Но погоди, кто ты?"
+    },
+    {
+      "right": {
+        "name": "milen",
+        "state": "smile"
+      },
+      "active": "milen",
+      "text": "Ой, прости, я не представился... Меня зовут Милен! Рад познакомиться с тобой."
+    },
+    {
+      "right": {
+        "state": "talk"
+      },
+      "active": "milen",
+      "text": "Я был невероятно поражен тем, когда увидел, как бесстрашно ты борешься с этими чудищами!"
+    },
+    {
+      "right": {
+        "state": "smile"
+      },
+      "active": "milen",
+      "text": "Поэтому хотел бы как-нибудь тебе помочь в этом деле."
+    },
+    {
+      "right": {
+        "pose": "chocolate"
+      },
+      "active": "milen",
+      "text": "Конечно, хоть этого и немного, но надеюсь шоколад всё-таки восстановит твои силы."
+    },
+    {
+      "left": {
+        "state": "smile"
+      },
+      "active": "eva",
+      "text": "Ничего себе! Спасибо большое, Милен!"
+    },
+    {
+      "right": {
+        "pose": "idle"
+      },
+      "active": "milen",
+      "text": "Всегда пожалуйста! Если что, я продолжу тут собирать мусор, так что у нас даже будет возможность встретиться ещё раз!"
+    },
+    {
+      "left": {
+        "state": "idle"
+      },
+      "active": "eva",
+      "text": "Хорошо! Береги себя!"
+    }
+  ]
+}

@@ -1,14 +1,10 @@
 import { useCallback, useRef, useState } from 'react';
-import { Body } from '../Body';
 import { ChunkParams } from './typings';
 import { USER_BODY_GROUP } from '../../bodyGroups/user';
 import { appendChunk, cleanChunks } from './utils';
 import { initialState } from './contants';
-
-const SENSOR_OPTIONS: Matter.IChamferableBodyDefinition = {
-  isSensor: true,
-  isStatic: true,
-};
+import { VerticalSensor } from '../VerticalSensor';
+import { Container } from '@pixi/react';
 
 type Props = {
   x: number;
@@ -31,43 +27,29 @@ export const LevelManager = ({
   const [chunks, setChunks] = useState<ChunkParams[]>(initialState(x, y));
   const [sensorPosition, setSensorPosition] = useState(x);
 
-  const onCollision = useCallback(
-    (e: Matter.IEventCollision<Matter.Engine>) => {
-      if (
-        !isCollisionDetectorVisibile.current ||
-        !e.pairs.some((pair) =>
-          USER_BODY_GROUP.get().some(
-            (body) => pair.bodyA.label === body.label || pair.bodyB.label === body.label,
-          ),
-        )
-      )
-        return;
-      isCollisionDetectorVisibile.current = false;
-      const newChunks = cleanChunks({
-        chunks: appendChunk({
-          chunks,
-          chunkWidth,
-          tileSize,
-          sensorPosition,
-        }),
-        tileSize,
+  const onCollision = useCallback(() => {
+    if (!isCollisionDetectorVisibile.current) return;
+    isCollisionDetectorVisibile.current = false;
+    const newChunks = cleanChunks({
+      chunks: appendChunk({
+        chunks,
         chunkWidth,
+        tileSize,
         sensorPosition,
-      });
+      }),
+      tileSize,
+      chunkWidth,
+      sensorPosition,
+    });
 
-      setSensorPosition((currX) => currX + (chunkWidth * tileSize) / 2);
-      setChunks(newChunks);
-      isCollisionDetectorVisibile.current = true;
-    },
-    [chunkWidth, chunks, sensorPosition, tileSize],
-  );
-
-  const collisionDetectorX = chunks[0].x + (chunkWidth * tileSize) / 2;
-  console.log('TOUCH', collisionDetectorX, chunks);
+    setSensorPosition((currX) => currX + (chunkWidth * tileSize) / 2);
+    setChunks(newChunks);
+    isCollisionDetectorVisibile.current = true;
+  }, [chunkWidth, chunks, sensorPosition, tileSize]);
 
   return (
-    <>
-      {chunks.map((item) => (
+    <Container sortableChildren>
+      {chunks.map((item, index, arr) => (
         <item.component
           key={item.key}
           width={item.width}
@@ -76,17 +58,10 @@ export const LevelManager = ({
           x={item.x}
           y={item.y}
           spritesheetUrl={spritesheetUrl}
+          zIndex={arr.length - 1 - index}
         />
       ))}
-      <Body
-        width={60}
-        height={10000}
-        x={sensorPosition}
-        y={0}
-        options={SENSOR_OPTIONS}
-        label="sensor"
-        onCollision={onCollision}
-      />
-    </>
+      <VerticalSensor x={sensorPosition} y={0} onCollision={onCollision} isUserCollisionOnly />
+    </Container>
   );
 };

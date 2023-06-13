@@ -6,10 +6,16 @@ import { TouchController } from '../TouchController';
 import { useDispatch } from 'react-redux';
 import { makeDamageToHealthEntity } from '../../../redux/health';
 import { getBodyId } from '../../../utils/getBodyId';
+import { applyForce } from '../../Body/utils';
 
 const DAMAGE_AMOUNT = 1;
+const FORCE_STRENGH = 10;
 
-export const DamageTouchController = () => {
+type Props = {
+  pushToSide?: 'left' | 'right';
+};
+
+export const DamageTouchController = ({ pushToSide }: Props) => {
   const { body } = useBody();
   const dispatch = useDispatch();
 
@@ -20,10 +26,17 @@ export const DamageTouchController = () => {
           DAMAGING_BODY_GROUP.get().includes(pair.bodyA) ||
           DAMAGING_BODY_GROUP.get().includes(pair.bodyB),
       );
-      if (isDamaged)
-        dispatch(makeDamageToHealthEntity({ id: getBodyId(body), amount: DAMAGE_AMOUNT }));
+      if (!isDamaged) return;
+
+      dispatch(makeDamageToHealthEntity({ id: getBodyId(body), amount: DAMAGE_AMOUNT }));
+      const toX = pushToSide
+        ? pushToSide === 'left'
+          ? FORCE_STRENGH * -1
+          : FORCE_STRENGH
+        : FORCE_STRENGH;
+      applyForce(body, toX, 0);
     },
-    [body],
+    [body, dispatch, pushToSide],
   );
 
   return <TouchController onTouch={onTouch} />;

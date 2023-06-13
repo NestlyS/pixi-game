@@ -6,9 +6,7 @@ import { DeathWrapper } from '../../DeathController/wrapper';
 import { AnimationList, useAnimationController } from '../../AnimationController/context';
 import { SignalList, emitSignal } from '../../../../utils/signaller/emitSignal';
 import { useContainer } from '../../ViewController/context';
-import { playSound } from '../../../../utils/soundPlayer';
-
-const DEATH_SOUND = 'evaDeathSnd';
+import { SoundTypes, Sounds, playSound } from '../../../../utils/soundController';
 
 type Props = {
   cooldown?: number;
@@ -37,7 +35,7 @@ export const MainUserDeathWrapper = ({ cooldown = 0, onDeath, children }: Props)
       });
       onDeath?.(body);
       if (container) moveSpriteCenter(container, -3);
-      playSound(DEATH_SOUND);
+      playSound(Sounds.Death, SoundTypes.Sound);
     },
     [onDeath, requestAnimation, container],
   );

@@ -2,7 +2,7 @@ import { Context } from 'react';
 
 type Props = {
   children: React.ReactNode;
-  context: Context<any>;
+  context: Context<unknown>;
   render: (node: React.ReactNode) => React.ReactNode;
 };
 

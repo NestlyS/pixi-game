@@ -24,4 +24,5 @@ export type ChunkProps = {
   spritesheetUrl: string;
   x: number;
   y: number;
+  zIndex: number;
 };

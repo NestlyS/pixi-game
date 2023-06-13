@@ -14,3 +14,10 @@ export const selectPageGameDistance = (state: IAppState) => selectPageGame(state
 export const selectPageGameInitedState = (state: IAppState) => selectPageGame(state).isInited;
 
 export const selectPageGameCurrentPage = (state: IAppState) => selectPageGame(state).page;
+
+export const selectPageGameNovel = (state: IAppState) => selectPageGame(state).currentNovel;
+
+export const selectPageGameIsTutorialCompleted = (state: IAppState) =>
+  selectPageGame(state).isTutorialRead;
+
+export const selectPageGameIsMilenMet = (state: IAppState) => selectPageGame(state).isMilenMet;

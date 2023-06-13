@@ -72,11 +72,5 @@ export const cleanChunks = ({
   tileSize: number;
 }): ChunkParams[] =>
   chunks.filter((item) => {
-    console.log(
-      'CHARACTER',
-      item.x + item.width * tileSize,
-      sensorPosition - (chunkWidth * tileSize) / 2,
-      sensorPosition,
-    );
     return item.x + item.width * tileSize > sensorPosition - (chunkWidth * tileSize) / 2;
   });

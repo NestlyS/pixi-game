@@ -1,85 +1,55 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { ScriptType } from './typings';
-
-type NovelControllerState<T = string> = {
-  script: ScriptType<T>[] | null;
-  page: number;
-  dialog: number;
-  currentText: string;
-  restText: string;
-  active: T;
-  state: string;
-};
+import { ActionTypes, CharNames, Dialogs, NewScriptType, NovelControllerState } from './typings';
+import { updateState } from './utils';
 
 const initialState: NovelControllerState = {
   script: null,
   page: 0,
-  dialog: 0,
-  currentText: '',
-  restText: '',
-  active: '',
-  state: '',
+  currentDialog: Dialogs.First,
+  background: '',
+  text: '',
+  actionType: ActionTypes.Default,
+  sound: null,
+  effect: null,
+  leftCharacter: {
+    name: CharNames.Eva,
+    state: 'idle',
+    isActive: false,
+    pose: 'idle',
+  },
+  rightCharacter: {
+    name: CharNames.Eva,
+    state: 'idle',
+    isActive: false,
+    pose: 'idle',
+  },
 };
 
 const novelPageSlice = createSlice({
   name: 'novelPage',
   initialState,
   reducers: {
-    setScript(state, action: PayloadAction<ScriptType[]>) {
+    setScript(state, action: PayloadAction<NewScriptType>) {
       state.script = action.payload;
     },
 
-    goToTheNextDialog(state) {
-      if (!state.script || !state.script.length) return;
+    goToDialog(state, action: PayloadAction<Dialogs>) {
+      if (!state.script) return;
+      console.log(action);
+      state.currentDialog = action.payload;
+      state.page = initialState.page;
 
-      state.dialog = state.dialog + 1;
-      state.page = 0;
+      updateState(state, true);
     },
 
     goToTheNextNovelPage(state) {
-      if (
-        !state.script ||
-        !state.script.length ||
-        state.script[state.dialog].dialog.length - 1 === state.page
-      )
-        return;
+      if (!state.script) return;
 
       state.page += 1;
-    },
-
-    initDialog(state) {
-      if (!state.script?.[state.dialog]?.dialog[state.page]) return;
-
-      const currentDialog = state.script?.[state.dialog]?.dialog[state.page];
-
-      state.restText = currentDialog.text;
-      state.currentText = '';
-      state.active = currentDialog.active;
-      state.state = currentDialog.state;
-    },
-
-    moveOneCharFromRestToVisibleText(state) {
-      const firstChar = state.restText[0];
-
-      if (!firstChar) return;
-
-      state.restText = state.restText.slice(1);
-      state.currentText += firstChar;
-    },
-
-    skipAllRestText(state) {
-      state.currentText += state.restText;
-      state.restText = '';
+      updateState(state);
     },
   },
 });
 
 export const novelPageReducer = novelPageSlice.reducer;
-export const {
-  initDialog,
-  setScript,
-  skipAllRestText,
-  moveOneCharFromRestToVisibleText,
-  goToTheNextNovelPage,
-  goToTheNextDialog,
-} = novelPageSlice.actions;
+export const { setScript, goToTheNextNovelPage, goToDialog } = novelPageSlice.actions;

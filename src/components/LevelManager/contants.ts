@@ -1,13 +1,14 @@
 import { CRACK_ROW_WIDTH } from '../Chunk/components/Crack';
 import { HEALER_ROW_WIDTH } from '../Chunk/components/Healer';
 import { MONSTERS_ROW_WIDTH } from '../Chunk/components/MonstersRow';
+import { SPIKES_ROW_WIDTH } from '../Chunk/components/SpikesRow';
 import { ROW_WIDTH } from '../Chunk/components/TrashRowChunk';
 import { Chunks, Components, CustomChunkParams } from './typings';
 
 export const CHUNKS_TYPE: Record<Chunks, CustomChunkParams> = {
   [Chunks.Row]: {
     width: ROW_WIDTH,
-    chance: 15,
+    chance: 10,
   },
   [Chunks.Crack]: {
     width: CRACK_ROW_WIDTH,
@@ -20,12 +21,12 @@ export const CHUNKS_TYPE: Record<Chunks, CustomChunkParams> = {
   [Chunks.Up]: {
     heightDelta: 1,
     width: ROW_WIDTH,
-    chance: 15,
+    chance: 5,
   },
   [Chunks.Down]: {
     heightDelta: -1,
     width: ROW_WIDTH,
-    chance: 15,
+    chance: 5,
   },
   [Chunks.Monsters]: {
     width: MONSTERS_ROW_WIDTH,
@@ -34,6 +35,10 @@ export const CHUNKS_TYPE: Record<Chunks, CustomChunkParams> = {
   [Chunks.Healer]: {
     width: HEALER_ROW_WIDTH,
     chance: 2,
+  },
+  [Chunks.Spikes]: {
+    width: SPIKES_ROW_WIDTH,
+    chance: 15,
   },
 };
 

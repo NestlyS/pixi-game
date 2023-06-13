@@ -1,4 +1,3 @@
-import { useTick } from '@pixi/react';
 import uniqueId from 'lodash.uniqueid';
 import { IEventCollision, Engine } from 'matter-js';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -12,9 +11,10 @@ import { Directions } from '../../Bullet/controller';
 import { AnimationList, useAnimationController } from '../AnimationController/context';
 import { ConnectedSensorController } from '../ConntectedSensorController';
 import { useDeath } from '../DeathController/context';
-import { playSound } from '../../../utils/soundPlayer';
+import { Sounds, playSound } from '../../../utils/soundController';
 import { useSelector } from 'react-redux';
 import { selectPageGameSpeedMultCalculated } from '../../../redux/gamePage/selectors';
+import { useSlowerTick } from '../../../utils/useSlowedTick';
 
 const COLLISION_SENSORS = [MONSTER_LABEL, AI_SENSOR_LABEL];
 const BULLET_WIDTH = 40;
@@ -23,10 +23,10 @@ const BULLET_SPEED = 7;
 const BULLET_TTL = 1000;
 const ATTACK_COOLDOWN = 2500;
 const ATTACK_TIMEOUT_AFTER_ANIMATION_START = 300;
+const DELTA = 20;
 
 const DEATH_BOOST = 11;
 const ATTACK_BOOST = 6;
-const ATTACK_SOUND = 'monsterAttackSnd';
 
 type BulletProps = {
   id: number | string;
@@ -40,20 +40,31 @@ type Props = {
   animationName: string;
   spritesheetUrl: string;
   children?: React.ReactNode;
+  afterAttackCooldown: number;
+  isMovingDisabled?: boolean;
+  isShootingDisabled?: boolean;
 };
 
-export const SimpleAIController = ({ children, spritesheetUrl, animationName }: Props) => {
+export const SimpleAIController = ({
+  children,
+  spritesheetUrl,
+  afterAttackCooldown,
+  animationName,
+  isMovingDisabled,
+  isShootingDisabled,
+}: Props) => {
   const { body, onCollision, clearCollision } = useBody();
   const { requestAnimation, releaseAnimation } = useAnimationController();
   const deathBoost = useSelector(selectPageGameSpeedMultCalculated(DEATH_BOOST));
   const isDead = useDeath();
+
+  console.log(body, body.position.x, body.position.y, { ...body.force }, body.speed);
 
   const isAttackRef = useRef(false);
   const [bullets, setBullets] = useState<BulletProps[]>([]);
   const isCooldownRef = useRef<null | (() => void)>(null);
   const direction = useRef<1 | -1>(1);
   const distanceRef = useRef(0);
-  const deltaRef = useRef(0);
   const isRunning = useRef(false);
 
   useEffect(() => {
@@ -66,7 +77,7 @@ export const SimpleAIController = ({ children, spritesheetUrl, animationName }: 
   useEffect(() => {
     if (!body || !onCollision || !clearCollision) return;
 
-    body.position.x += 10 * direction.current;
+    if (!isMovingDisabled) body.position.x += 10 * direction.current;
 
     const cb: CleanEventListener = (e) => {
       const isSensorCollision = e.pairs.some((value) => {
@@ -84,16 +95,10 @@ export const SimpleAIController = ({ children, spritesheetUrl, animationName }: 
     return () => {
       clearCollision(cb);
     };
-  }, [body, clearCollision, onCollision]);
+  }, [body, clearCollision, isMovingDisabled, onCollision]);
 
-  useTick((delta) => {
-    if (!body || isAttackRef.current || isDead) return;
-
-    deltaRef.current += delta;
-
-    if (deltaRef.current < 20) return;
-
-    deltaRef.current = 0;
+  useSlowerTick(() => {
+    if (isMovingDisabled || !body || isAttackRef.current || isDead) return;
 
     if (Math.abs(body.velocity.x) > EPS * 50 || distanceRef.current < 50) {
       applyForce(body, 3 * direction.current, body.velocity.y);
@@ -101,10 +106,14 @@ export const SimpleAIController = ({ children, spritesheetUrl, animationName }: 
 
     if (!isRunning.current && Math.abs(body.velocity.x) > EPS * 50) {
       requestAnimation({ name: AnimationList.Run });
-      // Код никогда не выставит это в true ну и фиг с ним
       isRunning.current = true;
     }
-  });
+
+    if (isRunning.current && Math.abs(body.velocity.x) < EPS * 50) {
+      releaseAnimation(AnimationList.Run);
+      isRunning.current = false;
+    }
+  }, DELTA);
 
   const handleCollision = useCallback(
     (e: IEventCollision<Engine>) => {
@@ -122,7 +131,7 @@ export const SimpleAIController = ({ children, spritesheetUrl, animationName }: 
         return;
 
       const lastDirection = direction.current;
-      playSound(ATTACK_SOUND);
+      playSound(Sounds.MonsterAttack);
       setTimeout(() => {
         applyForce(body, ATTACK_BOOST, -ATTACK_BOOST / 2);
 
@@ -141,8 +150,10 @@ export const SimpleAIController = ({ children, spritesheetUrl, animationName }: 
       requestAnimation({
         name: AnimationList.Attack,
         onFinish: () => {
-          isAttackRef.current = false;
           releaseAnimation(AnimationList.Attack);
+          setTimeout(() => {
+            isAttackRef.current = false;
+          }, afterAttackCooldown);
         },
       });
 
@@ -150,12 +161,12 @@ export const SimpleAIController = ({ children, spritesheetUrl, animationName }: 
       isCooldownRef.current = () => clearTimeout(timeoutId);
       isAttackRef.current = true;
     },
-    [body, releaseAnimation, requestAnimation],
+    [afterAttackCooldown, body, releaseAnimation, requestAnimation],
   );
 
   return (
     <>
-      {!isDead && (
+      {!isShootingDisabled && !isDead && (
         <ConnectedSensorController
           isHidden={false}
           width={500}

@@ -1,13 +1,21 @@
 import { TextStyle } from 'pixi.js';
-import { ColorOverlayFilter, DropShadowFilter, GodrayFilter, OutlineFilter } from 'pixi-filters';
+import {
+  ColorGradientFilter,
+  ColorOverlayFilter,
+  DropShadowFilter,
+  GodrayFilter,
+  OutlineFilter,
+} from 'pixi-filters';
 
 export const EPS = 0.03;
 export const ONE_CIRCLE_IN_RAD = 6.28;
 export const ONE_CIRCLE_IN_DEGREES = 360;
 export const MOBILE_SIZE = 800;
 
-export const DEFAULT_WORLD_WIDTH = 1600;
-export const DEFAULT_WORLD_HEIGHT = 900;
+// export const DEFAULT_WORLD_WIDTH = 1600;
+// export const DEFAULT_WORLD_HEIGHT = 900;
+export const DEFAULT_WORLD_WIDTH = 667;
+export const DEFAULT_WORLD_HEIGHT = 375;
 
 export const __IS_DEV__ = process.env.NODE_ENV === 'development';
 
@@ -25,6 +33,14 @@ export enum COLORS {
   NegativeFontOutline = 0x731d2c,
   White = 0xffffff,
   Black = 0x251059,
+  HintBlockOutline = 0xcfc5a1,
+  HintBlockFill = 0x453b33,
+  TextBlockFill = 0xffe0bc,
+  TextBlockSecondFill = 0xf4b2b1,
+  TextPositiveFill = 0x41bc66,
+  TextNegativeFill = 0xbb2222,
+  DangerOutline = 0xbd2430,
+  BuffOutline = 0x7df740,
 }
 
 export const MAIN_FONT_NAME = 'Press Start 2P';
@@ -114,17 +130,57 @@ export const PIXEL_FONT_RED = new TextStyle({
   fontSize: 40,
 });
 
-export const GODRAY_FILTER = new GodrayFilter({ alpha: 0.4, lacunarity: 4 });
-export const BLACK_OUTLINE_FILTER = new OutlineFilter(4, COLORS.Black, 0.05);
-export const WHITE_OUTLINE_FILTER = new OutlineFilter(3, COLORS.White, 0.05);
-export const PURPLE_OUTLINE_FILTER = new OutlineFilter(3, COLORS.UIOutline, 0.05);
-export const UI_OUTLINE_FILTER = new OutlineFilter(5, COLORS.UIOutline, 0.05);
-export const SHADOW_FILTER = new DropShadowFilter();
-export const COLOR_OVERLAY_FILTER_STEP_0 = new ColorOverlayFilter([0.5, 0.1, 0.1], 0.8);
-export const COLOR_OVERLAY_FILTER_STEP_1 = new ColorOverlayFilter([0.5, 0.3, 0.3], 0.6);
-export const COLOR_OVERLAY_FILTER_STEP_2 = new ColorOverlayFilter([0.5, 0.5, 0.5], 0.4);
+export enum Filters {
+  GODRAY_FILTER,
+  BLACK_OUTLINE_FILTER,
+  GREEN_OUTLINE_FILTER,
+  WHITE_OUTLINE_FILTER,
+  PURPLE_OUTLINE_FILTER,
+  RED_OUTLINE_FILTER,
+  UI_OUTLINE_FILTER,
+  HINT_BLOCK_OUTLINE_FILTER,
+  SHADOW_FILTER,
+  COLOR_OVERLAY_FILTER_STEP_0,
+  COLOR_OVERLAY_FILTER_STEP_1,
+  COLOR_OVERLAY_FILTER_STEP_2,
+  COLOR_OVERLAY_FILTER_DARKER,
+  COLOR_GRADIENT_FILTER,
+  UI_GRADIENT_FILTER,
+}
 
-export const COLOR_OVERLAY_FILTER_DARKER = new ColorOverlayFilter([0.3, 0.3, 0.3], 0.6);
+export const FILTERS = {
+  [Filters.GODRAY_FILTER]: new GodrayFilter({ alpha: 0.4, lacunarity: 4 }),
+  [Filters.BLACK_OUTLINE_FILTER]: new OutlineFilter(4, COLORS.Black, 0.05),
+  [Filters.GREEN_OUTLINE_FILTER]: new OutlineFilter(4, COLORS.BuffOutline, 0.05),
+  [Filters.WHITE_OUTLINE_FILTER]: new OutlineFilter(3, COLORS.White, 0.05),
+  [Filters.PURPLE_OUTLINE_FILTER]: new OutlineFilter(3, COLORS.UIOutline, 0.05),
+  [Filters.RED_OUTLINE_FILTER]: new OutlineFilter(6, COLORS.DangerOutline, 0.05),
+  [Filters.UI_OUTLINE_FILTER]: new OutlineFilter(5, COLORS.UIOutline, 0.05),
+  [Filters.HINT_BLOCK_OUTLINE_FILTER]: new OutlineFilter(5, COLORS.HintBlockOutline, 0.05),
+  [Filters.SHADOW_FILTER]: new DropShadowFilter(),
+  [Filters.COLOR_OVERLAY_FILTER_STEP_0]: new ColorOverlayFilter([0.5, 0.1, 0.1], 0.8),
+  [Filters.COLOR_OVERLAY_FILTER_STEP_1]: new ColorOverlayFilter([0.5, 0.3, 0.3], 0.6),
+  [Filters.COLOR_OVERLAY_FILTER_STEP_2]: new ColorOverlayFilter([0.5, 0.5, 0.5], 0.4),
+  [Filters.COLOR_OVERLAY_FILTER_DARKER]: new ColorOverlayFilter([0.3, 0.3, 0.3], 0.6),
+  [Filters.COLOR_GRADIENT_FILTER]: new ColorGradientFilter({
+    type: ColorGradientFilter.LINEAR,
+    stops: [
+      { offset: 0.7, color: COLORS.TextBlockFill, alpha: 0 },
+      { offset: 1.0, color: COLORS.TextBlockSecondFill, alpha: 1 },
+    ],
+    angle: 180,
+    alpha: 0.7,
+  }),
+  [Filters.UI_GRADIENT_FILTER]: new ColorGradientFilter({
+    type: ColorGradientFilter.LINEAR,
+    stops: [
+      { offset: 0.0, color: COLORS.TextBlockFill, alpha: 1 },
+      { offset: 0.6, color: COLORS.TextBlockSecondFill, alpha: 0.5 },
+    ],
+    angle: 180,
+    alpha: 0.7,
+  }),
+};
 
 export const MONSTER_LABEL = 'monster';
 export const AI_SENSOR_LABEL = 'ai-sensor';
@@ -134,4 +190,15 @@ export const USER_LABEL = 'user';
 export enum Pages {
   game = 'game',
   novel = 'novel',
+  startScreen = 'startScreen',
 }
+
+export const UI_SPRITESHEET_URL = './sprites/menuAtlas.json';
+export const START_SCREEN_SPRITESHEET_URL = './sprites/start_screen.json';
+export const NOVEL_SPRITESHEET_URL = './novel/novel.json';
+export const GAME_SPRITESHEET_URL = './sprites/atlas.json';
+export const TILE_SIZE = 80;
+
+export const GLOBAL_HIT_AREA = {
+  contains: () => true,
+};

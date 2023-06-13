@@ -8,8 +8,13 @@ export const selectAppControllerWidth = (state: IAppState) => selectAppControlle
 
 export const selectAppControllerHeight = (state: IAppState) => selectAppController(state).height;
 
-export const selectAppControllerWidthScale = (state: IAppState) =>
-  selectAppController(state).widthScale;
+export const selectAppControllerScale = (state: IAppState) => selectAppController(state).scale;
 
-export const selectAppControllerHeightScale = (state: IAppState) =>
-  selectAppController(state).heightScale;
+export const selectAppControllerIsLowGraphicMode = (state: IAppState) =>
+  selectAppController(state).isLowGraphicMode;
+
+export const selectAppControllerIsMusicEnabled = (state: IAppState) =>
+  selectAppController(state).isMusicOn;
+
+export const selectAppControllerIsSoundsEnabled = (state: IAppState) =>
+  selectAppController(state).isSoundsOn;

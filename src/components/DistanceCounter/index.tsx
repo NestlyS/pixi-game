@@ -1,26 +1,21 @@
-import { useTick } from '@pixi/react';
 import { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useGlobalViewport } from '../GlobalViewport/context';
 import { selectPageGamePauseState } from '../../redux/gamePage/selectors';
 import { increaseDistanceCounter } from '../../redux/gamePage';
+import { useSlowerTick } from '../../utils/useSlowedTick';
 
-const DELTA = 10;
+const DELTA = 20;
 
 export const DistanceCounter = () => {
-  const deltaRef = useRef(0);
   const isPaused = useSelector(selectPageGamePauseState);
   const viewport = useGlobalViewport();
   const prevX = useRef(0);
   const dispatch = useDispatch();
 
-  useTick((delta) => {
-    deltaRef.current += delta;
-
-    if (isPaused || deltaRef.current < DELTA || !viewport.globalViewport?.x) return;
-
-    deltaRef.current = 0;
+  useSlowerTick(() => {
+    if (isPaused || !viewport.globalViewport?.x) return;
 
     const raw = Math.floor(viewport.globalViewport.x - prevX.current) * -1;
 
@@ -29,7 +24,7 @@ export const DistanceCounter = () => {
     if (raw <= 0) return;
 
     dispatch(increaseDistanceCounter(raw));
-  });
+  }, DELTA);
 
   return null;
 };

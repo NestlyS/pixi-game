@@ -1,10 +1,11 @@
 import { memo, useEffect, useRef, useState } from 'react';
 import { TextStyle } from 'pixi.js';
-import { Text, useTick } from '@pixi/react';
+import { Text } from '@pixi/react';
 import { Sprite } from '../../Sprite';
+import { useSlowerTick } from '../../../utils/useSlowedTick';
 
 const ANIMATION_TIMEOUT = 300;
-const DELTA_TIMEOUT = 3;
+const DELTA = 3;
 const ROTATION_AMPLITUDE = 0.15;
 const ROTATION_MULT = 0.2;
 
@@ -41,7 +42,6 @@ export const TrashCount = memo(
   ({ x, y, width, height, spritesheetUrl, textureUrl, fontStyle, count }: Props) => {
     const [rotation, setRotation] = useState(0);
     const isAnimatedRef = useRef(false);
-    const deltaRef = useRef(0);
 
     useEffect(() => {
       isAnimatedRef.current = true;
@@ -49,17 +49,11 @@ export const TrashCount = memo(
       return () => clearTimeout(id);
     }, [count]);
 
-    useTick((delta) => {
-      deltaRef.current += delta;
-
-      if (deltaRef.current < DELTA_TIMEOUT) return;
-
-      deltaRef.current = 0;
-
+    useSlowerTick(() => {
       if (!isAnimatedRef.current && rotation === 0) return;
       if (!isAnimatedRef.current) return setRotation(0);
       setRotation(getRotation(rotation));
-    });
+    }, DELTA);
 
     return (
       <>

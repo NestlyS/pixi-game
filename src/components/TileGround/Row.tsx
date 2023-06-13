@@ -20,7 +20,7 @@ export const Row = memo(
               <SpriteController
                 pixelised
                 key={index}
-                x={startX}
+                x={startX + 1}
                 y={startY}
                 width={tileSize}
                 height={tileSize}
@@ -35,7 +35,7 @@ export const Row = memo(
               <SpriteController
                 pixelised
                 key={index}
-                x={startX + tileSize * index}
+                x={startX + tileSize * index + 1}
                 y={startY}
                 width={tileSize}
                 height={tileSize}
@@ -49,7 +49,7 @@ export const Row = memo(
             <SpriteController
               pixelised
               key={index}
-              x={startX + tileSize * index}
+              x={startX + tileSize * index + 1}
               y={startY}
               width={tileSize}
               height={tileSize}

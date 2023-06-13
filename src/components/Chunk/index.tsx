@@ -20,12 +20,12 @@ export const Chunk = memo(
       if (!landscape) return;
 
       setLastBlockOffset(landscape[landscape.length - 1]);
-    }, [landscape]);
+    }, [landscape, setLastBlockOffset]);
 
     const elements = useMemo(
       () =>
         paramsToElements({
-          params: sizesToParams(landscapeToSizes(landscape, tileSize), x, y, tileSize),
+          params: sizesToParams(landscapeToSizes(landscape, tileSize), x, y),
           tilesHeight,
           tileSize,
           spritesheetUrl,

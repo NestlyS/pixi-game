@@ -1,6 +1,7 @@
 import { useTick } from '@pixi/react';
 import { useEffect, useRef, useMemo } from 'react';
 import uniqueId from 'lodash.uniqueid';
+import { useSlowerTick } from './useSlowedTick';
 
 type StoreDataType = {
   isPressed: boolean;
@@ -10,27 +11,19 @@ type StoreDataType = {
 const INPUT_CHECK = 1;
 const KEYS_STORE: Record<KeyboardEvent['key'], StoreDataType> = {};
 
-const chechIsCorrectCode = (e: KeyboardEvent, key: KeyboardEvent['code']) => (
-  e.code === 'KeyW' && console.log('LOLOLO', e.code), e.code !== key
-);
+const chechIsCorrectCode = (e: KeyboardEvent, key: KeyboardEvent['code']) => e.code !== key;
 
 export const useGlobalCheck = () => {
-  const timer = useRef(0);
-
-  useTick((delta) => {
-    timer.current += delta;
-
-    if (timer.current > INPUT_CHECK) {
+  useSlowerTick(() => {
+    {
       Object.entries(KEYS_STORE).forEach(([key, { isPressed, callback }]) => {
         if (isPressed && callback) {
           callback();
           KEYS_STORE[key].isInited = false;
         }
       });
-
-      timer.current = 0;
     }
-  });
+  }, INPUT_CHECK);
 };
 
 const keyboardCheck = (key: KeyboardEvent['code'], cb: () => void) => (e: KeyboardEvent) => {
@@ -50,7 +43,6 @@ export const useControlKey = (
     KEYS_STORE[uniqKey] = { isPressed: false, isInited: false, callback: cb };
 
     const downCb = () => {
-      if (key === 'KeyW') console.log('OLOLO', key);
       KEYS_STORE[uniqKey].isPressed = true;
       KEYS_STORE[uniqKey].isInited = true;
     };
@@ -78,7 +70,6 @@ export const useControlKey = (
 
     // TODO Исправить any
     const clearFunc = (_downCb: (e: any) => void, _upCb: (e: any) => void) => () => {
-      console.log('CLEAR', uniqKey, KEYS_STORE[uniqKey]);
       KEYS_STORE[uniqKey] = { isPressed: false, isInited: false, callback: null };
       if (key === 'mouse') {
         window.removeEventListener('mousedown', _downCb);
@@ -112,15 +103,11 @@ export const useControlKey = (
   }, [cb, uniqKey, key, onUnpress]);
 };
 
-export const useControlKey2 = (key: KeyboardEvent['code'] | 'mouse', cb: () => void) => {
+export const useControlKey2 = (key: KeyboardEvent['code'] | 'mouse' | 'any', cb: () => void) => {
   useEffect(() => {
-    console.log('lol?');
     let cooldownTimeout: NodeJS.Timeout | null = null;
 
-    const _cb = (e: KeyboardEvent) => {
-      console.log('COOOOOOLDOWN', cooldownTimeout);
-      if (e.code !== key || cooldownTimeout) return;
-      console.log('NICE COOOOOOLDOWN', cooldownTimeout);
+    const body = () => {
       cooldownTimeout = setTimeout(() => {
         if (cooldownTimeout) clearTimeout(cooldownTimeout);
         cooldownTimeout = null;
@@ -128,8 +115,23 @@ export const useControlKey2 = (key: KeyboardEvent['code'] | 'mouse', cb: () => v
       }, 100);
     };
 
-    document.body.addEventListener('keydown', _cb);
+    const _cb = (e: KeyboardEvent) => {
+      if ((key !== 'any' && e.code !== key) || cooldownTimeout) return;
+      body();
+    };
 
-    return () => document.body.removeEventListener('keydown', _cb);
+    const _cbMouse = () => {
+      if (cooldownTimeout) return;
+      body();
+    };
+
+    if (key !== 'mouse') document.body.addEventListener('keydown', _cb);
+    if (key === 'mouse' || key === 'any') document.body.addEventListener('mousedown', _cbMouse);
+
+    return () => {
+      if (key !== 'mouse') document.body.removeEventListener('keydown', _cb);
+      if (key === 'mouse' || key === 'any')
+        document.body.removeEventListener('mousedown', _cbMouse);
+    };
   }, [cb, key]);
 };

@@ -1,19 +1,17 @@
 import React from 'react';
-import { OutlineFilter } from 'pixi-filters';
 import { Body } from '../Body';
 import { AnimatedSpriteController } from '../controllers/AnimatedSpriteController';
 import { AnimationController } from '../controllers/AnimationController';
 import { AnimationList } from '../controllers/AnimationController/context';
 import { HealerTouchController } from './onTouchController';
-import { BLACK_OUTLINE_FILTER, SHADOW_FILTER } from '../../constants';
-
-const GREEN_OUTLINE_FILTER = new OutlineFilter(4, 0x7df740, 0.05);
+import { Filters } from '../../constants';
 
 const HEALER_PARAMS: Matter.IChamferableBodyDefinition = {
   isSensor: true,
   isStatic: true,
 };
 
+const FILTERS = [Filters.BLACK_OUTLINE_FILTER, Filters.GREEN_OUTLINE_FILTER, Filters.SHADOW_FILTER];
 const HEALER_HEIGHT = 190;
 const HEALER_WIDTH = 190;
 const HEALER_SPRITESHEER = '/healer/healer.json';
@@ -44,7 +42,7 @@ export const Healer = ({ x, y }: Props) => {
         animationSpeed={0.07}
         setDefault
         zIndex={100}
-        filters={[BLACK_OUTLINE_FILTER, GREEN_OUTLINE_FILTER, SHADOW_FILTER]}
+        filters={FILTERS}
       >
         <AnimationController animationParams={animationMap}>
           <HealerTouchController />

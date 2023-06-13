@@ -9,6 +9,7 @@ type MainUserState = {
   specialCooldown: number;
   attackCooldown: number;
   trashCount: Record<TrashTypes, number>;
+  isHurted: boolean;
   isStopped: boolean;
 };
 
@@ -23,11 +24,12 @@ const initialState: MainUserState = {
     bottle: 0,
     chips: 0,
   },
+  isHurted: false,
   isStopped: false,
 };
 
 const mainUserSlice = createSlice({
-  name: 'MainUser',
+  name: 'mainUser',
   initialState,
   reducers: {
     setId: (state, action: PayloadAction<MainUserState['id']>) => {
@@ -61,6 +63,14 @@ const mainUserSlice = createSlice({
       }, {} as Record<TrashTypes, number>);
     },
 
+    setHurted: (state) => {
+      state.isHurted = true;
+    },
+
+    unsetHurted: (state) => {
+      state.isHurted = false;
+    },
+
     stopPlayer: (state) => {
       state.isStopped = true;
     },
@@ -77,6 +87,8 @@ export const {
   setMaxHp,
   setSpeciaCooldown,
   setAttackCooldown,
+  setHurted,
+  unsetHurted,
   setDirection,
   incTrash,
   resetTrash,

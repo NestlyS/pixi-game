@@ -5,9 +5,8 @@ import { useSelector } from 'react-redux';
 
 import {
   selectAppControllerHeight,
-  selectAppControllerHeightScale,
   selectAppControllerWidth,
-  selectAppControllerWidthScale,
+  selectAppControllerScale,
 } from '../../../redux/appController/selectors';
 import { CharacterPreview } from './components/CharacterPreview';
 import { HeartPreview } from './components/HeartPreview';
@@ -15,7 +14,6 @@ import { TrashPreview } from './components/TrashPreview';
 import { SKILLS_LIST, SPECIAL_SKILLS_LIST } from './components/SkillsPreview/typings';
 import { SkillsPreview } from './components/SkillsPreview';
 import { COLORS } from '../../../constants';
-import { Menu } from '../InGameUI/components/Menu';
 import { PlayButton } from './components/PlayButton';
 import { CHARACTER_TYPES, CharacterName } from './components/CharacterName';
 
@@ -24,8 +22,8 @@ const MAIN_SPRITESHEET_URL = 'atlas.json';
 const SPRITESHEET_URL = 'charPreview.json';
 const MENU_SPRITESHEET_URL = 'menuAtlas';
 
-const HEART_WIDTH = 100;
-const HEART_HEIGHT = 90;
+const HEART_WIDTH = 80;
+const HEART_HEIGHT = 70;
 const TRASH_SIZE = 50;
 
 type CharacterListElementType = {
@@ -61,8 +59,7 @@ const CHARACTER_LIST: CharacterListElementType[] = [
 export const CharacterSelectUI = () => {
   const width = useSelector(selectAppControllerWidth);
   const height = useSelector(selectAppControllerHeight);
-  const widthScale = useSelector(selectAppControllerWidthScale);
-  const heightScale = useSelector(selectAppControllerHeightScale);
+  const scale = useSelector(selectAppControllerScale);
 
   const draw = useCallback(
     (graf: PIXI_Graphics) =>
@@ -93,17 +90,17 @@ export const CharacterSelectUI = () => {
       <HeartPreview
         x={width * 0.6}
         y={height * 0.3}
-        width={HEART_WIDTH / widthScale}
-        height={HEART_HEIGHT / heightScale}
+        width={HEART_WIDTH * scale}
+        height={HEART_HEIGHT * scale}
         value={CHARACTER_LIST[0].hp}
         spritesheetUrl={MAIN_SPRITESHEET_URL}
         textureUrl={TEXTURE_URL}
       />
       <SkillsPreview
-        x={width * 0.07}
-        y={height * 0.8}
-        width={HEART_WIDTH * width * 0.001}
-        height={HEART_HEIGHT * width * 0.001}
+        x={20 * scale}
+        y={height - HEART_HEIGHT * scale - 20 * scale}
+        width={HEART_WIDTH * scale}
+        height={HEART_HEIGHT * scale}
         skills={CHARACTER_LIST[0].skills}
         specialSkills={CHARACTER_LIST[0].specialSkills}
         spritesheetUrl={MENU_SPRITESHEET_URL}
@@ -115,7 +112,6 @@ export const CharacterSelectUI = () => {
         height={TRASH_SIZE * width * 0.001}
         spritesheetUrl={MAIN_SPRITESHEET_URL}
       />
-      <Menu />
     </Container>
   );
 };

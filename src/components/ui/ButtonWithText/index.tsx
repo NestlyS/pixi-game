@@ -1,48 +1,60 @@
-import { TextStyle } from 'pixi.js';
-import { Container, Text } from '@pixi/react';
-import React from 'react';
-import { Button } from '../Button';
+import { TextStyle, TextMetrics } from 'pixi.js';
+import { Text } from '@pixi/react';
+import React, { useMemo } from 'react';
+import { Button, Props as ButtonProps } from '../Button';
 
 type Props = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  spritesheetUrl: string;
-  textureUrl: string;
   fontStyle: TextStyle;
-  onClick?: () => void;
   children?: string;
   marginLeft?: number;
   marginTop?: number;
-};
+  width?: number;
+} & Omit<ButtonProps, 'width'>;
 
-export const ButtonWithText = ({
-  x,
-  y,
-  width,
-  height,
-  spritesheetUrl,
-  textureUrl,
-  fontStyle,
-  children,
-  marginLeft = 0,
-  marginTop = 0,
-  onClick,
-}: Props) => {
-  return (
-    <Container x={x} y={y}>
+export const ButtonWithText = React.memo(
+  ({
+    x,
+    y,
+    width,
+    height,
+    spritesheetUrl,
+    textureUrl,
+    fontStyle,
+    children = '',
+    pixelised,
+    marginLeft = 10,
+    marginTop = 10,
+    borderRadius,
+    backgroundColor,
+    outlineColor,
+    filters,
+    onClick,
+  }: Props) => {
+    const maxCalculatedTextWidth = useMemo(() => {
+      if (width) return width;
+
+      const metrics = TextMetrics.measureText(children, fontStyle);
+
+      return metrics.width ?? marginLeft * 2;
+    }, [children, fontStyle, marginLeft, width]);
+
+    return (
       <Button
         spritesheetUrl={spritesheetUrl}
-        width={width}
+        width={maxCalculatedTextWidth}
         height={height}
-        x={0}
-        y={0}
+        x={x}
+        y={y}
         textureUrl={textureUrl}
-        pixelised
+        pixelised={pixelised}
         onClick={onClick}
-      />
-      <Text x={marginLeft} y={marginTop} text={children} style={fontStyle} />
-    </Container>
-  );
-};
+        borderRadius={borderRadius}
+        outlineColor={outlineColor}
+        backgroundColor={backgroundColor}
+        filters={filters}
+      >
+        <Text x={marginLeft} y={marginTop} text={children} style={fontStyle} />
+      </Button>
+    );
+  },
+);

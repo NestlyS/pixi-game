@@ -1,36 +1,67 @@
-import { useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { useBody } from '../Body/context';
 import { CleanEventType } from '../Body/typing';
 import { TouchController } from '../controllers/TouchController';
 import { isUserLabel } from '../controllers/ConntectedSensorController/utils';
 import { AnimationList, useAnimationController } from '../controllers/AnimationController/context';
 import { makeHealToHealthEntity } from '../../redux/health';
 import { getBodyId } from '../../utils/getBodyId';
-import { playSound } from '../../utils/soundPlayer';
-
-const HEAL_SOUND = 'evaHealSnd';
+import { Sounds, playSound } from '../../utils/soundController';
+import { isAnyPairInUserBodyGroup } from '../../bodyGroups/user';
+import {
+  selectPageGameCurrentPage,
+  selectPageGameIsMilenMet,
+} from '../../redux/gamePage/selectors';
+import { initMilenMet } from '../../redux/gamePage/utils';
+import { Pages } from '../../redux/gamePage/typings';
+import { setGamePage, setNovel, setPause } from '../../redux/gamePage';
+import { Dialogs } from '../../redux/novelPage/typings';
 
 export const HealerTouchController = () => {
-  const { body } = useBody();
   const dispatch = useDispatch();
   const { requestAnimation } = useAnimationController();
+  const isMilenMet = useSelector(selectPageGameIsMilenMet);
+  const page = useSelector(selectPageGameCurrentPage);
   const [isHealed, setHealed] = useState(false);
+  const cb = useRef<(() => void) | null>(null);
+
+  useEffect(() => {
+    if (cb.current && page === Pages.Main) {
+      cb.current();
+      cb.current = null;
+      initMilenMet();
+    }
+  }, [page]);
 
   const onTouch = useCallback(
     (e: CleanEventType) => {
-      console.log('TOUCH', { ...e });
-      const secondBody = e.pairs[0].bodyA.id === body.id ? e.pairs[0].bodyB : e.pairs[0].bodyA;
+      const pairWithUser = isAnyPairInUserBodyGroup(e.pairs);
 
-      if (isUserLabel(secondBody)) {
-        dispatch(makeHealToHealthEntity({ amount: 1, id: getBodyId(secondBody) }));
+      if (!pairWithUser) return;
+
+      const body = isUserLabel(pairWithUser.bodyA) ? pairWithUser.bodyA : pairWithUser.bodyB;
+
+      if (!body) return;
+
+      const postCollision = () => {
+        dispatch(makeHealToHealthEntity({ amount: 1, id: getBodyId(body) }));
         setHealed(true);
         requestAnimation({ name: AnimationList.Heal });
-        playSound(HEAL_SOUND);
+        playSound(Sounds.Heal);
+      };
+
+      if (!isMilenMet) {
+        cb.current = postCollision;
+        dispatch(setPause());
+        dispatch(setNovel(Dialogs.Milen));
+        dispatch(setGamePage(Pages.Novel));
+        return;
       }
+
+      postCollision();
     },
-    [body.id, dispatch, requestAnimation],
+    [dispatch, isMilenMet, requestAnimation],
   );
 
   if (isHealed) return null;

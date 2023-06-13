@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
-import { Filter } from 'pixi.js';
 import { useAnimation } from '../../AnimatedSprite/context';
 import { AnimationControllerProvider, AnimationList, AnimationState } from './context';
+import { Filters } from '../../../constants';
 
 type AnimationParams = {
   name: string;
   speed?: number;
   loop?: boolean;
   priority: number;
-  filters?: Filter[];
+  filters?: Filters[];
 };
 type AnimationRecord<T extends string = string> = Record<T, AnimationParams | null>;
 
@@ -19,7 +19,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-export const AnimationController = ({ animationParams, children }: Props) => {
+export const AnimationController = React.memo(({ animationParams, children }: Props) => {
   const { animations, onComplete, setAnimation } = useAnimation();
 
   const animationStack = useRef<[name: AnimationList, priority: number][]>([
@@ -92,4 +92,4 @@ export const AnimationController = ({ animationParams, children }: Props) => {
   );
 
   return <AnimationControllerProvider value={value}>{children}</AnimationControllerProvider>;
-};
+});
