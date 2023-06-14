@@ -167,6 +167,7 @@ export const AnimatedSprite = memo(
           if (!ref || typeof ref === 'function') return;
           if (!isPaused) ref.current?.play();
           setCurrentAnimation(animationMap[name]);
+          if (isPaused) ref.current?.stop();
         },
         [animationMap, isPaused, ref],
       );
@@ -184,12 +185,12 @@ export const AnimatedSprite = memo(
 
       const value = useMemo(
         () =>
-          ({
-            setAnimation,
-            onComplete: onComplete_,
-            clearOnComplete: clearOnComplete_,
-            animations: Object.keys(animationMap),
-          } as AnimationState),
+        ({
+          setAnimation,
+          onComplete: onComplete_,
+          clearOnComplete: clearOnComplete_,
+          animations: Object.keys(animationMap),
+        } as AnimationState),
         [animationMap, clearOnComplete_, onComplete_, setAnimation],
       );
 

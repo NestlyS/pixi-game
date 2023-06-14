@@ -1,11 +1,5 @@
-import { useSelector } from 'react-redux';
 import { Assets } from 'pixi.js';
 import { Howl } from 'howler';
-import {
-  selectAppControllerIsMusicEnabled,
-  selectAppControllerIsSoundsEnabled,
-} from '../../redux/appController/selectors';
-import { IAppState } from '../../redux';
 import { __IS_DEV__ } from '../../constants';
 import { Sounds, SOUND_VOLUME } from './constants';
 import { SoundMapType, SoundTypes, SoundManifestType } from './typings';

@@ -22,7 +22,7 @@ export const MainUserHealthController = memo(({ initialHealth, maxHealth, cooldo
   const onDamage = useCallback(
     (cooldown?: number) => {
       shakeViewport();
-      playSound(Sounds.Hurt, SoundTypes.Sound);
+      playSound(Sounds.Hurt);
       dispatch(resetSpeedMult());
       dispatch(setHurted());
       requestAnimation({ name: AnimationList.Hurt });

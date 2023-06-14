@@ -7,9 +7,11 @@ import { useDispatch } from 'react-redux';
 import { makeDamageToHealthEntity } from '../../../redux/health';
 import { getBodyId } from '../../../utils/getBodyId';
 import { applyForce } from '../../Body/utils';
+import { isCrackBody } from '../../Chunk/components/Crack';
+import { isUserLabel } from '../ConntectedSensorController/utils';
 
 const DAMAGE_AMOUNT = 1;
-const FORCE_STRENGH = 10;
+const FORCE_STRENGH = 5;
 
 type Props = {
   pushToSide?: 'left' | 'right';
@@ -29,12 +31,14 @@ export const DamageTouchController = ({ pushToSide }: Props) => {
       if (!isDamaged) return;
 
       dispatch(makeDamageToHealthEntity({ id: getBodyId(body), amount: DAMAGE_AMOUNT }));
-      const toX = pushToSide
-        ? pushToSide === 'left'
-          ? FORCE_STRENGH * -1
-          : FORCE_STRENGH
+
+      if (!pushToSide) return;
+      if (isCrackBody(isUserLabel(isDamaged.bodyA) ? isDamaged.bodyB : isDamaged.bodyA)) return;
+
+      const toX = pushToSide === 'left'
+        ? FORCE_STRENGH * -1
         : FORCE_STRENGH;
-      applyForce(body, toX, 0);
+      applyForce(body, toX, -FORCE_STRENGH);
     },
     [body, dispatch, pushToSide],
   );

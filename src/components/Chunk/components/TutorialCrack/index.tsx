@@ -19,7 +19,7 @@ export const TutorialCrack = memo(
   }: ChunkProps & { onCollision: (e: IEventCollision<Engine>) => void }) => (
     <>
       <VerticalSensor
-        x={x + width * tileSize * 0.45}
+        x={x + width * tileSize * 0.35}
         y={0}
         onCollision={onCollision}
         isUserCollisionOnly

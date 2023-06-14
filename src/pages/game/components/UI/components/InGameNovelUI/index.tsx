@@ -6,7 +6,6 @@ import { NovelPageUI } from '../../../../../novel/components/NovelPageUI';
 import { Pages } from '../../../../../../redux/gamePage/typings';
 import { setScript } from '../../../../../../redux/novelPage';
 import { initNovelData } from '../../../../../novel/utils';
-import { initTutorialRead, syncGameFromLS } from '../../../../../../redux/gamePage/utils';
 
 export const InGameNovelUI = () => {
   const novelName = useSelector(selectPageGameNovel);
@@ -23,8 +22,6 @@ export const InGameNovelUI = () => {
     dispatch(resetNovel());
     dispatch(setGamePage(Pages.Main));
     dispatch(setPlay());
-    initTutorialRead();
-    syncGameFromLS(dispatch);
   }, [dispatch]);
 
   if (!novelName || !isLoaded) return null;

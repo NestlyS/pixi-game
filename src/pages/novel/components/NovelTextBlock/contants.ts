@@ -34,7 +34,7 @@ export const CHARACTERS_TALKING_TYPES = {
     [TalkingTypes.High]: Sounds.GermanTalkingHigh,
   },
   Герман: {
-    [TalkingTypes.Low]: Sounds.GermanTalkingMid,
+    [TalkingTypes.Low]: Sounds.GermanTalkingHigh,
     [TalkingTypes.Mid]: Sounds.GermanTalkingMid,
     [TalkingTypes.High]: Sounds.GermanTalkingHigh,
   },

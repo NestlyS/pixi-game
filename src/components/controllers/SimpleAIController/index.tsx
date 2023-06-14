@@ -165,7 +165,7 @@ export const SimpleAIController = ({
       {!isShootingDisabled && !isDead && (
         <ConnectedSensorController
           isHidden={false}
-          width={500}
+          width={400}
           height={100}
           onCollision={handleCollision}
         />

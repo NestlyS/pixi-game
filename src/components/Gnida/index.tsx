@@ -23,10 +23,9 @@ const animationMap = {
 type Props = {
   x: number;
   y: number;
-  onCollision?: (cb: () => void) => void;
 };
 
-export const Gnida = ({ x, y, onCollision }: Props) => {
+export const Gnida = ({ x, y }: Props) => {
   return (
     <Body
       x={x + GNIDA_WIDTH / 2}
@@ -46,7 +45,7 @@ export const Gnida = ({ x, y, onCollision }: Props) => {
         filters={FILTERS}
       >
         <AnimationController animationParams={animationMap}>
-          <GnidaTouchController onCollision={onCollision} />
+          <GnidaTouchController />
         </AnimationController>
       </AnimatedSpriteController>
     </Body>

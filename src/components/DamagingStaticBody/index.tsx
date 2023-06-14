@@ -11,9 +11,10 @@ type Props = {
   width: number;
   height: number;
   onCollision?: (e: Matter.IEventCollision<Matter.Engine>) => void;
+  label?: string;
 };
 
-export const DamagingStaticBody = ({ x, y, width, height, onCollision }: Props) => (
+export const DamagingStaticBody = ({ x, y, width, height, onCollision, label }: Props) => (
   <Body
     x={x}
     y={y}
@@ -22,5 +23,6 @@ export const DamagingStaticBody = ({ x, y, width, height, onCollision }: Props) 
     bodyGroup={[DAMAGING_BODY_GROUP]}
     onCollision={onCollision}
     options={TRAMPLIN_CONFIG}
+    label={label}
   />
 );

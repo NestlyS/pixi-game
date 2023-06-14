@@ -15,8 +15,7 @@ export const GnidaChunk = memo(
     tilesHeight,
     width = GNIDA_ROW_WIDTH,
     zIndex,
-    onCollision,
-  }: ChunkProps & { onCollision: (cb: () => void) => void }) => {
+  }: ChunkProps) => {
     return (
       <Container zIndex={zIndex}>
         <Grass
@@ -27,7 +26,7 @@ export const GnidaChunk = memo(
           tilesWidth={width}
           tilesHeight={tilesHeight}
         />
-        <Gnida x={x} y={y} onCollision={onCollision} />
+        <Gnida x={x} y={y} />
       </Container>
     );
   },

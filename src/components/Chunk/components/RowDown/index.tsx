@@ -81,7 +81,7 @@ export const RowDown = memo(
         <Row
           tilesCount={width / 2}
           startX={x + tileSize / 2}
-          startY={y + (tileSize * (tilesHeight + 1)) / 2}
+          startY={y + (tileSize * (tilesHeight)) / 2}
           tileSize={tileSize}
           spritesheet={spritesheetUrl}
           getTexture={getTexture}

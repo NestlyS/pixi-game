@@ -6,9 +6,15 @@ export const NEW_NOVEL_SCRIPT_URL = './novel/script_new.json';
 
 const SCREEN_BUNDLE = 'novel-screen';
 
+let isInited = false;
+
 export const initNovelData = async () => {
-  await Assets.loadBundle('novel-screen');
-  initSoundBundle(SCREEN_BUNDLE);
+  if (!isInited) {
+    isInited = true;
+
+    await Assets.loadBundle('novel-screen');
+    initSoundBundle(SCREEN_BUNDLE);
+  }
 
   return Assets.cache.has(NEW_NOVEL_SCRIPT_URL)
     ? Assets.cache.get<NewScriptType>(NEW_NOVEL_SCRIPT_URL)

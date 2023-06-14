@@ -1,12 +1,14 @@
 import { getRandomValue } from '../../utils/getRandomValue';
-import { CHUNKS_TYPE, MAX_CHANCES, SUM_CHANCES } from './contants';
+import { CHUNKS_TYPE, GET_MAX_CHANCES, GET_SUM_CHANCES } from './contants';
 import { ChunkParams, Chunks, Components } from './typings';
 
 type GenerateChunkType = (prevChunk: ChunkParams, tileSize: number) => ChunkParams | undefined;
 
 const generateChunk: GenerateChunkType = (prevChunk, tileSize) => {
-  const randomValue = getRandomValue(0, SUM_CHANCES);
-  const randomType = MAX_CHANCES.find(([chance]) => randomValue < Number(chance));
+  const randomValue = getRandomValue(0, GET_SUM_CHANCES(prevChunk.type));
+  const randomType = GET_MAX_CHANCES(prevChunk.type).find(
+    ([chance]) => randomValue < Number(chance),
+  );
   if (!randomType || !randomType[1]) return;
 
   const type = randomType[1] as Chunks;

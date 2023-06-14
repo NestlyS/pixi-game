@@ -19,7 +19,7 @@ import { resetDistanceCounter, resetSpeedMult, setGamePage, stopGame } from '../
 import { DistanceCounter } from '../../components/DistanceCounter';
 import { selectPageGameInitedState } from '../../redux/gamePage/selectors';
 import { Pages } from '../../redux/gamePage/typings';
-import { resetTrash } from '../../redux/mainUser';
+import { resetTrash, setAttackCooldown, setSpeciaCooldown } from '../../redux/mainUser';
 import { useLowGraphic } from '../../utils/useLowGraphic';
 import { useInitPageData } from '../../utils/initPageData';
 import { StartPlatfrom } from './components/StartPlatform';
@@ -44,6 +44,8 @@ export const Game = () => {
     dispatch(resetSpeedMult());
     dispatch(resetDistanceCounter());
     dispatch(resetTrash());
+    dispatch(setSpeciaCooldown(0));
+    dispatch(setAttackCooldown(0));
     dispatch(setGamePage(Pages.CharacterSelect));
     setReset((val) => val + 1);
   }, [dispatch]);

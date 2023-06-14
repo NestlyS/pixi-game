@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { Pages } from './typings';
 import { Dialogs } from '../novelPage/typings';
 
-const MAX_AMOUNT = 2.5;
+const MAX_AMOUNT = 3.5;
 
 type GamePageState = {
   isPaused: boolean;

@@ -50,9 +50,11 @@ export const Settings = ({ children }: Props) => {
       dispatch(setLowGraphicMode());
     }
 
-    if (lowFPSCounter <= -FAIL_AMOUNT_TO_SWITCH) {
+    /* 
+      Если у юзера плохая графика, то зачем делать нормальную?
+      if (lowFPSCounter <= -FAIL_AMOUNT_TO_SWITCH) {
       dispatch(setDefaultGraphicMode());
-    }
+    } */
   }, [dispatch, lowFPSCounter]);
 
   useTick(() => {

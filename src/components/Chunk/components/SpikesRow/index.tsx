@@ -9,8 +9,9 @@ import { Container } from '@pixi/react';
 import { DamagingStaticBody } from '../../../DamagingStaticBody';
 import { Sprite } from '../../../Sprite';
 import { Filters } from '../../../../constants';
+import { TableSprite } from '../../../TableSprite';
 
-const FILTERS = [Filters.WHITE_OUTLINE_FILTER, Filters.RED_OUTLINE_FILTER];
+const FILTERS = [Filters.BLACK_OUTLINE_FILTER];
 
 export const SPIKES_ROW_WIDTH = 4;
 const TRASH_URL = 'trash.png';
@@ -47,7 +48,7 @@ export const SpikesRow = memo(
 
         <Sprite
           x={x + ((width - 1) * tileSize) / 2}
-          y={y - (tilesHeight - 0.45) * tileSize}
+          y={y - (tilesHeight - 0.5) * tileSize}
           width={width * tileSize * 0.4}
           height={tileSize * 0.5}
           textureUrl={TRASH_URL}
@@ -55,9 +56,12 @@ export const SpikesRow = memo(
           filters={FILTERS}
         />
 
+        <TableSprite x={x + tileSize / 2} y={y - (tilesHeight * tileSize * 0.5) - tileSize * 0.9} width={tileSize} height={tileSize} tableDirection='up' />
+
+
         <DamagingStaticBody
           x={x + ((width + 0.7) * tileSize) / 2}
-          y={y - ((tilesHeight + 0.5) * tileSize) / 2}
+          y={y - ((tilesHeight + 0.4) * tileSize) / 2}
           width={width * tileSize * 0.35}
           height={tileSize * 0.4}
         />

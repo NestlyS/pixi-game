@@ -21,3 +21,6 @@ export const selectPageGameIsTutorialCompleted = (state: IAppState) =>
   selectPageGame(state).isTutorialRead;
 
 export const selectPageGameIsMilenMet = (state: IAppState) => selectPageGame(state).isMilenMet;
+
+export const selectPageGameIsTutorialRead = (state: IAppState) =>
+  selectPageGame(state).isTutorialRead;

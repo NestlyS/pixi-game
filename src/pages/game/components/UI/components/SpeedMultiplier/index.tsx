@@ -6,7 +6,7 @@ import {
   selectPageGamePauseState,
 } from '../../../../../../redux/gamePage/selectors';
 
-const SPEED_UP_INTERVAL = 10000;
+const SPEED_UP_INTERVAL = 5000;
 const SPEED_UP_AMOUNT = 0.05;
 
 export const SpeedMultiplier = () => {

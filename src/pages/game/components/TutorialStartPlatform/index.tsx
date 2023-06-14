@@ -11,7 +11,6 @@ import { TutorialContextProvider } from './context';
 import { TutorialCrack } from '../../../../components/Chunk/components/TutorialCrack';
 import { GnidaChunk } from '../../../../components/Chunk/components/GnidaChunk';
 import { selectPageGameCurrentPage } from '../../../../redux/gamePage/selectors';
-import { Dialogs } from '../../../../redux/novelPage/typings';
 import { Container } from '@pixi/react';
 
 const ROWS_WIDTH = 8;
@@ -41,16 +40,6 @@ export const TutorialStartPlatform = ({ y, rightEdgeX }: Props) => {
     dispatch(setPause());
     dispatch(setGamePage(Pages.TutorialJump));
   }, [dispatch]);
-
-  const onThirdCollision = useCallback(
-    (cb: () => void) => {
-      dispatch(setPause());
-      dispatch(setNovel(Dialogs.Gnida));
-      dispatch(setGamePage(Pages.Novel));
-      cbRef.current = cb;
-    },
-    [dispatch],
-  );
 
   return (
     <TutorialContextProvider value={true}>
@@ -109,7 +98,6 @@ export const TutorialStartPlatform = ({ y, rightEdgeX }: Props) => {
           tileSize={TILE_SIZE}
           tilesHeight={ROWS_HEIGHT}
           spritesheetUrl={GAME_SPRITESHEET_URL}
-          onCollision={onThirdCollision}
           zIndex={5}
         />
         <ControllableBody

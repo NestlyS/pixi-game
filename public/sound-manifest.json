@@ -39,7 +39,8 @@
       },
       "game": {
         "src": "sounds/game.mp3",
-        "type": "music"
+        "type": "music",
+        "volume": 2
       },
 
       "germanTalkingMid": {

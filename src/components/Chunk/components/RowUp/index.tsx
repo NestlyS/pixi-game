@@ -79,8 +79,8 @@ export const RowUp = memo(
         />
         <Row
           tilesCount={width}
-          startX={x + tileSize / 2 + halfWidth * tileSize}
-          startY={y - tileSize / 2 + (tileSize * tilesHeight) / 2}
+          startX={x + halfWidth * tileSize}
+          startY={y - tileSize + (tileSize * tilesHeight) / 2}
           tileSize={tileSize}
           spritesheet={spritesheetUrl}
           getTexture={getTexture}

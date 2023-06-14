@@ -43,11 +43,21 @@ export const CHUNKS_TYPE: Record<Chunks, CustomChunkParams> = {
 };
 
 export const CHANCES = Object.values(CHUNKS_TYPE).map(({ chance }) => chance);
-export const MAX_CHANCES = Object.entries(CHUNKS_TYPE).reduce(
-  (acc, [value, { chance }]) => [...acc, [chance + Number(acc[acc.length - 1]?.[0] ?? 0), value]],
-  [] as (number | string)[][],
-);
-export const SUM_CHANCES = Object.values(CHUNKS_TYPE).reduce((acc, { chance }) => acc + chance, 0);
+export const GET_MAX_CHANCES = (filter?: Chunks) =>
+  Object.entries(CHUNKS_TYPE)
+    .filter(([val]) => val !== filter)
+    .reduce(
+      (acc, [value, { chance }]) => [
+        ...acc,
+        [chance + Number(acc[acc.length - 1]?.[0] ?? 0), value],
+      ],
+      [] as (number | string)[][],
+    );
+export const GET_SUM_CHANCES = (filter?: Chunks) =>
+  Object.entries(CHUNKS_TYPE)
+    .filter(([val]) => val !== filter)
+    .map((val) => val[1])
+    .reduce((acc, { chance }) => acc + chance, 0);
 
 export const initialState = (x: number, y: number) => [
   {

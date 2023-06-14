@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { CleanEventType } from '../Body/typing';
 import { TouchController } from '../controllers/TouchController';
@@ -6,15 +6,30 @@ import { AnimationList, useAnimationController } from '../controllers/AnimationC
 import { isAnyPairInUserBodyGroup } from '../../bodyGroups/user';
 import { useBody } from '../Body/context';
 import { useSlowerTick } from '../../utils/useSlowedTick';
+import { setPause, setNovel, setGamePage } from '../../redux/gamePage';
+import { Dialogs } from '../../redux/novelPage/typings';
+import { useDispatch, useSelector } from 'react-redux';
+import { Pages } from '../../redux/gamePage/typings';
+import { initTutorialRead, syncGameFromLS } from '../../redux/gamePage/utils';
+import { selectPageGameCurrentPage, selectPageGameIsTutorialRead } from '../../redux/gamePage/selectors';
 
-type Props = {
-  onCollision?: (cb: () => void) => void;
-};
-
-export const GnidaTouchController = ({ onCollision }: Props) => {
+export const GnidaTouchController = () => {
   const { body } = useBody();
   const [isScripted, setScripted] = useState(false);
+  const page = useSelector(selectPageGameCurrentPage);
+  const isTutorialRead = useSelector(selectPageGameIsTutorialRead);
   const { requestAnimation } = useAnimationController();
+  const dispatch = useDispatch();
+  const cb = useRef<(() => void) | null>(null);
+
+  useEffect(() => {
+    if (cb.current && page === Pages.Main) {
+      cb.current();
+      cb.current = null;
+      initTutorialRead();
+      syncGameFromLS(dispatch);
+    }
+  }, [dispatch, page]);
 
   const onTouch = useCallback(
     (e: CleanEventType) => {
@@ -25,14 +40,17 @@ export const GnidaTouchController = ({ onCollision }: Props) => {
         setScripted(true);
       };
 
-      if (onCollision) {
-        onCollision(postCollision);
+      if (!isTutorialRead) {
+        cb.current = postCollision;
+        dispatch(setPause());
+        dispatch(setNovel(Dialogs.Gnida));
+        dispatch(setGamePage(Pages.Novel));
         return;
       }
 
       postCollision();
     },
-    [onCollision, requestAnimation],
+    [dispatch, isTutorialRead, requestAnimation],
   );
 
   useSlowerTick(() => {

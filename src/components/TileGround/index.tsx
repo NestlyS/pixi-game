@@ -14,69 +14,28 @@ export type Props = {
 
 export const TileGround = memo(
   ({ x, y, tileSize, tilesWidth, tilesHeight, spritesheetUrl, getTexture }: Props) => {
-    const arr = new Array(Math.floor(tilesHeight)).fill(0);
-
     const bodyWidth = tilesWidth * tileSize;
     const bodyHeight = tilesHeight * tileSize;
 
-    const sprites = useMemo(
-      () =>
-        arr.map((_, index) => {
-          /*
-      К сожалению, расположение y координаты спрайта относительно объекта коллизии можно получить только таким вот способом.
-        Из "y" мы сначала вычитаем половину общей высоты объекта коллизии,
-          а потом уже регулируем расположение строчки спрайтов при помощи индекса, умноженного на размер спрайта.
-        Также добавляем половину размера спрайта, так как смещение относительно центра неверно указывает расположение центра спрайта.
-
-      То же самое относится и к innerX.
-    */
-          const getInnerY = (index: number) => y - bodyHeight / 2 + index * tileSize + tileSize / 2;
+    return (
+      <Ground x={x} y={y} width={bodyWidth} height={bodyHeight}>
+        {new Array(Math.floor(tilesHeight)).fill(0).map((_, index) => {
+          const innerY = y - bodyHeight / 2 + index * tileSize;
           const cb = (indexX: number) => getTexture(indexX, index, tilesWidth, tilesHeight);
-          const innerX = x - bodyWidth / 2 + tileSize / 2;
-
-          if (index === 0) {
-            return (
-              <Row
-                key={index}
-                tilesCount={tilesWidth}
-                startX={innerX}
-                startY={getInnerY(index)}
-                tileSize={tileSize}
-                spritesheet={spritesheetUrl}
-                getTexture={cb}
-              />
-            );
-          }
+          const innerX = Math.round(x - bodyWidth / 2);
 
           return (
             <Row
               key={index}
               tilesCount={tilesWidth}
               startX={innerX}
-              startY={getInnerY(index)}
+              startY={innerY}
               tileSize={tileSize}
               spritesheet={spritesheetUrl}
               getTexture={cb}
             />
           );
-        }),
-      [
-        arr,
-        bodyHeight,
-        bodyWidth,
-        getTexture,
-        spritesheetUrl,
-        tileSize,
-        tilesHeight,
-        tilesWidth,
-        x,
-        y,
-      ],
-    );
-
-    return (
-      <Ground x={x} y={y} width={bodyWidth} height={bodyHeight}>
-        {sprites}
+        })}
       </Ground>
     );
   },

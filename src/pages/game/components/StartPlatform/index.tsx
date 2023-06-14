@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux';
 import { DefaultStartPlatform } from '../DefaultStartPlatform';
 import { TutorialStartPlatform } from '../TutorialStartPlatform';
 import { selectPageGameIsTutorialCompleted } from '../../../../redux/gamePage/selectors';
+import { useState } from 'react';
 
 type Props = {
   rightEdgeX: number;
@@ -10,8 +11,9 @@ type Props = {
 
 export const StartPlatfrom = ({ rightEdgeX, y }: Props) => {
   const isTutorialCompleted = useSelector(selectPageGameIsTutorialCompleted);
+  const [memoized] = useState(isTutorialCompleted);
 
-  if (!isTutorialCompleted) {
+  if (!memoized) {
     return <TutorialStartPlatform rightEdgeX={rightEdgeX} y={y} />;
   }
 

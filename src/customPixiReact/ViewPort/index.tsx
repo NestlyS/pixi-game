@@ -22,7 +22,7 @@ const PixiComponentViewport = PixiComponent('Viewport', {
       worldWidth: width * 4,
       worldHeight: height * 4,
       ticker: app.ticker,
-      interaction: app.renderer.plugins.interaction,
+      events: app.renderer.events,
     });
 
     plugin?.forEach((plugin) => {
