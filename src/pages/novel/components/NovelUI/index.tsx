@@ -57,6 +57,7 @@ export const NovelUI = React.memo(
     const isMusicOn = useSelector(selectAppControllerIsMusicEnabled);
 
     const isLastPage = useSelector(selectNovelControllerLastPage);
+
     const backgroundTexture = useSelector(selectNovelControllerBackground);
     const backgroundMusicURL = useSelector(selectNovelControllerSound);
     const pageEffect = useSelector(selectNovelControllerEffect);

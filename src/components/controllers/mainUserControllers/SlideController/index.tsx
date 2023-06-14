@@ -73,7 +73,7 @@ export const SlideController = ({ cooldown }: Props) => {
     Body.setPosition(body, { x: body.position.x, y: bodyNewY });
     Body.setInertia(body, Infinity);
     body.friction = SLIDING_FRICTION;
-    playSound(Sounds.Slide, SoundTypes.Sound);
+    playSound(Sounds.Slide);
 
     setSliding(true);
     setTimeout(() => unpressCb(), cooldown);

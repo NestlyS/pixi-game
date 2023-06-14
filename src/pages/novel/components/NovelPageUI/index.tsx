@@ -1,12 +1,13 @@
 import { NovelUI } from '../NovelUI';
 import { ActionTypes, Dialogs } from '../../../../redux/novelPage/typings';
 import { NOVEL_SPRITESHEET_URL } from '../../../../constants';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { goToDialog, goToTheNextNovelPage } from '../../../../redux/novelPage';
 import { ScreenTransitionWithTextUI } from '../ScreenTransitionWithTextUI';
 import {
   selectNovelControllerActionType,
+  selectNovelControllerCurrentDialogName,
   selectNovelControllerText,
 } from '../../../../redux/novelPage/selectors';
 
@@ -22,6 +23,7 @@ export const NovelPageUI = ({ onEnd, dialog }: Props) => {
 
   const text = useSelector(selectNovelControllerText);
   const actionType = useSelector(selectNovelControllerActionType);
+  const currentDialog = useSelector(selectNovelControllerCurrentDialogName);
   const [screenKey, setScreenKey] = useState(0);
   const prevAction = useRef(ActionTypes.Default);
 
@@ -29,9 +31,9 @@ export const NovelPageUI = ({ onEnd, dialog }: Props) => {
     dispatch(goToTheNextNovelPage());
   }, [dispatch]);
 
-  useEffect(() => {
+  if (dialog !== currentDialog) {
     dispatch(goToDialog(dialog));
-  }, [dialog, dispatch]);
+  }
 
   useEffect(() => {
     if (

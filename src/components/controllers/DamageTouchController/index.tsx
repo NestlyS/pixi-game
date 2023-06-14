@@ -35,9 +35,7 @@ export const DamageTouchController = ({ pushToSide }: Props) => {
       if (!pushToSide) return;
       if (isCrackBody(isUserLabel(isDamaged.bodyA) ? isDamaged.bodyB : isDamaged.bodyA)) return;
 
-      const toX = pushToSide === 'left'
-        ? FORCE_STRENGH * -1
-        : FORCE_STRENGH;
+      const toX = pushToSide === 'left' ? FORCE_STRENGH * -1 : FORCE_STRENGH;
       applyForce(body, toX, -FORCE_STRENGH);
     },
     [body, dispatch, pushToSide],

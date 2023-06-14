@@ -43,7 +43,7 @@ export const Crack = memo(
     const secondCrackCenter =
       firstCrackCenter +
       CRACK_WIDTH * tileSize +
-      ((rightCrackWidth - CRACK_INSIDE_WALLS_TILE_COUNT - 1) * tileSize);
+      (rightCrackWidth - CRACK_INSIDE_WALLS_TILE_COUNT - 1) * tileSize;
     const textureModifierLeft = useCallback(
       (indexX: number, indexY: number, length: number, height: number) => {
         if (indexY === 0 && indexX === 0) {
@@ -102,21 +102,18 @@ export const Crack = memo(
       return null;
     }, []);
 
-    const onCollision = useCallback(
-      (e: Matter.IEventCollision<Matter.Engine>) => {
-        const userCollided = e.pairs.find(
-          (item) => isUserLabel(item.bodyA) || isUserLabel(item.bodyB),
-        );
+    const onCollision = useCallback((e: Matter.IEventCollision<Matter.Engine>) => {
+      const userCollided = e.pairs.find(
+        (item) => isUserLabel(item.bodyA) || isUserLabel(item.bodyB),
+      );
 
-        if (!userCollided) return null;
+      if (!userCollided) return null;
 
-        const userBody = isUserLabel(userCollided.bodyA) ? userCollided.bodyA : userCollided.bodyB;
+      const userBody = isUserLabel(userCollided.bodyA) ? userCollided.bodyA : userCollided.bodyB;
 
-        applyForce(userBody, 0, -HIT_FORCE_STRENGTH * 1.5);
-        setTimeout(() => applyForce(userBody, HIT_FORCE_STRENGTH, -HIT_FORCE_STRENGTH), 100);
-      },
-      [],
-    );
+      applyForce(userBody, 0, -HIT_FORCE_STRENGTH * 1.5);
+      setTimeout(() => applyForce(userBody, HIT_FORCE_STRENGTH, -HIT_FORCE_STRENGTH), 100);
+    }, []);
 
     return (
       <Container zIndex={zIndex}>
@@ -163,7 +160,14 @@ export const Crack = memo(
           isSingleGrass
         />
 
-        <TableSprite x={x + tileSize * 1} y={y - (tilesHeight * tileSize * 0.5) - tileSize * 0.9} width={tileSize} height={tileSize} tableDirection='up' rotation={-0.2} />
+        <TableSprite
+          x={x + tileSize * 1}
+          y={y - tilesHeight * tileSize * 0.5 - tileSize * 0.9}
+          width={tileSize}
+          height={tileSize}
+          tableDirection="up"
+          rotation={-0.2}
+        />
 
         <DamagingStaticBody
           x={x + (width * tileSize) / 2}

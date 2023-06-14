@@ -14,9 +14,7 @@ import {
   selectAppControllerHeight,
   selectAppControllerWidth,
 } from '../../../../../../redux/appController/selectors';
-import {
-  selectMainUserTrashSum,
-} from '../../../../../../redux/mainUser/selectors';
+import { selectMainUserTrashSum } from '../../../../../../redux/mainUser/selectors';
 import { addCollectedTrash } from '../../../../../../redux/gamePage/utils';
 
 type Props = {

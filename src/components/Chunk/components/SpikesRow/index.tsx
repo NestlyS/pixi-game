@@ -56,8 +56,13 @@ export const SpikesRow = memo(
           filters={FILTERS}
         />
 
-        <TableSprite x={x + tileSize / 2} y={y - (tilesHeight * tileSize * 0.5) - tileSize * 0.9} width={tileSize} height={tileSize} tableDirection='up' />
-
+        <TableSprite
+          x={x + tileSize / 2}
+          y={y - tilesHeight * tileSize * 0.5 - tileSize * 0.9}
+          width={tileSize}
+          height={tileSize}
+          tableDirection="up"
+        />
 
         <DamagingStaticBody
           x={x + ((width + 0.7) * tileSize) / 2}

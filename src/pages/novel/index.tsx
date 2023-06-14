@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { useGlobalCheck } from '../../utils/useControlKey';
 import { SignalList, useCatchSignal } from '../../utils/signaller/emitSignal';
@@ -13,9 +13,11 @@ import { setGamePage } from '../../redux/gamePage';
 import { getPageToShowAfterNovel } from '../../redux/appController/utils';
 import { getGamePageToShowAfterNovel } from '../../redux/gamePage/utils';
 import { initNovelData } from './utils';
+import { selectNovelControllerScript } from '../../redux/novelPage/selectors';
 
 export const Novel = () => {
   const [resetCounter, setReset] = useState(0);
+  const script = useSelector(selectNovelControllerScript);
   const dispatch = useDispatch();
 
   const cb = useCallback(() => {
@@ -36,7 +38,7 @@ export const Novel = () => {
   useGlobalCheck();
   const isLoaded = useInitPageData(init);
 
-  if (!isLoaded) return null;
+  if (!isLoaded || !script) return null;
 
   return <NovelPageUI key={resetCounter} onEnd={onAllScriptsEnd} dialog={Dialogs.First} />;
 };

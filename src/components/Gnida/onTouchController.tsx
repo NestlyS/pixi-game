@@ -11,7 +11,10 @@ import { Dialogs } from '../../redux/novelPage/typings';
 import { useDispatch, useSelector } from 'react-redux';
 import { Pages } from '../../redux/gamePage/typings';
 import { initTutorialRead, syncGameFromLS } from '../../redux/gamePage/utils';
-import { selectPageGameCurrentPage, selectPageGameIsTutorialRead } from '../../redux/gamePage/selectors';
+import {
+  selectPageGameCurrentPage,
+  selectPageGameIsTutorialRead,
+} from '../../redux/gamePage/selectors';
 
 export const GnidaTouchController = () => {
   const { body } = useBody();

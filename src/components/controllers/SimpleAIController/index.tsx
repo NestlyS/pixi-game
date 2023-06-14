@@ -1,7 +1,7 @@
 import uniqueId from 'lodash.uniqueid';
 import { IEventCollision, Engine } from 'matter-js';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { USER_BODY_GROUP } from '../../../bodyGroups/user';
+import { USER_BODY_GROUP, isAnyPairInUserBodyGroup } from '../../../bodyGroups/user';
 import { AI_SENSOR_LABEL, EPS, MONSTER_LABEL } from '../../../constants';
 import { useBody } from '../../Body/context';
 import { CleanEventListener } from '../../Body/typing';
@@ -21,12 +21,11 @@ const BULLET_WIDTH = 40;
 const BULLET_HEIGHT = 40;
 const BULLET_SPEED = 7;
 const BULLET_TTL = 1000;
-const ATTACK_COOLDOWN = 2500;
+const ATTACK_COOLDOWN = 1500;
 const ATTACK_TIMEOUT_AFTER_ANIMATION_START = 300;
 const DELTA = 20;
 
 const DEATH_BOOST = 11;
-const ATTACK_BOOST = 6;
 
 type BulletProps = {
   id: number | string;
@@ -83,7 +82,7 @@ export const SimpleAIController = ({
 
         return COLLISION_SENSORS.some((label) => testingBody.label.includes(label));
       });
-      if (isSensorCollision) {
+      if (isSensorCollision || isAnyPairInUserBodyGroup(e.pairs)) {
         direction.current *= -1;
       }
     };

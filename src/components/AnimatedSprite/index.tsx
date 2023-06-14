@@ -185,12 +185,12 @@ export const AnimatedSprite = memo(
 
       const value = useMemo(
         () =>
-        ({
-          setAnimation,
-          onComplete: onComplete_,
-          clearOnComplete: clearOnComplete_,
-          animations: Object.keys(animationMap),
-        } as AnimationState),
+          ({
+            setAnimation,
+            onComplete: onComplete_,
+            clearOnComplete: clearOnComplete_,
+            animations: Object.keys(animationMap),
+          } as AnimationState),
         [animationMap, clearOnComplete_, onComplete_, setAnimation],
       );
 

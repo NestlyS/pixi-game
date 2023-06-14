@@ -5,7 +5,7 @@ import { updateState } from './utils';
 const initialState: NovelControllerState = {
   script: null,
   page: 0,
-  currentDialog: Dialogs.First,
+  currentDialog: null,
   background: '',
   text: '',
   actionType: ActionTypes.Default,

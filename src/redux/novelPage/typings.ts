@@ -58,7 +58,7 @@ export enum NOVEL_EFFECTS {
 export type NovelControllerState = {
   script: NewScriptType | null;
   page: number;
-  currentDialog: Dialogs;
+  currentDialog: Dialogs | null;
   background: string;
   text: string;
   leftCharacter: CharacterStatus;

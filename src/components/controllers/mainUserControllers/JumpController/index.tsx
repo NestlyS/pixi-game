@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useControlKey } from '../../../../utils/useControlKey';
+import { useControlKey2 } from '../../../../utils/useControlKey';
 import { useBody } from '../../../Body/context';
 import { applyForce } from '../../../Body/utils';
 import { EPS, JUMP_KEY_CODE, JUMP_KEY_CODE_1, JUMP_KEY_CODE_2 } from '../../../../constants';
@@ -44,8 +44,8 @@ export const JumpController = ({ maxJumps = DEFAULT_JUMPS }: Props) => {
     setJumps((val) => val - 1);
   }, [body, isHurted, jumpsLeft, releaseAnimation, requestAnimation]);
 
-  useControlKey(JUMP_KEY_CODE, WCb);
-  useControlKey(JUMP_KEY_CODE_1, WCb);
-  useControlKey(JUMP_KEY_CODE_2, WCb);
+  useControlKey2(JUMP_KEY_CODE, WCb);
+  useControlKey2(JUMP_KEY_CODE_1, WCb);
+  useControlKey2(JUMP_KEY_CODE_2, WCb);
   return null;
 };

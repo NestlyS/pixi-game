@@ -49,14 +49,16 @@ export const PixiReact = React.memo(() => {
         <World>{getPage(page)}</World>
         <HintBox />
       </Settings>
-      {__IS_DEV__ && <Text
-        text={page[0]}
-        x={20}
-        y={20}
-        style={NORMAL_NOVEL_FONT}
-        interactive
-        onpointerdown={handlePageChange}
-      />}
+      {__IS_DEV__ && (
+        <Text
+          text={page[0]}
+          x={20}
+          y={20}
+          style={NORMAL_NOVEL_FONT}
+          interactive
+          onpointerdown={handlePageChange}
+        />
+      )}
     </ReduxStage>
   );
 });

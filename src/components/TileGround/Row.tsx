@@ -9,7 +9,7 @@ type RowProps = {
   tileSize: number;
   spritesheet: string;
   getTexture: (indexX: number) => string;
-}
+};
 
 export const Row = memo(
   ({ tilesCount, startX, startY, tileSize, spritesheet, getTexture }: RowProps) => {
@@ -27,7 +27,7 @@ export const Row = memo(
               spritesheet={spritesheet}
               textureUrl={getTexture(index)}
             />
-          )
+          );
         })}
       </Container>
     );

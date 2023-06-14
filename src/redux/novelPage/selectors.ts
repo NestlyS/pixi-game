@@ -10,7 +10,7 @@ export const selectNovelControllerLastPage = (state: IAppState) => {
   const script = selectNovelControllerScript(state);
   const name = selectNovelControllerCurrentDialogName(state);
 
-  if (!script || !script[name]) return null;
+  if (!script || !name || !script[name]) return null;
 
   return selectNovelControllerPage(state) >= script[name].length;
 };
