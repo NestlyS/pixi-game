@@ -108,7 +108,6 @@
         "name": "mary"
       },
       "background": "backgroung1.png",
-      "sound": "dialog-nerv",
       "active": "eva",
       "text": "Ладушки, я тогда пойду! Спасибо, что проводила меня!"
     },
@@ -134,7 +133,6 @@
     {
       "right": null,
       "background": "backgroung5.png",
-      "sound": "dialog-calm",
       "left": {
         "name": "eva",
         "state": "idle",
