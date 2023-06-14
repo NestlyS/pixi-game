@@ -11,7 +11,7 @@ type InitialState = {
 };
 
 export const initialState: InitialState = {
-  isFPSCounterVisible: true,
+  isFPSCounterVisible: __IS_DEV__,
   isAutorunEnabled: true,
   isSkipStartScreen: false,
   ...(__IS_DEV__ ? { isCollisionVisible: true, isNotFocusedOnMainBody: false } : {}),

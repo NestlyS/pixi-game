@@ -48,7 +48,7 @@ export const MenuWithText = ({ onExit }: Props) => {
       <ButtonContinue onExit={onExit} />
       <ButtonReset onExit={onExit} />
       <SwitchFPS />
-      <SwitchAutorun />
+      {__IS_DEV__ && <SwitchAutorun />}
       {__IS_DEV__ && <SwitchCollisions />}
       {__IS_DEV__ && <SwitchFocused />}
       <ButtonRow childrenWidth={buttonHeight * 2}>
